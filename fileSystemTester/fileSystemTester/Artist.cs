@@ -19,7 +19,7 @@ namespace fileSystemTester
             albums = new List<Album>();
             this.path = path;
 
-            string dataPath = path + "data.manager";
+            string dataPath = path + "\\data.manager";
 
             if (File.Exists(dataPath))
             {
@@ -34,16 +34,21 @@ namespace fileSystemTester
                 for (int i = 2; i < data.Length; i++)
                 {
                     string newDir = path + '\\' + data[i];
-                    Directory.CreateDirectory(newDir);
-                    FileStream newData = File.Open(newDir + "data.manager", FileMode.CreateNew, FileAccess.Write);
-                    newData.Write(Encoding.ASCII.GetBytes(artistName), 0, artistName.Length);
-                    newData.Close();
-                    albums.Add(new Album(newDir));
+                    if (!Directory.Exists(newDir))
+                    {
+                        Directory.CreateDirectory(newDir);
+                        FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
+                        newData.Write(Encoding.ASCII.GetBytes(artistName), 0, artistName.Length);
+
+                        newData.Write(Encoding.ASCII.GetBytes("#" + data[i]), 0, artistName.Length);
+                        newData.Close();
+                        albums.Add(new Album(newDir));
+                    }
                 }
             }
             else
             {
-                File.Create(dataPath);
+                throw new Exception("NO DATA FILE!");
             }
         }
 
@@ -64,15 +69,23 @@ namespace fileSystemTester
 
         public void addAlbum(string albumName)
         {
-            string newDir = path + '\\' + artistName;
+            if (File.ReadAllLines(path).Length < 2)
+                throw new Exception("no members - can't insert albums.");
+
+
+            string newDir = path + '\\' + artistName; //making a new directory for the album
             Directory.CreateDirectory(newDir);
 
-            FileStream newData = File.Open(newDir + "data.manager", FileMode.CreateNew, FileAccess.Write);
+            FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write); //make the new data file
 
-            newData.Write(Encoding.ASCII.GetBytes(name), 0, name.Length);
+            newData.Write(Encoding.ASCII.GetBytes(artistName), 0, artistName.Length);
+
+            newData.Write(Encoding.ASCII.GetBytes("#" + albumName), 0, artistName.Length);
             newData.Close();
 
-            File.AppendAllLines(newDir+"data.manager", new IEnumerable<string>())
+            FileStream artistDataFile = File.Open(path + "\\data.manager", FileMode.Append, FileAccess.Write);
+            artistDataFile.Write(Encoding.ASCII.GetBytes("\n"+albumName), 0, albumName.Length);
+            artistDataFile.Close();
         }
     }
 }

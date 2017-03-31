@@ -8,6 +8,11 @@ namespace fileSystemTester
 {
     class Album
     {
+        string path;
+        string albumName;
+        string artist;
+        int year;
+        List<Song> songs;
         public Album(string path)
         {
 
