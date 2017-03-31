@@ -8,5 +8,11 @@ namespace fileSystemTester
 {
     class Song
     {
+        string name;
+        string length;
+        public Song(string name, string length, int index)
+        {
+
+        }
     }
 }

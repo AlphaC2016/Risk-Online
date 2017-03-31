@@ -12,11 +12,11 @@ namespace fileSystemTester
         string path;
         string artistName;
         string[] members;
-        List<Album> albums;
+        SortedDictionary<string, Album> albums;
 
         public Artist(string path)
         {
-            albums = new List<Album>();
+            albums = new SortedDictionary<string, Album>();
             this.path = path;
 
             string dataPath = path + "\\data.manager";
@@ -25,11 +25,15 @@ namespace fileSystemTester
             {
                 string[] data = File.ReadAllLines(dataPath);
 
-                if (data.Length > 0)
-                    artistName = data[0];
+                if (data.Length > 2)
+                {
+                    throw new Exception("DATA FILE WRITTEN INCORRECTLY!");
+                }
 
-                if (data.Length >  1)
-                    members = data[1].Split('#');
+                artistName = data[0];
+
+                members = data[1].Split('#');
+
 
                 for (int i = 2; i < data.Length; i++)
                 {
@@ -38,11 +42,11 @@ namespace fileSystemTester
                     {
                         Directory.CreateDirectory(newDir);
                         FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
-                        newData.Write(Encoding.ASCII.GetBytes(artistName), 0, artistName.Length);
+                        newData.Write(Encoding.ASCII.GetBytes(data[i]), 0, artistName.Length);
 
-                        newData.Write(Encoding.ASCII.GetBytes("#" + data[i]), 0, artistName.Length);
+                        newData.Write(Encoding.ASCII.GetBytes("#" + artistName), 0, artistName.Length);
                         newData.Close();
-                        albums.Add(new Album(newDir));
+                        albums.Add(data[i], new Album(newDir));
                     }
                 }
             }
@@ -62,7 +66,7 @@ namespace fileSystemTester
             return members;
         }
 
-        public List<Album> GetAlbums()
+        public SortedDictionary<string, Album> GetAlbums()
         {
             return albums;
         }
@@ -82,6 +86,7 @@ namespace fileSystemTester
 
             newData.Write(Encoding.ASCII.GetBytes("#" + albumName), 0, artistName.Length);
             newData.Close();
+            albums.Add(albumName, new Album(newDir));
 
             FileStream artistDataFile = File.Open(path + "\\data.manager", FileMode.Append, FileAccess.Write);
             artistDataFile.Write(Encoding.ASCII.GetBytes("\n"+albumName), 0, albumName.Length);
