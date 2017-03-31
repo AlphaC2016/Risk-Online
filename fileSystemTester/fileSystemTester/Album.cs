@@ -5,6 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+/*Structure of album data file:
+ * 
+ * album name # artist name # year of release
+ * song name # length # index
+ * song name # length # index
+ * song name # length # index
+ * .
+ * .
+ * .
+ */
+
 namespace fileSystemTester
 {
     class Album
@@ -44,7 +55,7 @@ namespace fileSystemTester
                 for (int i=1; i<data.Length; i++)
                 {
                     string[] songData = data[i].Split('#');
-                    songs.Add(songData[0], new Song(songData[0], songData[1], int.Parse(songData[2])));
+                    songs.Add(songData[0], new Song(songData[0], songData[1], int.Parse(songData[2]), path));
                 }
             }
             else
@@ -90,6 +101,7 @@ namespace fileSystemTester
                 string newEntry = "\n" + songName + "#" + length + "#" + index.ToString();
                 dataFile.Write(Encoding.ASCII.GetBytes(newEntry), 0, newEntry.Length);
                 dataFile.Close();
+                songs.Add(songName, new Song(songName, length, index, path));
             }
         }
     }

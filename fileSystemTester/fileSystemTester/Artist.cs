@@ -5,6 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+
+/* Structure of Artist data file:
+ * 
+ * Artist name
+ * member # member # member # member...
+ * album name
+ * album name
+ * album name
+ * .
+ * .
+ * .
+ */
+
 namespace fileSystemTester
 {
     class Artist
@@ -42,7 +55,7 @@ namespace fileSystemTester
                     {
                         Directory.CreateDirectory(newDir);
                         FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
-                        newData.Write(Encoding.ASCII.GetBytes(data[i]), 0, artistName.Length);
+                        newData.Write(Encoding.ASCII.GetBytes(data[i]), 0, data[i].Length);
 
                         newData.Write(Encoding.ASCII.GetBytes("#" + artistName), 0, artistName.Length);
                         newData.Close();
