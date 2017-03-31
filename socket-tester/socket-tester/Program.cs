@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 
+//http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=b8-tXG8KrWs
+
 namespace socket_tester
 {
     class Program
@@ -14,16 +16,14 @@ namespace socket_tester
         {
             try
             {
-                Socket sc = socket_handler.accessSite("www.youtubeinmp3.com");
-                socket_handler.getSong("https://www.youtube.com/watch?v=b8-tXG8KrWs", sc);
-                //http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=b8-tXG8KrWs
-                sc.Close();
+                //Socket sc = SocketHandler.accessSite("www.youtubeinmp3.com");
+                SocketHandler.getSong("https://www.youtube.com/watch?v=b8-tXG8KrWs");
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
         }
     }
 }
