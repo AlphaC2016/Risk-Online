@@ -16,9 +16,13 @@ using System.IO;
  */
 namespace fileSystemTester
 {
+    /* This is the biggest data structure in the file system - the complete database.
+     * data-wise, It contains a list of all albums
+     * function-wise, it contains all search functions, and the 
+     */
     class Database
     {
-        SortedDictionary<string, Artist> artists;
+        List<Artist> artists;
         string base_path;
 
         public Database(string path)
@@ -48,7 +52,7 @@ namespace fileSystemTester
                         newData.Write(Encoding.ASCII.GetBytes(name+'\n'), 0, name.Length+1);
                         newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
                     }
-                    artists.Add(name, new Artist(newDir));
+                    artists.Add(new Artist(newDir));
                 }
             }
         }
@@ -63,12 +67,44 @@ namespace fileSystemTester
                 newData.Write(Encoding.ASCII.GetBytes(name + '\n'), 0, name.Length + 1);
                 newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
             }
-            artists.Add(name, new Artist(newDir));
+            artists.Add(new Artist(newDir));
         }
 
-        public SortedDictionary<string, Artist> getArtists()
+        public List<Artist> getArtists()
         {
             return artists;
+        }
+
+        public Artist GetArtist(string name)
+        {
+            Artist ans = artists.SingleOrDefault<Artist>(x => x.GetName().Equals(name));
+
+            if (ans.Equals(default(Artist)))
+                throw new Exception("ARTIST DOES NOT EXIST (or exists multiple times)");
+
+            return ans;
+        }
+
+        public Album GetAlbum(string artist, string name)
+        {
+            Artist a = GetArtist(artist);
+            Album ans = a.GetAlbums().SingleOrDefault<Album>(x => x.GetName().Equals(name));
+
+            if (ans.Equals(default(Album)))
+                throw new Exception("ALBUM DOES NOT EXIST (or exists multiple times)");
+
+            return ans;
+        }
+
+        public Album GetAlbum(string name)
+        {
+            foreach (Artist artist in artists)
+            {
+                Album ans = artist.GetAlbums().SingleOrDefault<Album>(x => x.GetName().Equals(name));
+                if (!ans.Equals(default(Album)))
+                    return ans;
+            }
+            throw new Exception("ALBUM DOES NOT EXIST (or exists multiple times)");
         }
     }
 }

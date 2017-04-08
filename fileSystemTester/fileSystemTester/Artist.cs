@@ -25,11 +25,11 @@ namespace fileSystemTester
         string path;
         string artistName;
         string genre;
-        SortedDictionary<string, Album> albums;
+        List<Album> albums;
 
         public Artist(string path)
         {
-            albums = new SortedDictionary<string, Album>();
+            albums = new List<Album>();
             this.path = path;
 
             string dataPath = path + "\\data.manager";
@@ -59,7 +59,7 @@ namespace fileSystemTester
 
                         newData.Write(Encoding.ASCII.GetBytes("#" + artistName), 0, artistName.Length);
                         newData.Close();
-                        albums.Add(data[i], new Album(newDir));
+                        albums.Add(new Album(newDir));
                     }
                 }
             }
@@ -79,7 +79,7 @@ namespace fileSystemTester
             return genre;
         }
 
-        public SortedDictionary<string, Album> GetAlbums()
+        public List<Album> GetAlbums()
         {
             return albums;
         }
@@ -99,7 +99,7 @@ namespace fileSystemTester
 
             newData.Write(Encoding.ASCII.GetBytes("#" + albumName), 0, artistName.Length);
             newData.Close();
-            albums.Add(albumName, new Album(newDir));
+            albums.Add(new Album(newDir));
 
             FileStream artistDataFile = File.Open(path + "\\data.manager", FileMode.Append, FileAccess.Write);
             artistDataFile.Write(Encoding.ASCII.GetBytes("\n"+albumName), 0, albumName.Length);

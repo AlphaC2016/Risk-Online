@@ -24,12 +24,12 @@ namespace fileSystemTester
         private string albumName;
         private string artist;
         private int year;
-        private SortedDictionary<string, Song> songs;
+        private List<Song> songs;
 
         public Album(string path)
         {
             year = -1;
-            songs = new SortedDictionary<string, Song>();
+            songs = new List<Song>();
             this.path = path;
 
             string dataPath = path + "\\data.manager";
@@ -55,7 +55,7 @@ namespace fileSystemTester
                 for (int i=1; i<data.Length; i++)
                 {
                     string[] songData = data[i].Split('#');
-                    songs.Add(songData[0], new Song(songData[0], songData[1], int.Parse(songData[2]), path));
+                    songs.Add(new Song(songData[0], songData[1], int.Parse(songData[2]), path));
                 }
             }
             else
@@ -79,7 +79,7 @@ namespace fileSystemTester
             return year;
         }
 
-        public SortedDictionary<string, Song> GetSogs()
+        public List<Song> GetSogs()
         {
             return songs;
         }
@@ -101,7 +101,7 @@ namespace fileSystemTester
                 string newEntry = "\n" + songName + "#" + length + "#" + index.ToString();
                 dataFile.Write(Encoding.ASCII.GetBytes(newEntry), 0, newEntry.Length);
                 dataFile.Close();
-                songs.Add(songName, new Song(songName, length, index, path));
+                songs.Add(new Song(songName, length, index, path));
             }
         }
     }
