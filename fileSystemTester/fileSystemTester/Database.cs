@@ -7,9 +7,9 @@ using System.IO;
 
 /*Structure of a database data file:
  * 
- * artist name $ member # member # member ...
- * artist name $ member # member # member ...
- * artist name $ member # member # member ...
+ * artist name # genre
+ * artist name # genre
+ * artist name # genre
  * .
  * .
  * .
@@ -36,9 +36,9 @@ namespace fileSystemTester
 
                 for (int i=0; i<data.Length; i++)
                 {
-                    int firstDelimeter = data[i].IndexOf('$');
-                    string name = data[i].Substring(0, firstDelimeter-1);
-                    string members = data[i].Substring(firstDelimeter + 1, data.Length - firstDelimeter - 1);
+                    string[] thisLine = data[i].Split('#');
+                    string name = thisLine[0];
+                    string genre = thisLine[1];
 
                     string newDir = path + '\\' + name;
                     if (!Directory.Exists(newDir))
@@ -46,14 +46,29 @@ namespace fileSystemTester
                         Directory.CreateDirectory(newDir);
                         FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
                         newData.Write(Encoding.ASCII.GetBytes(name+'\n'), 0, name.Length+1);
-                        newData.Write(Encoding.ASCII.GetBytes(members), 0, members.Length);
-                        artists.Add(name, new Artist(newDir));
+                        newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
                     }
+                    artists.Add(name, new Artist(newDir));
                 }
             }
         }
 
-        public void addArtist(string name, string[] members)
-        {}
+        public void addArtist(string name, string genre)
+        {
+            string newDir = Path.Combine(base_path, name);
+            if (!Directory.Exists(newDir))
+            {
+                Directory.CreateDirectory(newDir);
+                FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
+                newData.Write(Encoding.ASCII.GetBytes(name + '\n'), 0, name.Length + 1);
+                newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
+            }
+            artists.Add(name, new Artist(newDir));
+        }
+
+        public SortedDictionary<string, Artist> getArtists()
+        {
+            return artists;
+        }
     }
 }

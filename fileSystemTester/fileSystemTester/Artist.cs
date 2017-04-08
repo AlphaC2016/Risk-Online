@@ -9,7 +9,7 @@ using System.IO;
 /* Structure of Artist data file:
  * 
  * Artist name
- * member # member # member # member...
+ * genre
  * album name
  * album name
  * album name
@@ -24,7 +24,7 @@ namespace fileSystemTester
     {
         string path;
         string artistName;
-        string[] members;
+        string genre;
         SortedDictionary<string, Album> albums;
 
         public Artist(string path)
@@ -45,7 +45,7 @@ namespace fileSystemTester
 
                 artistName = data[0];
 
-                members = data[1].Split('#');
+                genre = data[1];
 
 
                 for (int i = 2; i < data.Length; i++)
@@ -74,9 +74,9 @@ namespace fileSystemTester
             return artistName;
         }
 
-        public string[] GetMembers()
+        public string GetGenre()
         {
-            return members;
+            return genre;
         }
 
         public SortedDictionary<string, Album> GetAlbums()
