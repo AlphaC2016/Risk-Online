@@ -21,7 +21,7 @@ namespace fileSystemTester
 
         public Retreiver()
         {
-            sqn = new SqlConnection("Data Source=Kevin" +";Initial Catalog=MusicData;Trusted_Connection=true");
+            sqn = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=\"F:\\2016-2017\\projects\\senior project\\fileSystemTester\\fileSystemTester\\MusicData.mdf\";Integrated Security=True");
             sqn.Open();
         }
 
@@ -42,7 +42,7 @@ namespace fileSystemTester
                 Console.Write("|");
                 for (int i=0; i<reader.FieldCount; i++)
                 {
-                    Console.WriteLine("\t" + reader[i] + "\t|");
+                    Console.Write("\t" + reader[i] + "\t\t|");
                 }
                 Console.WriteLine();
             }
