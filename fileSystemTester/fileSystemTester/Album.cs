@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Configuration;
+using System.Data.SqlClient;
 
 /*Structure of album data file:
  * 
