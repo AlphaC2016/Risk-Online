@@ -11,7 +11,7 @@ namespace fileSystemTester
         static void Main(string[] args)
         {
             Retreiver r = new Retreiver();
-            r.setCommand();
+            r.setCommand("SELECT * FROM Albums");
         }
     }
 }

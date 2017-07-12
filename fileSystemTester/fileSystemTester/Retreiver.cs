@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Configuration;
 using System.Data.SqlClient;
 
 namespace fileSystemTester
@@ -11,36 +12,31 @@ namespace fileSystemTester
     class Retreiver
     {
         SqlConnection sqn;
+        string connectionString;
+        SqlDataAdapter sda;
+        DataTable dt;
+        /*DataSet ds;
         SqlCommand cmd;
         SqlDataReader reader;
-
-        /*SqlDataAdapter sda;
-        DataSet ds;
-        DataTable dt;
         DataRow dr;*/
 
         public Retreiver()
         {
-            sqn = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=\"F:\\2016-2017\\projects\\senior project\\fileSystemTester\\fileSystemTester\\MusicData.mdf\";Integrated Security=True");
-            sqn.Open();
+            connectionString = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            sqn = new SqlConnection(connectionString);
         }
 
-        public void setCommand()
+        public void setCommand(string query)
         {
-            cmd = new SqlCommand("SELECT * FROM Artists", sqn);
-            try
-            {
-                reader = cmd.ExecuteReader();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            sda = new SqlDataAdapter(query, sqn);
+            dt = new DataTable();
+            sda.Fill(dt);
+            var reader = dt.CreateDataReader();
 
             while (reader.Read())
             {
                 Console.Write("|");
-                for (int i=0; i<reader.FieldCount; i++)
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
                     Console.Write("\t" + reader[i] + "\t\t|");
                 }
