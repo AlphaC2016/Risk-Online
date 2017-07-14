@@ -15,14 +15,12 @@ namespace fileSystemTester
         string album;
         string artist;
         string path;
-        public Song(string name, string length, int index, string path)
+        public Song(string name, string length, int index, string path, string album, string artist)
         {
             this.name = name;
             this.length = length;
             this.index = index;
-            string[] albumData = File.ReadAllLines(path + "\\data.manager")[0].Split('#');
-            album = albumData[0];
-            artist = albumData[1];
+            this.path = path;
         }
 
         public string GetName()

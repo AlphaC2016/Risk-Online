@@ -3,110 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
+using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 
-/*Structure of a database data file:
- * 
- * artist name # genre
- * artist name # genre
- * artist name # genre
- * .
- * .
- * .
- */
 namespace fileSystemTester
 {
-    /* This is the biggest data structure in the file system - the complete database.
-     * data-wise, It contains a list of all albums
-     * function-wise, it contains all search functions, and the 
-     */
-    class Database
+    static class DataBase
     {
-        List<Artist> artists;
-        string base_path;
+        static SqlConnection sqn;
+        static string connectionString;
+        static SqlDataAdapter sda;
+        static DataTable dt;
 
-        public Database(string path)
+        static DataBase()
         {
-            base_path = path;
+            connectionString = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            sqn = new SqlConnection(connectionString);
+        }
 
-            string dataPath = base_path + "\\data.manager";
-            if (!File.Exists(dataPath))
-            {
-                File.Create(dataPath);
-            }
-            else
-            {
-                string[] data = File.ReadAllLines(dataPath);
+        private static List<List<string>> SetCommand(string query)
+        {
+            List<List<string>> ans = new List<List<string>>();
+            List<string> curr = null;
 
-                for (int i=0; i<data.Length; i++)
+            sda = new SqlDataAdapter(query, sqn);
+            dt = new DataTable();
+            sda.Fill(dt);
+            var reader = dt.CreateDataReader();
+
+            while (reader.Read())
+            {
+                curr = new List<string>();
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    string[] thisLine = data[i].Split('#');
-                    string name = thisLine[0];
-                    string genre = thisLine[1];
-
-                    string newDir = path + '\\' + name;
-                    if (!Directory.Exists(newDir))
-                    {
-                        Directory.CreateDirectory(newDir);
-                        FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
-                        newData.Write(Encoding.ASCII.GetBytes(name+'\n'), 0, name.Length+1);
-                        newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
-                    }
-                    artists.Add(new Artist(newDir));
+                    curr.Add(reader[i].ToString());
                 }
+                ans.Add(curr);
             }
-        }
-
-        public void addArtist(string name, string genre)
-        {
-            string newDir = Path.Combine(base_path, name);
-            if (!Directory.Exists(newDir))
-            {
-                Directory.CreateDirectory(newDir);
-                FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
-                newData.Write(Encoding.ASCII.GetBytes(name + '\n'), 0, name.Length + 1);
-                newData.Write(Encoding.ASCII.GetBytes(genre), 0, genre.Length);
-            }
-            artists.Add(new Artist(newDir));
-        }
-
-        public List<Artist> getArtists()
-        {
-            return artists;
-        }
-
-        public Artist GetArtist(string name)
-        {
-            Artist ans = artists.SingleOrDefault<Artist>(x => x.GetName().Equals(name));
-
-            if (ans.Equals(default(Artist)))
-                throw new Exception("ARTIST DOES NOT EXIST (or exists multiple times)");
-
             return ans;
         }
 
-        public Album GetAlbum(string artist, string name)
+        public static List<List<string>> GetArtistsFromDB()
         {
-            Artist a = GetArtist(artist);
-            Album ans = a.GetAlbums().SingleOrDefault<Album>(x => x.GetName().Equals(name));
-
-            if (ans.Equals(default(Album)))
-                throw new Exception("ALBUM DOES NOT EXIST (or exists multiple times)");
-
-            return ans;
+            return SetCommand("SELECT * FROM Artists");
         }
 
-        public Album GetAlbum(string name)
+        public static List<List<string>> GetAlbumsFromArtist(string artist)
         {
-            foreach (Artist artist in artists)
-            {
-                Album ans = artist.GetAlbums().SingleOrDefault<Album>(x => x.GetName().Equals(name));
-                if (!ans.Equals(default(Album)))
-                    return ans;
-            }
-            throw new Exception("ALBUM DOES NOT EXIST (or exists multiple times)");
+            return SetCommand("SELECT * FROM Albums WHERE Artist_name=\'" + artist + "\'");
+        }
+
+        public static List<List<string>> GetSongsFromAlbum(string Album)
+        {
+            return SetCommand("SELECT * FROM Songs WHERE Album_name =\'" + Album + "\'");
+        }
+
+        public static List<List<string>> GetSongsFromArtist(string artist)
+        {
+            return SetCommand("SELECT * FROM Songs WHERE Artist_name=\'" + artist + "\' ORDER BY index");
+        }
+
+        public static void InsertAlbum(string albumName, string artistName)
+        {
+            SetCommand("INSERT INTO Albums (Name, Artist_name) VALUES (" + albumName + ", " + artistName + ")");
         }
     }
 }

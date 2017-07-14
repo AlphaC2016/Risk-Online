@@ -28,41 +28,24 @@ namespace fileSystemTester
         private int year;
         private List<Song> songs;
 
-        public Album(string path)
+        public Album(string albumName, string artist, int year=-1)
         {
-            year = -1;
+            this.albumName = albumName;
+            this.artist = artist;
+
+            if (year != -1) this.year = year;
+
             songs = new List<Song>();
-            this.path = path;
+            InitSongs();
+        }
 
-            string dataPath = path + "\\data.manager";
+        private void InitSongs()
+        {
+            List<List<string>> data = DataBase.GetSongsFromAlbum(albumName);
 
-            if (File.Exists(dataPath))
+            for (int i = 0; i < data.Count; i++)
             {
-                string[] data = File.ReadAllLines(dataPath);
-                string[] albumData = data[0].Split('#');
-                
-                if (albumData.Length < 2 || albumData.Length > 3)
-                {
-                    throw new Exception("DATA FILE WRITTEN INCORRECTLY");
-                }
-
-
-                albumName = albumData[0];
-                artist = albumData[1];
-                if (albumData.Length == 3)
-                {
-                    year = int.Parse(albumData[2]);
-                }
-
-                for (int i=1; i<data.Length; i++)
-                {
-                    string[] songData = data[i].Split('#');
-                    songs.Add(new Song(songData[0], songData[1], int.Parse(songData[2]), path));
-                }
-            }
-            else
-            {
-                throw new Exception("NO DATA FILE!");
+                songs.Add(new Song(data[i][0], data[i][4], int.Parse(data[i][3]), data[i][5], data[i][1], data[i][2]));
             }
         }
 
@@ -81,7 +64,7 @@ namespace fileSystemTester
             return year;
         }
 
-        public List<Song> GetSogs()
+        public List<Song> GetSongs()
         {
             return songs;
         }
@@ -91,20 +74,9 @@ namespace fileSystemTester
             this.year = year;
         }
 
-        public void AddSong(string songName, string length, int index)
+        public void AddSong(string name, int index, string length, string path)
         {
-            if (year == -1)
-            {
-                throw new Exception("ALBUM METADATA MUST BE INSERTED BEFORE SONGS");
-            }
-            else
-            {
-                FileStream dataFile = File.Open(path + "\\data.manager", FileMode.Append, FileAccess.Write);
-                string newEntry = "\n" + songName + "#" + length + "#" + index.ToString();
-                dataFile.Write(Encoding.ASCII.GetBytes(newEntry), 0, newEntry.Length);
-                dataFile.Close();
-                songs.Add(new Song(songName, length, index, path));
-            }
+
         }
     }
 }

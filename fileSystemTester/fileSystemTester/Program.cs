@@ -10,8 +10,7 @@ namespace fileSystemTester
     {
         static void Main(string[] args)
         {
-            Retreiver r = new Retreiver();
-            r.setCommand("SELECT * FROM Albums");
+            MusicData md = new MusicData();
         }
     }
 }

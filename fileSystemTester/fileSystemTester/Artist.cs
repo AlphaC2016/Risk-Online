@@ -29,46 +29,12 @@ namespace fileSystemTester
         string genre;
         List<Album> albums;
 
-        public Artist(string path)
+        public Artist(string artistName, string genre="")
         {
+            this.artistName = artistName;
+            this.genre = genre;
             albums = new List<Album>();
-            this.path = path;
-
-            string dataPath = path + "\\data.manager";
-
-            if (File.Exists(dataPath))
-            {
-                string[] data = File.ReadAllLines(dataPath);
-
-                if (data.Length > 2)
-                {
-                    throw new Exception("DATA FILE WRITTEN INCORRECTLY!");
-                }
-
-                artistName = data[0];
-
-                genre = data[1];
-
-
-                for (int i = 2; i < data.Length; i++)
-                {
-                    string newDir = path + '\\' + data[i];
-                    if (!Directory.Exists(newDir))
-                    {
-                        Directory.CreateDirectory(newDir);
-                        FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write);
-                        newData.Write(Encoding.ASCII.GetBytes(data[i]), 0, data[i].Length);
-
-                        newData.Write(Encoding.ASCII.GetBytes("#" + artistName), 0, artistName.Length);
-                        newData.Close();
-                        albums.Add(new Album(newDir));
-                    }
-                }
-            }
-            else
-            {
-                throw new Exception("NO DATA FILE!");
-            }
+            InitAlbums();
         }
 
         public string GetName()
@@ -86,26 +52,26 @@ namespace fileSystemTester
             return albums;
         }
 
+        private void InitAlbums()
+        {
+            List<List<string>> data = DataBase.GetAlbumsFromArtist(artistName);
+            for (int i=0; i<data.Count; i++)
+            {
+                if (data[i].Count == 3)
+                {
+                    albums.Add(new Album(data[i][0], data[i][1], int.Parse(data[i][2])));
+                }
+                else
+                {
+                    albums.Add(new Album(data[i][0], data[i][1]));
+                }
+            }
+
+        }
+
         public void addAlbum(string albumName)
         {
-            if (File.ReadAllLines(path).Length < 2)
-                throw new Exception("no members - can't insert albums.");
 
-
-            string newDir = path + '\\' + artistName; //making a new directory for the album
-            Directory.CreateDirectory(newDir);
-
-            FileStream newData = File.Open(newDir + "\\data.manager", FileMode.CreateNew, FileAccess.Write); //make the new data file
-
-            newData.Write(Encoding.ASCII.GetBytes(artistName), 0, artistName.Length);
-
-            newData.Write(Encoding.ASCII.GetBytes("#" + albumName), 0, artistName.Length);
-            newData.Close();
-            albums.Add(new Album(newDir));
-
-            FileStream artistDataFile = File.Open(path + "\\data.manager", FileMode.Append, FileAccess.Write);
-            artistDataFile.Write(Encoding.ASCII.GetBytes("\n"+albumName), 0, albumName.Length);
-            artistDataFile.Close();
         }
     }
 }
