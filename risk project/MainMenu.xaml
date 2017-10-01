@@ -29,24 +29,35 @@
         </Grid.RowDefinitions>
 
         <!-- Buttons -->
+
+        <!--Help-->
+        <Button Name="BtnHelp" Width="150" Height="150" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" ClickMode="Press">
+            <Button.Background>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/Help.png"></ImageBrush>
+            </Button.Background>
+        </Button>
+
+        <!--Settings-->
+        <Button Name="BtnSettings" Width="150" Height="150" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0">
+            <Button.Background>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/Settings.png"></ImageBrush>
+            </Button.Background>
+        </Button>
+
+        <!--Join Room-->
         <Button Name="BtnJoinRoom" Width="150" Height="150" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0">
             <Button.Background>
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/Settings.png"></ImageBrush>
             </Button.Background>
         </Button>
 
-        <Button Name="BtnSettings" Width="150" Height="150" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0">
+        <!--Create Room-->
+        <Button Name="BtnCreateRoom" Width="150" Height="150" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0">
             <Button.Background>
-                <ImageBrush Stretch="Fill" ImageSource="/Assets/Settings.png"></ImageBrush>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/CreateRoom.png"></ImageBrush>
             </Button.Background>
         </Button>
 
-
-        <Button Name="BtnHelp" Width="150" Height="150" Grid.Column="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" ClickMode="Press">
-            <Button.Background>
-                <ImageBrush Stretch="Fill" ImageSource="/Assets/Help.png"></ImageBrush>
-            </Button.Background>
-        </Button>
 
     </Grid>
 </Page>
