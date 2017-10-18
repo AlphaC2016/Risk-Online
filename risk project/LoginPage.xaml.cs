@@ -53,19 +53,24 @@ namespace risk_project
         {
             foreach (TextBlock label in labels)
             {
-                label.FontSize = ActualHeight * ActualWidth / 43200;
+                label.FontSize = (ActualHeight + ActualWidth) / 62.5;
+            }
+
+            foreach (TextBlock title in titles)
+            {
+                title.FontSize = (ActualHeight + ActualWidth) / 42;
             }
 
             foreach (TextBox box in boxes)
             {
-                box.FontSize = ActualHeight * ActualWidth / 43200;
-                box.Width = ActualHeight * ActualWidth / 6912;
+                box.FontSize = (ActualHeight + ActualWidth) / 62.5;
+                box.Width = ActualWidth / 6.4;
             }
 
             foreach (Button button in buttons)
             {
-                button.FontSize = ActualHeight * ActualWidth / 43200;
-                button.Width = ActualHeight * ActualWidth / 6912;
+                button.FontSize = (ActualHeight + ActualWidth) / 62.5;
+                button.Width = ActualWidth / 6.4;
             }
         }
 

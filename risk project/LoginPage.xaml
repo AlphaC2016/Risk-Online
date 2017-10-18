@@ -21,25 +21,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <!-- text blocks and labels-->
-        <TextBlock Name="LblLogin" Grid.Row="0" Grid.Column="0" Text="LOG IN" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="#FFCDAD00"></TextBlock>
-        <TextBlock Name="LblSignUp" Grid.Row="0" Grid.Column="1" Text="SIGN UP" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="#FFCDAD00"></TextBlock>
-        <TextBlock Name="LblLoginUsername" Grid.Row="1" Grid.Column="0" Text="Username:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
-        <TextBlock Name="LblSignUpUsername" Grid.Row="1" Grid.Column="1" Text="Username:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
-        <TextBlock Name="LblLoginPass" Grid.Row="2" Grid.Column="0" Text="Password:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
-        <TextBlock Name="LblSignUpPass" Grid.Row="2" Grid.Column="1" Text="Password:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
-        <TextBlock Name="LblSignUpRepass" Grid.Row="3" Grid.Column="1" Text="Re-enter Password:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,0,0,0" FontFamily="Papyrus" FontSize="36" Foreground="White"></TextBlock>
+        <TextBlock Name="LblLogin" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="LOG IN" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="DarkRed"></TextBlock>
+        <TextBlock Name="LblSignUp" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Text="SIGN UP" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="DarkRed"></TextBlock>
+        <TextBlock Name="LblLoginUsername" Grid.Row="1" Grid.Column="0" Text="Username:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
+        <TextBlock Name="LblSignUpUsername" Grid.Row="1" Grid.Column="3" Text="Username:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
+        <TextBlock Name="LblLoginPass" Grid.Row="2" Grid.Column="0" Text="Password:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
+        <TextBlock Name="LblSignUpPass" Grid.Row="2" Grid.Column="3" Text="Password:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin ="3,0,0,0" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
+        <TextBlock Name="LblSignUpRepass" Grid.Row="3" Grid.Column="3" Text="Re-enter Password:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0,0,0" FontFamily="Papyrus" FontSize="36" Foreground="White"></TextBlock>
 
         <!-- Text boxes and input -->
-        <TextBox Name="TxbLoginUsername" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpUsername" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbLoginPass" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpRepass" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbLoginUsername" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbSignUpUsername" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbLoginPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbSignUpPass" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbSignUpRepass" Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
 
         <!-- Buttons -->
-        <Button Name="BtnLogin" Content="Log in!" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="#FFCDAD00" Foreground="White" Click="BtnLogin_Click" />
-        <Button Name="BtnSignUp" Content="Register!" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="#FFCDAD00" Foreground="White" Click="BtnSignUp_Click"/>
+        <Button Name="BtnLogin" Content="Log in!" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="DarkRed" Foreground="White" Click="BtnLogin_Click" />
+        <Button Name="BtnSignUp" Content="Register!" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="DarkRed" Foreground="White" Click="BtnSignUp_Click"/>
     </Grid>
 </Page>

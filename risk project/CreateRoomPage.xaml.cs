@@ -29,8 +29,14 @@ namespace risk_project
         {
             this.InitializeComponent();
 
+            buttons = new List<Button>();
+            labels = new List<TextBlock>();
+
             buttons.Add(BtnBack);
             buttons.Add(BtnCreate);
+
+            labels.Add(LblPlayerAmount);
+            labels.Add(LblRoomName);
         }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
@@ -40,7 +46,23 @@ namespace risk_project
 
         private void FitSize(object sender, SizeChangedEventArgs e)
         {
+            foreach (TextBlock label in labels)
+            {
+                label.FontSize = (ActualHeight + ActualWidth) / 41;
+            }
 
+            foreach (Button button in buttons)
+            {
+                button.FontSize = (ActualHeight+ActualWidth) / 41;
+                button.Width = ActualWidth / 3;
+            }
+
+            LblTitle.FontSize = (ActualHeight + ActualWidth) / 27;
+
+            CbxAmount.Height = ActualHeight / 10.8;
+            CbxAmount.Width = ActualWidth / 4.8;
+
+            CbxAmount.FontSize = (ActualHeight + ActualWidth) / 41;
         }
     }
 }

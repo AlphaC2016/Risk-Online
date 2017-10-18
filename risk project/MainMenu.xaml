@@ -67,14 +67,14 @@
 
 
         <!-- Labels -->
-        <TextBlock Name="LblHelp" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Help" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="Gold"/>
+        <TextBlock Name="LblHelp" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Help" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="DarkRed"/>
 
-        <TextBlock Name="LblSettings" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Settings" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="Gold"/>
+        <TextBlock Name="LblSettings" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Settings" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
 
-        <TextBlock Name="LblJoinRoom" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Join Room" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="Gold"/>
+        <TextBlock Name="LblJoinRoom" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Join Room" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
 
-        <TextBlock Name="LblCreateRoom" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Create Room" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="Gold"/>
+        <TextBlock Name="LblCreateRoom" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Create Room" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
 
-        <TextBlock Name="LblLeaderboards" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Leaderboards" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="Gold"/>
+        <TextBlock Name="LblLeaderboards" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Leaderboards" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
     </Grid>
 </Page>

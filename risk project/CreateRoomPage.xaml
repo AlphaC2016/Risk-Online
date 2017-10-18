@@ -27,13 +27,13 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Name="LblTitle" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Create Room" FontFamily="Papyrus" FontSize="72" Foreground="WhiteSmoke"></TextBlock>
+        <TextBlock Name="LblTitle" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Create Room" FontFamily="Papyrus" FontSize="110" Foreground="WhiteSmoke"></TextBlock>
         <TextBlock Name="LblRoomName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Room Name:" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
         <TextBlock Name="LblPlayerAmount" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Max Player Amount:" FontFamily="Papyrus" FontSize="48" Foreground="White"></TextBlock>
 
-        <TextBox Name="TxbRoomName" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="400"></TextBox>
+        <TextBox Name="TxbRoomName" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="400"></TextBox>
 
-        <ComboBox Name="CbxAmount" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400" Height="100" FontFamily="Papyrus" FontSize="48">
+        <ComboBox Name="CbxAmount" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Height="100" FontFamily="Papyrus" FontSize="48">
             <ComboBoxItem Content="2"></ComboBoxItem>
             <ComboBoxItem Content="3"></ComboBoxItem>
             <ComboBoxItem Content="4"></ComboBoxItem>
