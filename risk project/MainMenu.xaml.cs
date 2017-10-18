@@ -75,5 +75,10 @@ namespace risk_project
         {
             Frame.Navigate(typeof(GamePage));
         }
+
+        private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(CreateRoomPage));
+        }
     }
 }
