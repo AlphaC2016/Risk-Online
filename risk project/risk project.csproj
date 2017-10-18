@@ -99,6 +99,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Auxiliary.cs" />
+    <Compile Include="GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpPage.xaml.cs">
+      <DependentUpon>HelpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LeaderboardsPage.xaml.cs">
+      <DependentUpon>LeaderboardsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
@@ -106,6 +116,9 @@
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -114,9 +127,13 @@
     <None Include="risk project_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Backgrounds\help_background.jpg" />
+    <Content Include="Assets\Backgrounds\leaderboards_background.jpg" />
     <Content Include="Assets\Backgrounds\login_background.jpg" />
     <Content Include="Assets\Backgrounds\main_background.jpg" />
-    <Content Include="Assets\Icons\Acheivements.png" />
+    <Content Include="Assets\Backgrounds\map.jpg" />
+    <Content Include="Assets\Backgrounds\settings_background.jpg" />
+    <Content Include="Assets\Icons\Leaderboards.png" />
     <Content Include="Assets\Icons\CreateRoom.png" />
     <Content Include="Assets\Icons\flag.png" />
     <Content Include="Assets\Icons\Help.png" />
@@ -136,6 +153,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HelpPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LeaderboardsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +172,10 @@
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

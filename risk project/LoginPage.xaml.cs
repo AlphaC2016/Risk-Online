@@ -30,6 +30,8 @@ namespace risk_project
         {
             this.InitializeComponent();
 
+            Auxiliary.Init();
+
             titles.Add(LblLogin);
             titles.Add(LblSignUp);
 

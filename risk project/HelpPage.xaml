@@ -1,0 +1,92 @@
+﻿<Page
+    x:Class="risk_project.HelpPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:risk_project"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="FitSize" SizeChanged="FitSize">
+
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Backgrounds/help_background.jpg"></ImageBrush>
+        </Grid.Background>
+
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Name="TxbInstructions" FontSize="42" FontFamily="Papyrus" Foreground="White" xml:space="preserve">
+                "Risk" is a strategy game built for 2-6 players, in which the player has only one goal - 
+                conquer the entire world!
+            
+                HOW DOES IT WORK?
+
+                PRE-GAME
+                Every players starts with an army, and a few territories that belong to him.
+                In total, there are 42 territories, and every player gets an equal amount.
+                At the start of each game, the player must divide his army between his terriroties -
+                the compuiter automatically puts one soldier in each territory (the minimum.)
+
+                when you finish stationing all your soliders, the real game begins!
+
+                TURN PROCESS
+                The game works in turns.
+                each turn begins with reinforcments - the player gets a few more soliders to put in his territories.
+                for every three territories you have, you get one soldier for your reinforcments -
+                with three soldiers as a minimum. additional bonuses will be detailed later.
+
+                in each turn, a player can use the force he has in a certain territory to attack
+                territories that are "connected" to it - either by land or by naval connection.
+                
+                BATTLES
+                when one territory battles another, each one brings a few soldiers to fight.
+                the attacker can bring up to 3 soldiers, and the defender can bring up to 2.
+                if you are the attacker, you must leave at least  one soldier at the home territory at all times -
+                if you have 3 soldiers, you can only send 2, etc.
+                
+                for each soldier you bring, you get a die. when the dice are thrown,
+                it is decided who will lse how many soldiers.
+                how do we do that?
+                the attacker compares his highest score to the defender's highest score.
+                if the attacker's die got a higher one than the defender's, the defender loses one soldier.
+                if the numbers are equal, or the defender got a bigger score, the attacker loses one soldier.
+                EXAMPLE:
+                the left numbers are the attacker, the right one are the defender.
+                6 - 5
+                5 - 5
+                3
+                because 6 > 5, the defender loses one soldier.
+                but because 5=5, the attacker also loses one.
+                a battle ends when all defende units are dead, when there is only one attacker soldier left,
+                or when the attacker retreats.
+                if a battle was successful, the attacker must put at least one unit in the new territory.
+                a player's turn ends when he doesnt want to attack any more.
+
+                at the end of each turn, the player can move forces from one territory to another,
+                as long as they are connected - if by normal connections or a chain of his territories.
+
+
+                BONUSES
+                if a player captures a whole continent, he gets a reinforcment bonus for as long as he has the entire
+                continent under his control.
+                the continent - bonus table is the following:
+
+                Australia - 2
+                S. America - 2
+                Africa - 3
+                N. America - 5
+                Europe - 5
+                Asia - 7
+
+
+                That's it for now.
+                Good luck!
+                </TextBlock>
+                <Button Name="BtnReturn" Content="Go Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="White" Click="Return" Margin="0,5,5,0"></Button>
+            </StackPanel>
+        </ScrollViewer>
+
+        
+
+
+    </Grid>
+</Page>

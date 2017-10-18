@@ -23,6 +23,7 @@ namespace risk_project
     public sealed partial class MainMenu : Page
     {
         List<Button> buttons = new List<Button>();
+        List<TextBlock> labels = new List<TextBlock>();
 
         public MainMenu()
         {
@@ -31,6 +32,14 @@ namespace risk_project
             buttons.Add(BtnHelp);
             buttons.Add(BtnSettings);
             buttons.Add(BtnJoinRoom);
+            buttons.Add(BtnCreateRoom);
+            buttons.Add(BtnLeaderBoards);
+
+            labels.Add(LblHelp);
+            labels.Add(LblSettings);
+            labels.Add(LblJoinRoom);
+            labels.Add(LblCreateRoom);
+            labels.Add(LblLeaderboards);
         }
 
         private void FitSize(object sender, RoutedEventArgs e)
@@ -40,6 +49,31 @@ namespace risk_project
                 b.Width = ActualWidth / 12.8;
                 b.Height = ActualHeight / 7.2;
             }
+
+            foreach (TextBlock lbl in labels)
+            {
+                lbl.FontSize = ActualHeight * ActualWidth / 43000;
+            }
+        }
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
+        }
+
+        private void BtnLeaderBoards_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(LeaderboardsPage));
+        }
+
+        private void BtnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(HelpPage));
+        }
+
+        private void BtnJoinRoom_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(GamePage));
         }
     }
 }

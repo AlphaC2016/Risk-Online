@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="risk_project.LeaderboardsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:risk_project"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded" SizeChanged="FitSize">
+
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Backgrounds/leaderboards_background.jpg"></ImageBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="1.75*"></ColumnDefinition>
+            <ColumnDefinition Width="1.75*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Name="LblTitle" Text="Leaderboards" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="Gold"></TextBlock>
+        <TextBlock Name="LblName" Text="Name" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="Gold"></TextBlock>
+        <TextBlock Name="LblGamesWon" Text="Victories" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="Gold"></TextBlock>
+
+
+        <Button Name="BtnReturn" Content="Go Back" Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="48" Foreground="Gold" Click="Return"></Button>
+    </Grid>
+</Page>
