@@ -42,7 +42,7 @@
         </ComboBox>
 
         <Button Name="BtnBack" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Go Back" FontFamily="Papyrus" FontSize="48" Foreground="White" Width="300" Click="BtnBack_Click"></Button>
-        <Button Name="BtnCreate" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Create" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGoldenrod" Width="300"></Button>
+        <Button Name="BtnCreate" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Create" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkRed" Width="300"></Button>
 
     </Grid>
 </Page>

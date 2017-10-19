@@ -23,7 +23,7 @@ namespace risk_project
 
         static Auxiliary()
         {
-            InitMusic();
+            //InitMusic();
             musicPlaying = true;
             soundPlaying = true;
             fullScreen = false;
@@ -46,10 +46,10 @@ namespace risk_project
         {
             musicPlaying = !musicPlaying;
 
-            if (musicPlaying)
+            /*if (musicPlaying)
                 player.Play();
             else
-                player.Pause();
+                player.Pause();*/
         }
 
         public static bool IsMusicPlaying() { return musicPlaying; }

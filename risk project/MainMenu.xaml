@@ -9,7 +9,7 @@
 
     <Grid Name="mainGrid">
         <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="/Assets/Backgrounds/main_background.jpg" Opacity="0.8"></ImageBrush>
+            <ImageBrush Stretch="Fill" ImageSource="/Assets/Backgrounds/main_background.jpg" Opacity="1"></ImageBrush>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -67,7 +67,8 @@
 
 
         <!-- Labels -->
-        <TextBlock Name="LblHelp" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Help" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="DarkRed"/>
+
+        <TextBlock Name="LblHelp" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Help" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="DarkRed"></TextBlock>
 
         <TextBlock Name="LblSettings" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Settings" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
 

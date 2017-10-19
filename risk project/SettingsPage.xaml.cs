@@ -24,12 +24,15 @@ namespace risk_project
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        bool music = true;
-        bool sound = false;
+        private bool music = true;
+        private bool sound = true;
 
         public SettingsPage()
         {
             this.InitializeComponent();
+
+            music = true;
+            sound = true;
         }
 
         private void Return(object sender, RoutedEventArgs e)
@@ -39,9 +42,9 @@ namespace risk_project
 
         private void ToggleMusic(object sender, RoutedEventArgs e)
         {
-            Auxiliary.ToggleMusic();
+            music = !music;
 
-            if (!Auxiliary.IsMusicPlaying())
+            if (!music)
             {
                 BtnMusic.Content = "Music: OFF";
                 BtnMusic.Background = new SolidColorBrush(Colors.DarkRed);
@@ -71,7 +74,7 @@ namespace risk_project
 
         private void ChangeColor(object sender, RangeBaseValueChangedEventArgs e)
         {
-            LblColor.Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)SldRed.Value, (byte)SldGreen.Value, (byte)SldBlue.Value));
+            RecColorSample.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)SldRed.Value, (byte)SldGreen.Value, (byte)SldBlue.Value));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -91,6 +94,11 @@ namespace risk_project
 
             else if (view.IsFullScreenMode)
                 view.ExitFullScreenMode();
+        }
+
+        private void FitSize(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

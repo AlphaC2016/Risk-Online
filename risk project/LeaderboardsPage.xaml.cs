@@ -53,7 +53,7 @@ namespace risk_project
                     txb.HorizontalAlignment = HorizontalAlignment.Center;
                     txb.VerticalAlignment = VerticalAlignment.Center;
                     txb.FontFamily = new FontFamily("Papyrus");
-                    txb.Foreground = new SolidColorBrush(Colors.Gold);
+                    txb.Foreground = new SolidColorBrush(Colors.DarkRed);
                     labels.Add(txb);
                     MainGrid.Children.Add(txb);
                 }
