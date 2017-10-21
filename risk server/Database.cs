@@ -8,5 +8,10 @@ namespace risk_server
 {
     class Database
     {
+
+        public bool isUserAndPassMatch(string username, string password)
+        {
+            return true;
+        }
     }
 }

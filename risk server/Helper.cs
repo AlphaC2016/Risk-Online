@@ -25,7 +25,7 @@ namespace risk_server
         public const int JOIN_ROOM = 209;
         public const int JOIN_ROOM_RES = 110;
         public const int LEAVE_ROOM = 211;
-        public const int LEAVE_ROOM_RES = 112;
+        public const int LEAVE_ROOM_RES = 1120;
         public const int NEW_ROOM = 213;
         public const int NEW_ROOM_RES = 114;
         public const int CLOSE_ROOM = 215;
@@ -46,6 +46,31 @@ namespace risk_server
 
         public const int MSG_TYPE_CODE_LENGTH = 3;
 
+        public const int SIGN_IN_SUCCESS = 1020;
+        public const int SIGN_IN_WRONG_DETAILS = 1021;
+        public const int SIGN_IN_USER_IS_ALREADY_CONNECTED = 1022;
+
+        public const int SIGN_UP_SUCCESS = 1040;
+        public const int SIGN_UP_PASS_ILLEGAL = 1041;
+        public const int SIGN_UP_USERNAME_ALREADY_EXISTS = 1042;
+        public const int SIGN_UP_USERNAME_ILLEGAL = 1043;
+        public const int SIGN_UP_OTHER = 1044;
+
+        public const int CREATE_ROOM_SUCCESS = 1140;
+        public const int CREATE_ROOM_FAIL = 1141;
+
+        public const int JOIN_ROOM_SUCCESS = 1100;
+        public const int JOIN_ROOM_FULL = 1101;
+        public const int JOIN_ROOM_NOT_EXIST_OR_OTHER = 1102;
+
+        public const int GET_ROOMS_SUCCESS = 106;
+
+        public const int GET_USERS_OF_ROOM_SUCCESS = 108;
+        public const int GET_USERS_OF_ROOM_FAIL = 1080;
+
+        public const int CREATE_GAME_SUCCESS = 118;
+        public const int CREATE_GAME_FAIL = 1180;
+
         //RESPONSE VERBOSE MEANINGS
         public const int LOGIN_SUCCESS = 0;
         public const int LOGIN_WRONG_DETAILS = 1;
@@ -55,8 +80,6 @@ namespace risk_server
         public const int FORGOT_PASS_EMAIL_DOES_NOT_EXIST = 1;
         public const int FORGOT_PASS_NO_PARAMS = 2;
         public const int FORGOT_PASS_OTHER = 3;
-
-        private static TcpListener server;
 
         public static void SendData(string message, TcpClient client)
         {
@@ -68,7 +91,7 @@ namespace risk_server
         }
 
 
-        public static string RecvData(int size, TcpClient client)
+        private static string RecvData(int size, TcpClient client)
         {
             byte[] data = new byte[size + 1];
             client.GetStream().Read(data, 0, size);
@@ -76,41 +99,24 @@ namespace risk_server
             return ans.Replace("\0", "");
         }
 
-        public static bool Connect()
-        {
-            try
-            {
-                string[] configData = File.ReadAllLines(CONFIG_PATH);
-
-                string IPAddr = configData[0].Split('=')[1];
-                int portNo = int.Parse(configData[1].Split('=')[1]);
-
-                IPEndPoint address = new IPEndPoint(IPAddress.Parse(IPAddr), portNo);
-                client = new TcpClient();
-
-                client.Connect(address);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
         public static string GetPaddedNumber(int num, int size)
         {
             return num.ToString().PadLeft(size, '0');
         }
 
-        public static int GetMessageTypeCode()
+        public static int GetMessageTypeCode(TcpClient client)
         {
-            return int.Parse(RecvData(Helper.MSG_TYPE_CODE_LENGTH));
+            return int.Parse(RecvData(Helper.MSG_TYPE_CODE_LENGTH, client));
         }
 
-        public static void closeUp()
+        public static int GetIntPartFromSocket(TcpClient client, int size)
         {
-            client.GetStream().Close();
-            client.Close();
+            return int.Parse(RecvData(size, client));
+        }
+
+        public static string GetStringPartFromSocket(TcpClient client, int size)
+        {
+            return RecvData(size, client);
         }
     }
 }
