@@ -81,6 +81,8 @@ namespace risk_server
         public const int FORGOT_PASS_NO_PARAMS = 2;
         public const int FORGOT_PASS_OTHER = 3;
 
+        public const string DB_PATH = "MyDatabase.db";
+
         public static void SendData(string message, TcpClient client)
         {
             NetworkStream stream = client.GetStream();
