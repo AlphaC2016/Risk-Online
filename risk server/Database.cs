@@ -53,6 +53,9 @@ namespace risk_server
             return ans;
         }
 
-
+        public void AddVictory(string username)
+        {
+            Execute("UPDATE User SET victories = victories + 1 WHERE username=" + username + ';');
+        }
     }
 }
