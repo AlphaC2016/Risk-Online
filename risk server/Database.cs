@@ -12,7 +12,7 @@ namespace risk_server
         SQLiteConnection con;
         public Database()
         {
-            SQLiteConnection con = new SQLiteConnection("Data Source=" + Helper.DB_PATH +";Version=3;");
+            con = new SQLiteConnection("Data Source=" + Helper.DB_PATH +";Version=3;");
             con.Open();
         }
 
@@ -24,7 +24,7 @@ namespace risk_server
 
         public bool IsUserAndPassMatch(string username, string password)
         {
-            SQLiteDataReader reader = Execute("SELECT * FROM User WHERE username=\""+username+"\" AND password=\""+password+';');
+            SQLiteDataReader reader = Execute("SELECT * FROM User WHERE username=\""+username+"\" AND password=\""+password+"\";");
             return reader.Read();
         }
 
@@ -36,12 +36,12 @@ namespace risk_server
 
         public void AddNewUser(string username, string password)
         {
-            Execute("INSERT INTO User ('username', 'password', 'victories') VALUES ('" + username + "', '" + password + "', 0);");
+            Execute("INSERT INTO User ('username', 'password') VALUES ('" + username + "', '" + password + "');");
         }
 
         public string[,] GetLeaderboards()
         {
-            SQLiteDataReader reader = Execute("SELECT username,victories FROM User ORDER BY vicories DESC");
+            SQLiteDataReader reader = Execute("SELECT username,victories FROM User ORDER BY vicories DESC;");
             string[,] ans = new string[10, 2];
 
             for (int i = 0; i < ans.Length && reader.Read(); i++)
@@ -55,7 +55,7 @@ namespace risk_server
 
         public void AddVictory(string username)
         {
-            Execute("UPDATE User SET victories = victories + 1 WHERE username=" + username + ';');
+            Execute("UPDATE User SET victories = victories + 1 WHERE username=" + username + "\";");
         }
     }
 }

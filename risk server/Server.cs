@@ -178,14 +178,15 @@ namespace risk_server
 
         //--------------------------------HANDLERS---------------------------------
 
+        //-------------------SIGN HANDLERS-----------------------------------------
         private User HandleSignIn(RecievedMessage msg)
         {
-            string username = msg.GetValues()[0];
-            string password = msg.GetValues()[1];
+            string username = msg[0];
+            string password = msg[1];
 
             try
             {
-                if (!_db.isUserAndPassMatch(username, password))
+                if (!_db.IsUserAndPassMatch(username, password))
                 {
                     Helper.SendData(Helper.SIGN_IN_WRONG_DETAILS.ToString(), msg.GetSocket());
                     return null;
@@ -198,10 +199,80 @@ namespace risk_server
                 return null;
             }
 
-            if (Get)
+            if (GetUserByName(username) != null)
+            {
+                Helper.SendData(Helper.SIGN_IN_USER_IS_ALREADY_CONNECTED.ToString(), msg.GetSocket());
+                return null;
+            }
 
-
+            User newUser = new User(username, msg.GetSocket());
+            Helper.SendData(Helper.SIGN_IN_SUCCESS.ToString(), msg.GetSocket());
+            return newUser;
         }
+
+        private bool HandleSignUp(RecievedMessage msg)
+        {
+            string username = msg[0];
+            string password = msg[1];
+
+            try
+            {
+                if (_db.DoesUserExist(username))
+                {
+                    Helper.SendData(Helper.SIGN_UP_USERNAME_ALREADY_EXISTS.ToString(), msg.GetSocket());
+                    return false;
+                }
+
+                _db.AddNewUser(username, password);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Data);
+                Helper.SendData(Helper.SIGN_UP_OTHER.ToString(), msg.GetSocket());
+            }
+
+            Helper.SendData(Helper.SIGN_UP_SUCCESS.ToString(), msg.GetSocket());
+            return true;
+        }
+
+        private void HandleSignOut(RecievedMessage msg)
+        {
+            if (msg.GetUser() != null)
+            {
+                //HandleLeaveGame(msg);
+                //HandleLeaveRoom(msg);
+                //HandleCloseRoom(msg);
+
+                _connectedUsers.Remove(msg.GetUser().GetSocket());
+            }
+        }
+
+
+        //------------------ROOM HANDLERS-----------------------------------------
+
+        private bool HandleCreateRoom(RecievedMessage msg)
+        {
+            User user;
+            if ((user = msg.GetUser()) != null)
+            {
+                bool success = user.CreateRoom(++_roomIdSequence, msg[0], int.Parse(msg[1]));
+                
+                if (success)
+                {
+                    _roomsList.Add(_roomIdSequence, user.GetRoom());
+                    return true;
+                }
+                else
+                {
+                    _roomIdSequence--;
+                    return false;
+                }
+            }
+            return false;
+        }
+
+
+
 
         private void ClientHandler(object data)
         {
@@ -235,8 +306,10 @@ namespace risk_server
         {
             foreach (User user in _connectedUsers.Values)
             {
-                if (user != null && user.)
+                if (user != null && user.GetUsername() == username)
+                    return user;
             }
+            return null;
         }
     }
 }
