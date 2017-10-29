@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace risk_server
 {
+
     class User
     {
         private string _username;
@@ -14,6 +15,11 @@ namespace risk_server
         private Game _currGame;
         TcpClient _socket;
 
+        /// <summary>
+        /// the default constructor.
+        /// </summary>
+        /// <param name="name">the user's name.</param>
+        /// <param name="socket">the user's comm socekt.</param>
         public User(string name, TcpClient socket)
         {
             _username = name;
@@ -22,18 +28,23 @@ namespace risk_server
             _currRoom = null;
         }
 
+        /// <summary>
+        /// this function sends a message to the user.
+        /// </summary>
+        /// <param name="message">the message.</param>
         public void Send(string message)
         {
             Helper.SendData(message, _socket);
         }
 
+        /*simple setter.*/
         void SetGame(Game game)
         {
             _currGame = game;
             _currRoom = null;
         }
 
-
+        /* simple get functions.*/
         public string GetUsername() { return _username; }
 
         public TcpClient GetSocket() { return _socket; }
@@ -42,7 +53,13 @@ namespace risk_server
 
         public Room GetRoom() { return _currRoom; }
 
-
+        /// <summary>
+        /// this function tries to create a room controlled by the current user.
+        /// </summary>
+        /// <param name="roomId">the room's id.</param>
+        /// <param name="name">the room's name.</param>
+        /// <param name="maxUsers">the max amount of users in the room.</param>
+        /// <returns></returns>
         public bool CreateRoom(int roomId, string name, int maxUsers)
         {
             if (_currRoom != null)
@@ -55,6 +72,11 @@ namespace risk_server
             return true;
         }
 
+        /// <summary>
+        /// this function adds the user to a room.
+        /// </summary>
+        /// <param name="newRoom">the new room for the user.</param>
+        /// <returns>returns true if worked, false otherwise.</returns>
         public bool JoinRoom(Room newRoom)
         {
             if (_currRoom != null) return false;
@@ -66,23 +88,33 @@ namespace risk_server
             return true;
         }
 
-
+        /// <summary>
+        /// this function removes the user from his room.
+        /// </summary>
         public void LeaveRoom()
         {
             _currRoom.LeaveRoom(this);
             _currRoom = null;
         }
 
+        /// <summary>
+        /// this function attempts to close the room the user is in.
+        /// </summary>
+        /// <returns>returns the room code if worked, -1 otherwise.</returns>
         public int CloseRoom()
         {
             if (_currRoom == null) return -1;
 
             int ans = _currRoom.GetId();
-            _currRoom.CloseRoom(this);
+            ans = _currRoom.CloseRoom(this);
             _currRoom = null;
             return ans;
         }
 
+        /// <summary>
+        /// this function removes the user from the current game.
+        /// </summary>
+        /// <returns>true unless the room's empty.</returns>
         public bool LeaveGame()
         {
             if (_currGame == null) return false;
