@@ -10,6 +10,7 @@ namespace risk_server
     {
         static void Main(string[] args)
         {
+            
         }
     }
 }

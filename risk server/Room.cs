@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace risk_server
 {
+    /// <summary>
+    /// This class represents a game room, that contains a group of users before they play a game.
+    /// </summary>
 
-    /* This class represents a game room, that contains a group of users before they play a game.
-     * 
-     * Fields:
+    /* Fields:
      * _users = the list of users in the room.
      * _admin = the administrator of the room (whomever built it)
      * _maxUsers = the maximal amount of users in the room.
@@ -24,7 +25,13 @@ namespace risk_server
         string _name;
         int _id;
 
-        /* The default constructor. */
+        /// <summary>
+        /// the default constructor.
+        /// </summary>
+        /// <param name="id">the room's id.</param>
+        /// <param name="admin">the administrator of the room.</param>
+        /// <param name="name">the name of the room.</param>
+        /// <param name="maxUsers">the max amount of users in this room.</param>
         public Room(int id, User admin, string name, int maxUsers)
         {
             _id = id;
@@ -36,8 +43,11 @@ namespace risk_server
             _users.Add(admin);
         }
 
-        /* This function sends a message to all users in th room -
-         * a neater alternatie to using a NetworkStream directly. */
+        /// <summary>
+        /// This function sends a message to all users in th room -
+        /// a neater alternative to using a NetworkStream directly.
+        /// </summary>
+        /// <param name="message">the message to be sent.</param>
         private void SendMessage(string message)
         {
             foreach (User user in _users)
@@ -46,7 +56,11 @@ namespace risk_server
             }
         }
 
-        /* This function works exacty the same as the original, but allows you to exclude a user from the list. */
+        /// <summary>
+        /// This function works exacty the same as the original, but allows you to exclude a user from the list.
+        /// </summary>
+        /// <param name="excludeUser">the user to be excluded.</param>
+        /// <param name="message">the </param>
         private void SendMessage(User excludeUser, string message)
         {
             foreach (User user in _users)
@@ -57,12 +71,20 @@ namespace risk_server
         }
 
 
+        //returns all users.
         public List<User> GetUsers() { return _users; }
 
+        //returns the room's id.
         public int GetId() { return _id; }
 
+        //returns the room's name.
         public string GetName() { return _name; }
 
+
+        /// <summary>
+        /// this function generates a 108 message that contains all current users.
+        /// </summary>
+        /// <returns>the 108 message.</returns>
         public string GetUserListMessage()
         {
             string ans = Helper.GET_USERS_OF_ROOM_SUCCESS.ToString() + Helper.GetPaddedNumber(_users.Count, 1);
@@ -75,6 +97,11 @@ namespace risk_server
             return ans;
         }
 
+        /// <summary>
+        /// this function attempts to add a user to the room.
+        /// </summary>
+        /// <param name="user">the user to be added.</param>
+        /// <returns>returns whether the operation worked.</returns>
         public bool JoinRoom(User user)
         {
             if (_users.Count == _maxUsers)
@@ -89,6 +116,10 @@ namespace risk_server
             return true;
         }
 
+        /// <summary>
+        /// this function removes a user from the room.
+        /// </summary>
+        /// <param name="user">the user to be removed.</param>
         public void LeaveRoom(User user)
         {
             if (_users.Contains<User>(user))
@@ -99,6 +130,11 @@ namespace risk_server
             }
         }
 
+        /// <summary>
+        /// this function shuts the room down.
+        /// </summary>
+        /// <param name="user">the user who initiated the shutdown.</param>
+        /// <returns>returns the room's id code or -1 if failed.</returns>
         public int CloseRoom(User user)
         {
             if (user != _admin)

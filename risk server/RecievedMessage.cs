@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace risk_server
 {
-    /* This class represents a message sent by a client.
-     * 
-     * Fields:
-     * _socket = the TcpClient that represents the socket the message has been sent through.
-     * _user = the user that sent the message. if unknown, will be set to null.
-     * _messageCode = the message code. (big surprise there, huh?)
-     * _values = the specific vaues of the message. (values in a values field?! who would have thought!)
-     */
+    /// <summary>
+    /// This class represents a message sent by a client.
+    /// Fields:
+    /// _socket = the TcpClient that represents the socket the message has been sent through.
+    /// _user = the user that sent the message. if unknown, will be set to null.
+    /// _messageCode = the message code. (big surprise there, huh?)
+    /// _values = the specific vaues of the message. (values in a values field?! who would have thought!)
+    /// </summary>
 
     class RecievedMessage
     {
@@ -23,14 +23,23 @@ namespace risk_server
         private int _messageCode;
         private List<string> _values;
 
-        /* This constructor is in case of a message without any special values.*/
+        /// <summary>
+        /// This constructor is in case of a message without any special values.
+        /// </summary>
+        /// <param name="socket">the socket the message was sent in.</param>
+        /// <param name="messageCode">the message code.</param>
         public RecievedMessage(TcpClient socket, int messageCode)
         {
             _socket = socket;
             _messageCode = messageCode;
         }
 
-        /* This constructor is in case of a message with values.*/
+        /// <summary>
+        /// This constructor is in case of a message with values.
+        /// </summary>
+        /// <param name="socket">the socket the message was sent in.</param>
+        /// <param name="messageCode">the message code.</param>
+        /// <param name="values">the verbose values of the message.</param>
         public RecievedMessage(TcpClient socket, int messageCode, List<string> values)
         {
             _socket = socket;
@@ -45,10 +54,14 @@ namespace risk_server
         public void SetUser(User user) { _user = user; }
         public int GetMessageCode() { return _messageCode; }
 
-        /* This function overrides the [] operator in order to allow direct access to the values og the message.*/
-        public string this[int key]
+        /// <summary>
+        /// This function overrides the [] operator in order to allow direct access to the values og the message.
+        /// </summary>
+        /// <param name="index">the value index.</param>
+        /// <returns>the specific value.</returns>
+        public string this[int index]
         {
-            get { return _values[key]; }
+            get { return _values[index]; }
         }
     }
 }
