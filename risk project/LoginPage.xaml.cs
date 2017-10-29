@@ -47,6 +47,8 @@ namespace risk_project
 
             buttons.Add(BtnLogin);
             buttons.Add(BtnSignUp);
+
+            Comms cm = new Comms();
         }
 
         private void FitSize(object sender, RoutedEventArgs e)

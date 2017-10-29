@@ -174,8 +174,6 @@ namespace risk_server
         }
 
 
-
-
         //--------------------------------HANDLERS---------------------------------
 
         //-------------------SIGN HANDLERS-----------------------------------------
@@ -271,9 +269,94 @@ namespace risk_server
             return false;
         }
 
+        private bool HandleCloseRoom(RecievedMessage msg)
+        {
 
+            User user = msg.GetUser();
+            if (user!=null)
+            {
+                Room rm = user.GetRoom();
+                if (rm != null)
+                {
+                    int code = user.CloseRoom();
 
+                    if (code != -1)
+                    {
+                        _roomsList.Remove(code);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
+        private bool HandleJoinRoom(RecievedMessage msg)
+        {
+            User user = msg.GetUser();
+            if (user != null)
+            {
+                int roomId = int.Parse(msg[0]);
+                Room rm = GetRoomById(roomId);
+
+                if (rm != null)
+                {
+                    return msg.GetUser().JoinRoom(rm);
+                }
+                else
+                {
+                    msg.GetUser().Send(Helper.JOIN_ROOM_NOT_EXIST_OR_OTHER.ToString());
+                }
+            }
+            return false;
+        }
+
+        private bool HandleLeaveRoom(RecievedMessage msg)
+        {
+            if (msg.GetUser() != null && msg.GetUser().GetRoom() != null)
+            {
+                msg.GetUser().LeaveRoom();
+                return true;
+            }
+            return false;
+        }
+
+        private void HandleGetUsersInRoom(RecievedMessage msg)
+        {
+            User user = msg.GetUser();
+            if (user != null)
+            {
+                Room room = GetRoomById(int.Parse(msg[0]));
+                if (room != null)
+                {
+                    user.Send(room.GetUserListMessage());
+                }
+                else
+                {
+                    user.Send(Helper.GET_USERS_OF_ROOM_FAIL.ToString());
+                }
+            }
+        }
+
+        private void HandleGetRooms(RecievedMessage msg)
+        {
+            User user = msg.GetUser();
+            if (user != null)
+            {
+                int num = _roomsList.Count();
+
+                string ans = Helper.GET_ROOMS_SUCCESS.ToString() + Helper.GetPaddedNumber(num, 4);
+
+                foreach (KeyValuePair<int, Room> pair in _roomsList)
+                {
+                    ans += Helper.GetPaddedNumber(pair.Key, 4);
+                    ans += Helper.GetPaddedNumber(pair.Value.GetName().Length, 4);
+                    ans += pair.Value;
+                }
+                user.Send(ans);
+            }
+        }
+
+        //--------------------------CLIENT HANDLERS--------------------------------
         private void ClientHandler(object data)
         {
             TcpClient client = data as TcpClient;
@@ -293,7 +376,105 @@ namespace risk_server
 
         private void HandleRecievedMessages()
         {
+            RecievedMessage msg = null;
+            while (true)
+            {
+                if (_queRecMessages.Count>0)
+                {
+                    lock(_queRecMessages)
+                    {
+                        msg = _queRecMessages.Dequeue();
+                    }
+                    Router(msg);
+                }
+            }
+        }
 
+        private void Router(RecievedMessage rm)
+        {
+            int messageCode = rm.GetMessageCode();
+
+            switch (messageCode)
+            {
+                case Helper.SIGN_IN:
+                    Console.WriteLine("router :: entering SignIn");
+                    if (HandleSignIn(rm) == null)
+                    {
+                        Console.WriteLine("router :: ERROR SignIn");
+                    }
+                    break;
+
+                case Helper.SIGN_OUT:
+                    Console.WriteLine("router :: entering SignOut");
+                    HandleSignOut(rm);
+                    break;
+
+                case Helper.SIGN_UP:
+                    Console.WriteLine("router :: entering SignUp");
+                    if (!HandleSignUp(rm))
+                    {
+                        Console.WriteLine("router :: ErrorSignUp");
+                    }
+                    break;
+
+                /*case Helper.EXSIT_ROOMS:
+                    Console.WriteLine("router :: entering ExsitRooms");
+                    HandleExsitRooms(rm);
+                    break;
+
+                case Helper.JOIN_ROOM:
+                    Console.WriteLine("router :: entering JoinRoom");
+                    HandleJoinRoom(rm);
+                    break;
+
+                case Helper.USERS_IN_ROOM:
+                    Console.WriteLine("router :: entering UsersInRoom");
+                    HandleUsersInRoom(rm);
+                    break;
+
+                case Helper.CREATE_ROOM:
+                    Console.WriteLine("router :: entering CreateRoom");
+                    HandleCreateRoom(rm);
+                    break;
+
+                case Helper.LEAVE_ROOM:
+                    Console.WriteLine("router :: entering LeaveRoom");
+                    HandleLeaveRoom(rm);
+                    break;
+
+                case Helper.CLOSE_ROOM:
+                    Console.WriteLine("router :: entering CloseRoom");
+                    HandleCloseRoom(rm);
+                    break;
+
+                case Helper.START_GAME:
+                    Console.WriteLine("router :: entering StartGame");
+                    HandleStartGame(rm);
+                    break;
+
+                case Helper.PLAYER_MOVE:
+                    Console.WriteLine("router :: entering PlayerMove");
+                    HandlePlayerMove(rm);
+                    break;
+
+                case Helper.BEST_SCORES:
+                    Console.WriteLine("router :: entering BestScores");
+                    HandleBestScores(rm);
+                    break;
+
+                case Helper.ADD_SCORE:
+                    Console.WriteLine("router :: entering AddScore");
+                    HandleAddScore(rm);
+                    break;
+
+                case Helper.EXIT:
+                    Console.WriteLine("router :: entering SafeDeleteUser");
+                    this.SafeDeleteUser(rm);
+                    break;*/
+
+                default:
+                    break;
+            }
         }
 
         //--------------------------GETTERS----------------------------------------
@@ -311,5 +492,18 @@ namespace risk_server
             }
             return null;
         }
+
+        private Room GetRoomById(int id)
+        {
+            return _roomsList[id];
+        }
+
+        private void SafeDeleteUser(RecievedMessage msg)
+        {
+            TcpClient sc = msg.GetSocket();
+            HandleSignOut(msg);
+            sc.Close();
+        }
+
     }
 }

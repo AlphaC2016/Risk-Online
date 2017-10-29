@@ -13,7 +13,7 @@ using Windows.UI;
 
 namespace risk_project
 {
-    static class Auxiliary
+    static class Helper
     {
         private static MediaPlayer player;
         public static bool musicPlaying;
@@ -21,7 +21,7 @@ namespace risk_project
         public static bool fullScreen;
         static SolidColorBrush playerColor;
 
-        static Auxiliary()
+        static Helper()
         {
             //InitMusic();
             musicPlaying = true;
