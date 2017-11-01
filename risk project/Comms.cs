@@ -30,18 +30,20 @@ namespace risk_project
             await sc.ConnectAsync(serverHost, port);
         }
 
-        public static async void Send(string message)
+        public static  void SendData(string message)
         {
-            IBuffer buf = Encoding.ASCII.GetBytes(message).AsBuffer();
-            await sc.OutputStream.WriteAsync(buf);
-            await sc.OutputStream.FlushAsync();
+            StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
+            writer.Write(message);
+            writer.Flush();
         }
 
-        public static async Task<string> Recieve()
+        public static string RecvData(int size)
         {
             Stream streamIn = sc.InputStream.AsStreamForRead();
             StreamReader reader = new StreamReader(streamIn);
-            return await reader.ReadLineAsync();
+            char[] buf = new char[size + 1];
+            reader.Read(buf, 0, size);
+            return new string(buf);
         }
     }
 }
