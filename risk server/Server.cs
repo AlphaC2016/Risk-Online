@@ -25,6 +25,7 @@ namespace risk_server
             InitSocket();
             _connectedUsers = new Dictionary<TcpClient, User>();
             _roomsList = new Dictionary<int, Room>();
+            _queRecMessages = new Queue<RecievedMessage>();
             _db = new Database();
             _roomIdSequence++;
         }
