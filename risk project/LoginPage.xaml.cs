@@ -48,7 +48,7 @@ namespace risk_project
             buttons.Add(BtnLogin);
             buttons.Add(BtnSignUp);
 
-            Comms cm = new Comms();
+            Comms.InitSocket();
         }
 
         private void FitSize(object sender, RoutedEventArgs e)
@@ -78,6 +78,15 @@ namespace risk_project
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
+            string message = Comms.SIGN_IN.ToString();
+            string username = TxbLoginUsername.Text;
+            string password = TxbLoginPass.Text;
+
+            message += Comms.GetPaddedNumber(username.Length, 2) + username;
+            message += Comms.GetPaddedNumber(password.Length, 2) + password;
+
+            Comms.SendData(message);
+
             Frame.Navigate(typeof(MainMenu));
         }
 
