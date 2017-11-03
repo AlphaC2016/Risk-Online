@@ -108,11 +108,13 @@ namespace risk_project
 
         public static string RecvData(int size)
         {
-            Stream streamIn = sc.InputStream.AsStreamForRead();
-            StreamReader reader = new StreamReader(streamIn);
-            char[] buf = new char[size + 1];
-            reader.Read(buf, 0, size);
-            return new string(buf);
+            IBuffer buf = new byte[size + 1].AsBuffer();
+            sc.InputStream.ReadAsync()
+            //Stream streamIn = sc.InputStream.AsStreamForRead();
+            //StreamReader reader = new StreamReader(streamIn);
+            //char[] buf = new char[size + 1];
+            //reader.Read(buf, 0, size);
+            //return new string(buf);
         }
 
         public static string GetPaddedNumber(int num, int size)

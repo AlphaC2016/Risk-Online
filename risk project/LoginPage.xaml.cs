@@ -109,7 +109,7 @@ namespace risk_project
                     }
                 }
             });
-
+            getAnswer.Start();
             
         }
 
