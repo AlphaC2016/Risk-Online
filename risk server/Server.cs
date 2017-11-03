@@ -96,10 +96,6 @@ namespace risk_server
                     // password
                     sizes = Helper.GetIntPartFromSocket(client, 2);
                     values.Add(Helper.GetStringPartFromSocket(client, sizes));
-
-                    // email
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
                     break;
 
                 case Helper.ACTIVE_ROOMS:
@@ -481,7 +477,14 @@ namespace risk_server
         //--------------------------GETTERS----------------------------------------
         private User GetUserBySocket(TcpClient client)
         {
-            return _connectedUsers[client];
+            try
+            {
+                return _connectedUsers[client];
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         private User GetUserByName(string username)

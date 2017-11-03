@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -85,9 +87,30 @@ namespace risk_project
             message += Comms.GetPaddedNumber(username.Length, 2) + username;
             message += Comms.GetPaddedNumber(password.Length, 2) + password;
 
-            Comms.SendData(message);
+            Task send = new Task(() => { Comms.SendData(message); });
+            send.Start();
 
-            Frame.Navigate(typeof(MainMenu));
+            Task getAnswer = new Task(() =>
+            {
+                RecievedMessage msg = new RecievedMessage();
+
+                if (msg.GetCode() == Comms.SIGN_IN_RES)
+                {
+                    if (msg[0] == "0")
+                    {
+                        Frame.Navigate(typeof(MainMenu));
+                    }
+                    else
+                    {
+                        var dialog = new MessageDialog("Incorrect username or password.");
+                        dialog.ShowAsync();
+                        TxbLoginUsername.Text = "";
+                        TxbLoginPass.Text = "";
+                    }
+                }
+            });
+
+            
         }
 
         private void BtnSignUp_Click(object sender, RoutedEventArgs e)

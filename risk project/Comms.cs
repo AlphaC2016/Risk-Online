@@ -17,6 +17,8 @@ namespace risk_project
     {
         private static StreamSocket sc;
 
+        private const string CONFIG_PATH = "config.txt";
+
         public const int SIGN_IN = 200; //protocol values
         public const int SIGN_OUT = 201;
         public const int SIGN_IN_RES = 102;
@@ -85,35 +87,32 @@ namespace risk_project
         public const int FORGOT_PASS_NO_PARAMS = 2;
         public const int FORGOT_PASS_OTHER = 3;
 
+        static Comms()
+        {
+        }
 
         public static async void InitSocket()
         {
             sc = new StreamSocket();
             HostName serverHost = new HostName("127.0.0.1");
-            string port = "9736";
+            string port = "3000";
             await sc.ConnectAsync(serverHost, port);
         }
 
-        public static void SendData(string message)
+        public static  void SendData(string message)
         {
-            byte[] buf = Encoding.ASCII.GetBytes(message);
             StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
-            writer.Write(buf);
+            writer.Write(message);
             writer.Flush();
         }
 
-        public static string RecvData(int length)
+        public static string RecvData(int size)
         {
             Stream streamIn = sc.InputStream.AsStreamForRead();
             StreamReader reader = new StreamReader(streamIn);
-            char[] buf = new char[length + 1];
-            reader.Read(buf, 0, length);
+            char[] buf = new char[size + 1];
+            reader.Read(buf, 0, size);
             return new string(buf);
-        }
-
-        public static int GetIntPartFromSocket(int length)
-        {
-            return int.Parse(RecvData(length));
         }
 
         public static string GetPaddedNumber(int num, int size)
