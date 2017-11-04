@@ -110,7 +110,6 @@ namespace risk_project
                 }
             });
             getAnswer.Start();
-            
         }
 
         private void BtnSignUp_Click(object sender, RoutedEventArgs e)
