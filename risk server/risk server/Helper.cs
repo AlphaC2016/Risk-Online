@@ -46,7 +46,7 @@ namespace risk_server
 
         public const int MSG_TYPE_CODE_LENGTH = 3;
 
-        public const int SIGN_IN_SUCCESS = 1020;
+        public const int SIGN_IN_SUCCESS = 10200;
         public const int SIGN_IN_WRONG_DETAILS = 1021;
         public const int SIGN_IN_USER_IS_ALREADY_CONNECTED = 1022;
 

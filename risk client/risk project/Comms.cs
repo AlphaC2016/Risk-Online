@@ -15,8 +15,9 @@ namespace risk_project
 {
     static class Comms
     {
-        private static StreamSocket sc;
+        //private static StreamSocket sc;
         private static StreamReader reader = null;
+        private static StreamSocket sc;
 
         private const string CONFIG_PATH = "config.txt";
 
@@ -110,14 +111,18 @@ namespace risk_project
 
         public static string RecvData(int size)
         {
-            if (reader == null)
+            lock (sc)
             {
-                Stream streamIn = sc.InputStream.AsStreamForRead();
-                reader = new StreamReader(streamIn);
+                    if (reader == null)
+                    {
+                        Stream streamIn = sc.InputStream.AsStreamForRead();
+                        reader = new StreamReader(streamIn);
+                    }
+                    char[] buf = new char[size];
+                    reader.Read(buf, 0, size);
+                    return new string(buf);
             }
-            char[] buf = new char[size + 1];
-            reader.Read(buf, 0, size);
-            return new string(buf);
+            
         }
 
         public static string GetPaddedNumber(int num, int size)

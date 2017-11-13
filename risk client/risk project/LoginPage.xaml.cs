@@ -90,23 +90,29 @@ namespace risk_project
             Task send = new Task(() => { Comms.SendData(message); });
             send.Start();
 
-            Task getAnswer = new Task(() =>
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            Task getAnswer = new Task(async () =>
             {
                 RecievedMessage msg = new RecievedMessage();
 
                 if (msg.GetCode() == Comms.SIGN_IN_RES)
                 {
-                    if (msg[0] == "0")
-                    {
-                        Frame.Navigate(typeof(MainMenu));
-                    }
-                    else
-                    {
-                        var dialog = new MessageDialog("Incorrect username or password.");
-                        dialog.ShowAsync();
-                        TxbLoginUsername.Text = "";
-                        TxbLoginPass.Text = "";
-                    }
+                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                   {
+                       if (msg[0] == "0")
+                       {
+                           Frame.Navigate(typeof(MainMenu));
+                       }
+                       else
+                       {
+                           var dialog = new MessageDialog("Incorrect username or password.");
+                           dialog.ShowAsync();
+
+                           TxbLoginUsername.Text = "";
+                           TxbLoginPass.Text = "";
+                       }
+                   });
+                    
                 }
             });
             getAnswer.Start();
