@@ -58,6 +58,7 @@ namespace risk_server
         private void Accept()
         {
             TcpClient client = _socket.AcceptTcpClient();
+            Console.WriteLine("ACCEPTED CLIENT FROM " + Helper.GetIp(client));
             Thread t = new Thread(ClientHandler);
             t.Start(client);
         }
@@ -183,6 +184,7 @@ namespace risk_server
             {
                 if (!_db.IsUserAndPassMatch(username, password))
                 {
+                    Console.WriteLine("SIGN IN: USERNAME AND PASSWORD DO NOT MATCH FROM SOCKET "+Helper.GetIp(msg.GetSocket()));
                     Helper.SendData(Helper.SIGN_IN_WRONG_DETAILS.ToString(), msg.GetSocket());
                     return null;
                 }
@@ -196,12 +198,14 @@ namespace risk_server
 
             if (GetUserByName(username) != null)
             {
+                Console.WriteLine("SIGN IN: USER IS ALREADY CONNECTED FROM SOCKET " + Helper.GetIp(msg.GetSocket()));
                 Helper.SendData(Helper.SIGN_IN_USER_IS_ALREADY_CONNECTED.ToString(), msg.GetSocket());
                 return null;
             }
 
             User newUser = new User(username, msg.GetSocket());
             Helper.SendData(Helper.SIGN_IN_SUCCESS.ToString(), msg.GetSocket());
+            Console.WriteLine("SIGN IN: SUCCESSFUL FROM SOCKET " +Helper.GetIp(msg.GetSocket()));
             return newUser;
         }
 
@@ -239,6 +243,7 @@ namespace risk_server
                 //HandleCloseRoom(msg);
 
                 _connectedUsers.Remove(msg.GetUser().GetSocket());
+                SafeDeleteUser(msg);
             }
         }
 
@@ -395,10 +400,7 @@ namespace risk_server
             {
                 case Helper.SIGN_IN:
                     Console.WriteLine("router :: entering SignIn");
-                    if (HandleSignIn(rm) == null)
-                    {
-                        Console.WriteLine("router :: ERROR SignIn");
-                    }
+                    HandleSignIn(rm);
                     break;
 
                 case Helper.SIGN_OUT:

@@ -103,9 +103,17 @@ namespace risk_project
                        {
                            Frame.Navigate(typeof(MainMenu));
                        }
-                       else
+                       else if (msg[0] == Comms.SIGN_IN_WRONG_DETAILS.ToString())
                        {
                            var dialog = new MessageDialog("Incorrect username or password.");
+                           dialog.ShowAsync();
+
+                           TxbLoginUsername.Text = "";
+                           TxbLoginPass.Text = "";
+                       }
+                       else
+                       {
+                           var dialog = new MessageDialog("The specified user is already connected - please try again.");
                            dialog.ShowAsync();
 
                            TxbLoginUsername.Text = "";
@@ -120,6 +128,52 @@ namespace risk_project
 
         private void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            if (TxbSignUpPass.Text != TxbSignUpRepass.Text)
+            {
+                var dialog = new MessageDialog("Passwords do not match. try again.");
+                dialog.ShowAsync();
+                TxbSignUpPass.Text = "";
+                TxbSignUpRepass.Text = "";
+            }
+
+            string message = Comms.SIGN_UP.ToString();
+            string username = TxbSignUpUsername.Text;
+            string password = TxbSignUpPass.Text;
+
+            message += Comms.GetPaddedNumber(username.Length, 2) + username;
+            message += Comms.GetPaddedNumber(password.Length, 2) + password;
+
+            Task send = new Task(() => { Comms.SendData(message); });
+            send.Start();
+            send.Wait();
+
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            Task getAnswer = new Task(async () =>
+            {
+                RecievedMessage msg = new RecievedMessage();
+
+                if (msg.GetCode() == Comms.SIGN_UP_RES)
+                {
+                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        if (msg[0] == "0")
+                        {
+                            Frame.Navigate(typeof(MainMenu));
+                        }
+                        else
+                        {
+                            var dialog = new MessageDialog("Incorrect username or password.");
+                            dialog.ShowAsync();
+
+                            TxbLoginUsername.Text = "";
+                            TxbLoginPass.Text = "";
+                        }
+                    });
+
+                }
+            });
+            getAnswer.Start();
+
             Frame.Navigate(typeof(MainMenu));
         }
     }

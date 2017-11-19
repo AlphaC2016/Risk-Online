@@ -54,18 +54,18 @@ namespace risk_project
 
         public const int MSG_TYPE_CODE_LENGTH = 3;
 
-        public const int SIGN_IN_SUCCESS = 1020;
-        public const int SIGN_IN_WRONG_DETAILS = 1021;
-        public const int SIGN_IN_USER_IS_ALREADY_CONNECTED = 1022;
+        public const int SIGN_IN_SUCCESS = 0;
+        public const int SIGN_IN_WRONG_DETAILS = 1;
+        public const int SIGN_IN_USER_IS_ALREADY_CONNECTED = 2;
 
-        public const int SIGN_UP_SUCCESS = 1040;
-        public const int SIGN_UP_PASS_ILLEGAL = 1041;
-        public const int SIGN_UP_USERNAME_ALREADY_EXISTS = 1042;
-        public const int SIGN_UP_USERNAME_ILLEGAL = 1043;
-        public const int SIGN_UP_OTHER = 1044;
+        public const int SIGN_UP_SUCCESS = 0;
+        public const int SIGN_UP_PASS_ILLEGAL = 1;
+        public const int SIGN_UP_USERNAME_ALREADY_EXISTS = 2;
+        public const int SIGN_UP_USERNAME_ILLEGAL = 3;
+        public const int SIGN_UP_OTHER = 4;
 
-        public const int CREATE_ROOM_SUCCESS = 1140;
-        public const int CREATE_ROOM_FAIL = 1141;
+        public const int CREATE_ROOM_SUCCESS = 0;
+        public const int CREATE_ROOM_FAIL = 1;
 
         public const int JOIN_ROOM_SUCCESS = 1100;
         public const int JOIN_ROOM_FULL = 1101;
@@ -101,12 +101,15 @@ namespace risk_project
             await sc.ConnectAsync(serverHost, port);
         }
 
-        public static  void SendData(string message)
+        public static void SendData(string message)
         {
-            StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
-            writer.Write(message);
-            writer.Flush();
-            reader = null;
+            lock (sc)
+            {
+                StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
+                writer.Write(message);
+                writer.Flush();
+                reader = null;
+            }
         }
 
         public static string RecvData(int size)

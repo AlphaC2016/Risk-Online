@@ -46,7 +46,7 @@ namespace risk_server
 
         public const int MSG_TYPE_CODE_LENGTH = 3;
 
-        public const int SIGN_IN_SUCCESS = 10200;
+        public const int SIGN_IN_SUCCESS = 1020;
         public const int SIGN_IN_WRONG_DETAILS = 1021;
         public const int SIGN_IN_USER_IS_ALREADY_CONNECTED = 1022;
 
@@ -90,6 +90,7 @@ namespace risk_server
             byte[] data = new ASCIIEncoding().GetBytes(message);
             stream.Write(data, 0, data.Length);
             stream.Flush();
+            Console.WriteLine("MESSAGE " + message + " HAS BEEN SENT TO CLIENT ON " + GetIp(client));
         }
 
 
@@ -119,6 +120,11 @@ namespace risk_server
         public static string GetStringPartFromSocket(TcpClient client, int size)
         {
             return RecvData(size, client);
+        }
+
+        public static string GetIp(TcpClient client)
+        {
+            return ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
         }
     }
 }
