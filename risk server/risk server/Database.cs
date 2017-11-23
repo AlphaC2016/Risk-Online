@@ -53,7 +53,7 @@ namespace risk_server
         /// <returns>true if the user exists, false otherwise.</returns>
         public bool DoesUserExist(string username)
         {
-            SQLiteDataReader reader= Execute("SELECT * FROM User WHERE username=\"" + username + "\";");
+            SQLiteDataReader reader= Execute("SELECT * FROM User WHERE username='" + username + "';");
             return reader.Read();
         }
 
@@ -64,7 +64,7 @@ namespace risk_server
         /// <param name="password">the new password.</param>
         public void AddNewUser(string username, string password)
         {
-            Execute("INSERT INTO User ('username', 'password') VALUES ('" + username + "', '" + password + "');");
+            Execute("INSERT INTO User (username, password) VALUES ('" + username + "', '" + password + "');");
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace risk_server
         /// <returns>the matrix.</returns>
         public string[,] GetLeaderboards()
         {
-            SQLiteDataReader reader = Execute("SELECT username,victories FROM User ORDER BY vicories DESC;");
-            string[,] ans = new string[10, 2];
+            SQLiteDataReader reader = Execute("SELECT username,victories FROM User ORDER BY victories DESC LIMIT 8;");
+            string[,] ans = new string[8, 2];
 
             for (int i = 0; i < ans.Length && reader.Read(); i++)
             {
                 ans[i, 0] = (string)reader[0];
-                ans[i, 1] = (string)reader[1];
+                ans[i, 1] = reader[1].ToString();
             }
 
             return ans;

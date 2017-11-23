@@ -9,7 +9,7 @@
 
     <Grid Name="mainGrid">
         <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="/Assets/Backgrounds/main_background.jpg" Opacity="1"></ImageBrush>
+            <ImageBrush Stretch="Fill" ImageSource="/Assets/Backgrounds/main_background.jpg" Opacity="0.75"></ImageBrush>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -64,6 +64,7 @@
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/Icons/Leaderboards.png"></ImageBrush>
             </Button.Background>
         </Button>
+        
 
 
         <!-- Labels -->
@@ -77,5 +78,6 @@
         <TextBlock Name="LblCreateRoom" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Create Room" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
 
         <TextBlock Name="LblLeaderboards" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Leaderboards" FontFamily="Papyrus" FontSize="48" FontWeight="Bold" Foreground="DarkRed"/>
+
     </Grid>
 </Page>

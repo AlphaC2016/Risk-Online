@@ -40,11 +40,17 @@ namespace risk_project
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] readFile = File.ReadAllLines("mapdata.csv");
-            foreach (var line in readFile)
+            Task read = new Task(() =>
             {
-                labelData.Add(line.Split(','));
-            }
+                string[] readFile = File.ReadAllLines("Assets/mapdata.csv");
+                foreach (var line in readFile)
+                {
+                    labelData.Add(line.Split(','));
+                }
+            });
+            read.Start();
+            read.Wait();
+            
 
             foreach (string[] line in labelData)
             {

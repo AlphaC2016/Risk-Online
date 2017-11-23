@@ -1,5 +1,5 @@
 ﻿<Page x:Name="PgLogIn"
-    x:Class="risk_project.MainPage"
+    x:Class="risk_project.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:risk_project"
@@ -35,11 +35,11 @@
         <TextBlock Name="LblSignUpRepass" Grid.Row="3" Grid.Column="3" Text="Re-enter Password:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0,0,0" FontFamily="Papyrus" FontSize="36" Foreground="White"></TextBlock>
 
         <!-- Text boxes and input -->
-        <TextBox Name="TxbLoginUsername" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpUsername" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbLoginPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpPass" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
-        <TextBox Name="TxbSignUpRepass" Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="#FFCDAD00"></TextBox>
+        <TextBox Name="TxbLoginUsername" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed"></TextBox>
+        <TextBox Name="TxbSignUpUsername" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed"></TextBox>
+        <TextBox Name="TxbLoginPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed"></TextBox>
+        <TextBox Name="TxbSignUpPass" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed"></TextBox>
+        <TextBox Name="TxbSignUpRepass" Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed"></TextBox>
 
         <!-- Buttons -->
         <Button Name="BtnLogin" Content="Log in!" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="DarkRed" Foreground="White" Click="BtnLogin_Click" />

@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Windows.Media.Core;
-using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Windows.Media.Playback;
 
 namespace risk_project
 {
@@ -19,41 +19,44 @@ namespace risk_project
         public static bool musicPlaying;
         public static bool soundPlaying;
         public static bool fullScreen;
-        static SolidColorBrush playerColor;
 
-        static Helper()
+        public static double red;
+        public static double green;
+        public static double blue;
+
+        //public static object RecordPlayer { get; private set; }
+
+        public static void PlayMusic()
         {
-            //InitMusic();
-            musicPlaying = true;
-            soundPlaying = true;
-            fullScreen = false;
-            playerColor = new SolidColorBrush(Colors.Gray);
-
             player.Play();
-
+        }
+        public static void PauseMusic()
+        {
+            player.Pause();
         }
 
-        private async static void InitMusic()
+        public static void InitMusic()
         {
-            StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            StorageFile file = await folder.GetFileAsync("music.mp3");
-
-            player.AutoPlay = false;
-            player.Source = MediaSource.CreateFromStorageFile(file);
-        }
-
-        public static void ToggleMusic()
-        {
-            musicPlaying = !musicPlaying;
-
-            /*if (musicPlaying)
+            player = new MediaPlayer();
+            player.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/music.mp3"));
+            if (musicPlaying)
+            {
                 player.Play();
-            else
-                player.Pause();*/
+            }
         }
 
         public static bool IsMusicPlaying() { return musicPlaying; }
 
-        public static void Init() { }
+        public static void Init()
+        {
+            musicPlaying = true;
+            soundPlaying = true;
+            fullScreen = false;
+
+            red = 127;
+            green = 127;
+            blue = 127;
+            InitMusic();
+        }
     }
 }

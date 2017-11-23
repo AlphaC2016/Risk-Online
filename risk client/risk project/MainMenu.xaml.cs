@@ -34,7 +34,7 @@ namespace risk_project
             buttons.Add(BtnJoinRoom);
             buttons.Add(BtnCreateRoom);
             buttons.Add(BtnLeaderBoards);
-
+            
             labels.Add(LblHelp);
             labels.Add(LblSettings);
             labels.Add(LblJoinRoom);
@@ -80,5 +80,6 @@ namespace risk_project
         {
             Frame.Navigate(typeof(CreateRoomPage));
         }
+
     }
 }

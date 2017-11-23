@@ -24,15 +24,41 @@ namespace risk_project
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        private bool music = true;
-        private bool sound = true;
-
+        bool init;
         public SettingsPage()
         {
             this.InitializeComponent();
+        }
 
-            music = true;
-            sound = true;
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            init = false;
+            SldRed.Value = Helper.red;
+            SldGreen.Value = Helper.green;
+            SldBlue.Value = Helper.blue;
+            init = true;
+            ChangeColor(sender, null);
+
+            if (!Helper.musicPlaying)
+            {
+                BtnMusic.Content = "Music: OFF";
+                BtnMusic.Background = new SolidColorBrush(Colors.DarkRed);
+            }
+            if (!Helper.soundPlaying)
+            {
+                BtnSound.Content = "Sound: OFF";
+                BtnSound.Background = new SolidColorBrush(Colors.DarkRed);
+            }
+
+            if (Helper.fullScreen)
+            {
+                CbxModes.SelectedIndex = 1;
+            }
+            else
+            {
+                CbxModes.SelectedIndex = 0;
+            }
+            
         }
 
         private void Return(object sender, RoutedEventArgs e)
@@ -42,25 +68,26 @@ namespace risk_project
 
         private void ToggleMusic(object sender, RoutedEventArgs e)
         {
-            music = !music;
-
-            if (!music)
+            Helper.musicPlaying = !Helper.musicPlaying;
+            if (!Helper.musicPlaying)
             {
                 BtnMusic.Content = "Music: OFF";
                 BtnMusic.Background = new SolidColorBrush(Colors.DarkRed);
+                Helper.PauseMusic();
             }
             else
             {
                 BtnMusic.Content = "Music: ON";
                 BtnMusic.Background = new SolidColorBrush(Colors.DarkGreen);
+                Helper.PlayMusic();
             }
         }
 
         private void ToggleSound(object sender, RoutedEventArgs e)
         {
-            sound = !sound;
+            Helper.soundPlaying = !Helper.soundPlaying;
 
-            if (!sound)
+            if (!Helper.soundPlaying)
             {
                 BtnSound.Content = "Sound: OFF";
                 BtnSound.Background = new SolidColorBrush(Colors.DarkRed);
@@ -74,15 +101,13 @@ namespace risk_project
 
         private void ChangeColor(object sender, RangeBaseValueChangedEventArgs e)
         {
-            RecColorSample.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)SldRed.Value, (byte)SldGreen.Value, (byte)SldBlue.Value));
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            SldRed.Value = 127;
-            SldGreen.Value = 127;
-            SldBlue.Value = 127;
-            ChangeColor(sender, null);
+            if (init)
+            {
+                Helper.red = SldRed.Value;
+                Helper.green = SldGreen.Value;
+                Helper.blue = SldBlue.Value;
+                RecColorSample.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)SldRed.Value, (byte)SldGreen.Value, (byte)SldBlue.Value));
+            }
         }
 
         private void CbxModes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -90,10 +115,18 @@ namespace risk_project
             ApplicationView view = ApplicationView.GetForCurrentView();
 
             if (((ComboBoxItem)CbxModes.SelectedValue).Content.ToString() == "Fullscreen")
+            {
+                Helper.fullScreen = true;
                 view.TryEnterFullScreenMode();
+            }
+               
 
             else if (view.IsFullScreenMode)
+            {
+                Helper.fullScreen = false;
                 view.ExitFullScreenMode();
+            }
+                
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)

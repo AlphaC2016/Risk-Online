@@ -22,13 +22,13 @@ namespace risk_project
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class LoginPage : Page
     {
         List<TextBlock> titles = new List<TextBlock>();
         List<TextBlock> labels = new List<TextBlock>();
         List<TextBox> boxes = new List<TextBox>();
         List<Button> buttons = new List<Button>();
-        public MainPage()
+        public LoginPage()
         {
             this.InitializeComponent();
 
@@ -51,6 +51,7 @@ namespace risk_project
             buttons.Add(BtnSignUp);
 
             Comms.InitSocket();
+            Helper.Init();
         }
 
         private void FitSize(object sender, RoutedEventArgs e)
@@ -89,6 +90,7 @@ namespace risk_project
 
             Task send = new Task(() => { Comms.SendData(message); });
             send.Start();
+            send.Wait();
 
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             Task getAnswer = new Task(async () =>
@@ -97,27 +99,30 @@ namespace risk_project
 
                 if (msg.GetCode() == Comms.SIGN_IN_RES)
                 {
-                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                   await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                    {
-                       if (msg[0] == "0")
+                       MessageDialog dialog;
+                       switch (msg[0])
                        {
-                           Frame.Navigate(typeof(MainMenu));
-                       }
-                       else if (msg[0] == Comms.SIGN_IN_WRONG_DETAILS.ToString())
-                       {
-                           var dialog = new MessageDialog("Incorrect username or password.");
-                           dialog.ShowAsync();
+                           case Comms.SIGN_IN_SUCCESS:
+                               Frame.Navigate(typeof(MainMenu));
+                               break;
 
-                           TxbLoginUsername.Text = "";
-                           TxbLoginPass.Text = "";
-                       }
-                       else
-                       {
-                           var dialog = new MessageDialog("The specified user is already connected - please try again.");
-                           dialog.ShowAsync();
+                           case Comms.SIGN_IN_WRONG_DETAILS:
+                               dialog = new MessageDialog("Incorrect username or password.");
+                               dialog.ShowAsync();
 
-                           TxbLoginUsername.Text = "";
-                           TxbLoginPass.Text = "";
+                               TxbLoginUsername.Text = "";
+                               TxbLoginPass.Text = "";
+                               break;
+
+                           default:
+                               dialog = new MessageDialog("The specified user is already connected - please try again.");
+                               dialog.ShowAsync();
+
+                               TxbLoginUsername.Text = "";
+                               TxbLoginPass.Text = "";
+                               break;
                        }
                    });
                     
@@ -128,53 +133,62 @@ namespace risk_project
 
         private void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            MessageDialog dialog;
             if (TxbSignUpPass.Text != TxbSignUpRepass.Text)
             {
-                var dialog = new MessageDialog("Passwords do not match. try again.");
+                dialog = new MessageDialog("Passwords do not match. try again.");
                 dialog.ShowAsync();
                 TxbSignUpPass.Text = "";
                 TxbSignUpRepass.Text = "";
             }
-
-            string message = Comms.SIGN_UP.ToString();
-            string username = TxbSignUpUsername.Text;
-            string password = TxbSignUpPass.Text;
-
-            message += Comms.GetPaddedNumber(username.Length, 2) + username;
-            message += Comms.GetPaddedNumber(password.Length, 2) + password;
-
-            Task send = new Task(() => { Comms.SendData(message); });
-            send.Start();
-            send.Wait();
-
-            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
-            Task getAnswer = new Task(async () =>
+            else
             {
-                RecievedMessage msg = new RecievedMessage();
+                string message = Comms.SIGN_UP.ToString();
+                string username = TxbSignUpUsername.Text;
+                string password = TxbSignUpPass.Text;
 
-                if (msg.GetCode() == Comms.SIGN_UP_RES)
+                message += Comms.GetPaddedNumber(username.Length, 2) + username;
+                message += Comms.GetPaddedNumber(password.Length, 2) + password;
+
+                Comms.SendData(message);
+
+                var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+                Task getAnswer = new Task(async () =>
                 {
-                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    RecievedMessage msg = new RecievedMessage();
+
+                    if (msg.GetCode() == Comms.SIGN_UP_RES)
                     {
-                        if (msg[0] == "0")
+                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                         {
-                            Frame.Navigate(typeof(MainMenu));
-                        }
-                        else
-                        {
-                            var dialog = new MessageDialog("Incorrect username or password.");
-                            dialog.ShowAsync();
+                            switch (msg[0])
+                            {
+                                case Comms.SIGN_UP_SUCCESS:
+                                    Frame.Navigate(typeof(MainMenu));
+                                    break;
 
-                            TxbLoginUsername.Text = "";
-                            TxbLoginPass.Text = "";
-                        }
-                    });
+                                case Comms.SIGN_UP_USERNAME_ALREADY_EXISTS:
+                                    dialog = new MessageDialog("This username already exists - please choose something else!");
+                                    dialog.ShowAsync();
+                                    TxbSignUpUsername.Text = "";
+                                    TxbSignUpPass.Text = "";
+                                    TxbSignUpRepass.Text = "";
+                                    break;
 
-                }
-            });
-            getAnswer.Start();
+                                case Comms.SIGN_UP_OTHER:
+                                    dialog = new MessageDialog("An error occured. please try again.");
+                                    dialog.ShowAsync();
+                                    TxbSignUpUsername.Text = "";
+                                    TxbSignUpPass.Text = "";
+                                    TxbSignUpRepass.Text = "";
+                                    break;
+                            }
+                        });
 
-            Frame.Navigate(typeof(MainMenu));
+                    }
+                });
+                getAnswer.Start();
+            }
         }
     }
 }

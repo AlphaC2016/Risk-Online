@@ -20,7 +20,7 @@ namespace risk_server
     {
         private TcpClient _socket;
         private User _user;
-        private int _messageCode;
+        private string _messageCode;
         private List<string> _values;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace risk_server
         /// </summary>
         /// <param name="socket">the socket the message was sent in.</param>
         /// <param name="messageCode">the message code.</param>
-        public RecievedMessage(TcpClient socket, int messageCode)
+        public RecievedMessage(TcpClient socket, string messageCode)
         {
             _socket = socket;
             _messageCode = messageCode;
@@ -40,7 +40,7 @@ namespace risk_server
         /// <param name="socket">the socket the message was sent in.</param>
         /// <param name="messageCode">the message code.</param>
         /// <param name="values">the verbose values of the message.</param>
-        public RecievedMessage(TcpClient socket, int messageCode, List<string> values)
+        public RecievedMessage(TcpClient socket, string messageCode, List<string> values)
         {
             _socket = socket;
             _messageCode = messageCode;
@@ -52,7 +52,7 @@ namespace risk_server
         public TcpClient GetSocket() { return _socket; }
         public User GetUser() { return _user; }
         public void SetUser(User user) { _user = user; }
-        public int GetMessageCode() { return _messageCode; }
+        public string GetMessageCode() { return _messageCode; }
 
         /// <summary>
         /// This function overrides the [] operator in order to allow direct access to the values og the message.

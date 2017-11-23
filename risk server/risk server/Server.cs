@@ -22,6 +22,7 @@ namespace risk_server
         //----------------------CONSTRUCTORS AND DESTRUCTORS------------------------
         public Server()
         {
+            Console.WriteLine("BOOTING UP...");
             InitSocket();
             _connectedUsers = new Dictionary<TcpClient, User>();
             _roomsList = new Dictionary<int, Room>();
@@ -40,7 +41,8 @@ namespace risk_server
         public void Serve()
         {
             _socket.Start();
-            Thread t = new Thread(this.HandleRecievedMessages);
+            Console.WriteLine("LISTENING...");
+            Thread t = new Thread(HandleRecievedMessages);
             t.Start();
 
             while (true)
@@ -64,13 +66,13 @@ namespace risk_server
         }
 
 
-        private RecievedMessage BuildRecievedMessage(TcpClient client, int msgCode)
+        private RecievedMessage BuildRecievedMessage(TcpClient client, string msgCode)
         {
             List<string> values = new List<string>();
 
             int sizes;
 
-            //cout << "Building message " << msgCode << " from socket " << client;
+            Console.WriteLine("BUILDING MESSAGE " + msgCode + "FROM SOCKET" + client);
 
 
             switch (msgCode)
@@ -152,7 +154,7 @@ namespace risk_server
                     // No Values!
                     break;
 
-                case Helper.BEST_SCORES:
+                case Helper.LEADERBOARDS:
                     // No Values!
                     break;
 
@@ -175,7 +177,7 @@ namespace risk_server
         //--------------------------------HANDLERS---------------------------------
 
         //-------------------SIGN HANDLERS-----------------------------------------
-        private User HandleSignIn(RecievedMessage msg)
+        private void HandleSignIn(RecievedMessage msg)
         {
             string username = msg[0];
             string password = msg[1];
@@ -186,27 +188,27 @@ namespace risk_server
                 {
                     Console.WriteLine("SIGN IN: USERNAME AND PASSWORD DO NOT MATCH FROM SOCKET "+Helper.GetIp(msg.GetSocket()));
                     Helper.SendData(Helper.SIGN_IN_WRONG_DETAILS.ToString(), msg.GetSocket());
-                    return null;
+                    return;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Helper.SendData(Helper.SIGN_IN_WRONG_DETAILS.ToString(), msg.GetSocket());
-                return null;
+                return;
             }
 
             if (GetUserByName(username) != null)
             {
                 Console.WriteLine("SIGN IN: USER IS ALREADY CONNECTED FROM SOCKET " + Helper.GetIp(msg.GetSocket()));
                 Helper.SendData(Helper.SIGN_IN_USER_IS_ALREADY_CONNECTED.ToString(), msg.GetSocket());
-                return null;
+                return;
             }
 
             User newUser = new User(username, msg.GetSocket());
             Helper.SendData(Helper.SIGN_IN_SUCCESS.ToString(), msg.GetSocket());
             Console.WriteLine("SIGN IN: SUCCESSFUL FROM SOCKET " +Helper.GetIp(msg.GetSocket()));
-            return newUser;
+            _connectedUsers.Add(msg.GetSocket(), newUser);
         }
 
         private bool HandleSignUp(RecievedMessage msg)
@@ -243,7 +245,6 @@ namespace risk_server
                 //HandleCloseRoom(msg);
 
                 _connectedUsers.Remove(msg.GetUser().GetSocket());
-                SafeDeleteUser(msg);
             }
         }
 
@@ -358,20 +359,94 @@ namespace risk_server
             }
         }
 
+        //------------------LEADERBOARDS HANDLER(S)--------------------------------
+
+        private void HandleGetLeaderboards(RecievedMessage msg)
+        {
+            //[row, column]
+            string[,] data = _db.GetLeaderboards();
+            int i, j;
+            string message = Helper.LEADERBOARDS_RES;
+
+            for (i=0; i<data.GetLength(0); i++)
+            {
+                if (data[i,0] != null)
+                {
+                    message += Helper.GetPaddedNumber(data[i, 0].Length, 2);
+                    message += data[i, 0];
+                }
+                else
+                {
+                    message += "00";
+                }
+                
+
+                if (data[i,1] != null)
+                {
+                    message += Helper.GetPaddedNumber(int.Parse(data[i, 1]), 2);
+                }
+                else
+                {
+                    message += "00";
+                }
+            }
+            msg.GetUser().Send(message);
+            
+        }
+
         //--------------------------CLIENT HANDLERS--------------------------------
         private void ClientHandler(object data)
         {
             TcpClient client = data as TcpClient;
-
-            int code = Helper.GetMessageTypeCode(client);
-
-            while (code != 0 && code != Helper.EXIT_APP)
+            RecievedMessage msg;
+            string code;
+            try
             {
-                RecievedMessage msg = BuildRecievedMessage(client, code);
-
-                lock (_queRecMessages)
+                code = Helper.GetMessageTypeCode(client);
+            }
+            catch (Exception e)
+            {
+                code = "";
+            }
+            try
+            {
+                while (code != "" && code != Helper.EXIT_APP)
                 {
-                    _queRecMessages.Enqueue(msg);
+                    msg = BuildRecievedMessage(client, code);
+                    msg.SetUser(GetUserBySocket(msg.GetSocket()));
+
+                    lock (_queRecMessages)
+                    {
+                        _queRecMessages.Enqueue(msg);
+                        Console.WriteLine("INSERTED NEW MESSAGE FROM IP {0}, CODE {1}", Helper.GetIp(client), code);
+                    }
+                    try
+                    {
+                        code = Helper.GetMessageTypeCode(client);
+                    }
+                    catch (Exception e)
+                    {
+                        code = "";
+                    }
+                }
+                throw new Exception("OK");
+            }
+            catch (Exception e)
+            {
+                if (e.Message != "OK")
+                {
+                    Console.WriteLine("EXCEPTION FROM MESSAGE, IP {0} CODE {1}", client, code);
+                    Console.WriteLine("FUNCTION: {0} MESSAGE: {1}", e.TargetSite, e.Message);
+                }
+                else
+                {
+                    msg = new RecievedMessage(client, Helper.EXIT_APP);
+                    msg.SetUser(GetUserBySocket(msg.GetSocket()));
+                    lock (_queRecMessages)
+                    {
+                        _queRecMessages.Enqueue(msg);
+                        Console.WriteLine("INSERTED NEW MESSAGE FROM IP {0}, CODE {1}", Helper.GetIp(client), code);
+                    }
                 }
             }
         }
@@ -394,7 +469,7 @@ namespace risk_server
 
         private void Router(RecievedMessage rm)
         {
-            int messageCode = rm.GetMessageCode();
+            string messageCode = rm.GetMessageCode();
 
             switch (messageCode)
             {
@@ -456,20 +531,22 @@ namespace risk_server
                     HandlePlayerMove(rm);
                     break;
 
-                case Helper.BEST_SCORES:
-                    Console.WriteLine("router :: entering BestScores");
-                    HandleBestScores(rm);
-                    break;
+                
 
                 case Helper.ADD_SCORE:
                     Console.WriteLine("router :: entering AddScore");
                     HandleAddScore(rm);
+                    break;*/
+
+                case Helper.LEADERBOARDS:
+                    Console.WriteLine("router :: entering Leaderboards");
+                    HandleGetLeaderboards(rm);
                     break;
 
-                case Helper.EXIT:
+                case Helper.EXIT_APP:
                     Console.WriteLine("router :: entering SafeDeleteUser");
                     this.SafeDeleteUser(rm);
-                    break;*/
+                    break;
 
                 default:
                     break;
