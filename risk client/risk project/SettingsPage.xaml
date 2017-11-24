@@ -33,14 +33,14 @@
         <TextBlock Name="LblMode" Text="Screen mode:" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" FontSize="48"></TextBlock>
         <TextBlock Name="LblColor" Text="Your color:" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" FontSize="48"></TextBlock>
 
-        <ComboBox Name="CbxModes" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="30" SelectionChanged="CbxModes_SelectionChanged">
+        <ComboBox Name="CbxModes" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="30" SelectionChanged="CbxModes_SelectionChanged" Height="60">
             <ComboBoxItem Content="Windowed"></ComboBoxItem>
             <ComboBoxItem Content="Fullscreen"></ComboBoxItem>
         </ComboBox>
 
-        <Button Name="BtnMusic" Content="Music: ON" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGreen" Click="ToggleMusic" ></Button>
-        <Button Name="BtnSound" Content="Sound: ON" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGreen" Click="ToggleSound" ></Button>
-        <Button Name="BtnReturn" Content="Go Back" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkRed" Click="Return"></Button>
+        <Button Name="BtnMusic" Content="Music: ON" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGreen" Click="ToggleMusic" Height="90" ></Button>
+        <Button Name="BtnSound" Content="Sound: ON" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGreen" Click="ToggleSound" Height="90" ></Button>
+        <Button Name="BtnReturn" Content="Go Back" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkRed" Click="Return" Height="90"></Button>
 
         <Grid Name="SliderGrid" Grid.Row="3" Grid.Column="2">
             <Grid.RowDefinitions>
@@ -53,7 +53,7 @@
             <Slider Name="SldGreen" Grid.Row="1" Minimum="0" Maximum="255" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Foreground="Green" Background="White" ValueChanged="ChangeColor" SmallChange="8" StepFrequency="8"></Slider>
             <Slider Name="SldBlue" Grid.Row="2" Minimum="0" Maximum="255" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Foreground="Blue" Background="White" ValueChanged="ChangeColor" SmallChange="8" StepFrequency="8"></Slider>
         </Grid>
-        
+
         <Rectangle Name="RecColorSample" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100" Fill="White"></Rectangle>
     </Grid>
 </Page>

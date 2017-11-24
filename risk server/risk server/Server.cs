@@ -215,12 +215,12 @@ namespace risk_server
         {
             string username = msg[0];
             string password = msg[1];
-
+            TcpClient client = msg.GetSocket();
             try
             {
                 if (_db.DoesUserExist(username))
                 {
-                    Helper.SendData(Helper.SIGN_UP_USERNAME_ALREADY_EXISTS.ToString(), msg.GetSocket());
+                    Helper.SendData(Helper.SIGN_UP_USERNAME_ALREADY_EXISTS.ToString(), client);
                     return false;
                 }
 
@@ -229,10 +229,11 @@ namespace risk_server
             catch (Exception e)
             {
                 Console.WriteLine(e.Data);
-                Helper.SendData(Helper.SIGN_UP_OTHER.ToString(), msg.GetSocket());
+                Helper.SendData(Helper.SIGN_UP_OTHER.ToString(), client);
             }
 
             Helper.SendData(Helper.SIGN_UP_SUCCESS.ToString(), msg.GetSocket());
+            _connectedUsers.Add(client, new User(username, client));
             return true;
         }
 

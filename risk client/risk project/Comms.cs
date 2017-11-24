@@ -89,10 +89,6 @@ namespace risk_project
         public const string FORGOT_PASS_NO_PARAMS = "2";
         public const string FORGOT_PASS_OTHER = "3";
 
-        static Comms()
-        {
-        }
-
         public static async void InitSocket()
         {
             sc = new StreamSocket();

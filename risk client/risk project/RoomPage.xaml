@@ -12,5 +12,12 @@
             <ImageBrush ImageSource="/Assets/Backgrounds/roompage_background.jpg"/>
         </Grid.Background>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="4.5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        
     </Grid>
 </Page>

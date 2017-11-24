@@ -25,9 +25,29 @@ namespace risk_project
     public sealed partial class SettingsPage : Page
     {
         bool init;
+        List<Button> buttons;
+        List<Slider> sliders;
+        List<TextBlock> labels;
+
+
         public SettingsPage()
         {
             this.InitializeComponent();
+
+            buttons = new List<Button>();
+            sliders = new List<Slider>();
+            labels = new List<TextBlock>();
+
+            buttons.Add(BtnMusic);
+            buttons.Add(BtnSound);
+            buttons.Add(BtnReturn);
+
+            sliders.Add(SldRed);
+            sliders.Add(SldGreen);
+            sliders.Add(SldBlue);
+
+            labels.Add(LblColor);
+            labels.Add(LblMode);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -131,7 +151,31 @@ namespace risk_project
 
         private void FitSize(object sender, SizeChangedEventArgs e)
         {
+            foreach (Slider sld in sliders)
+            {
+                sld.Width = ActualWidth / 3.168;
+                sld.Height = ActualHeight / 11.02;
+            }
 
+            foreach (TextBlock lbl in labels)
+            {
+                lbl.FontSize = (ActualHeight + ActualWidth) / 62.5;
+            }
+
+            foreach (Button btn in buttons)
+            {
+                btn.FontSize = (ActualHeight + ActualWidth) / 70;
+                btn.Width = ActualWidth / 6.4;
+                btn.Height = ActualHeight / 12;
+            }
+
+            LblTitle.FontSize = (ActualHeight + ActualWidth) / 41.67;
+
+            CbxModes.Width = ActualWidth / 4.8;
+            CbxModes.Height = ActualHeight / 14;
+            CbxModes.FontSize = (ActualHeight + ActualWidth) / 62.5;
+
+            RecColorSample.Width = RecColorSample.Height = (ActualWidth + ActualHeight) / 30;
         }
     }
 }
