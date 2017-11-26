@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -61,8 +62,24 @@ namespace risk_project
 
             CbxAmount.Height = ActualHeight / 10.8;
             CbxAmount.Width = ActualWidth / 4.8;
-
             CbxAmount.FontSize = (ActualHeight + ActualWidth) / 62.5;
+
+            TxbRoomName.Width = ActualWidth / 4.8;
+            TxbRoomName.Height = ActualHeight / 10.8;
+            TxbRoomName.FontSize = (ActualHeight + ActualWidth) / 62.5;
+        }
+
+        private void BtnCreate_Click(object sender, RoutedEventArgs e)
+        {
+            string message = Comms.NEW_ROOM;
+            string name = TxbRoomName.Text;
+            message += Comms.GetPaddedNumber(name.Length, 2);
+            message += name;
+            message += ((ComboBoxItem)CbxAmount.SelectedValue).Content.ToString();
+            Task send = new Task(() =>
+            {
+                Comms.SendData(message);
+            });
         }
     }
 }

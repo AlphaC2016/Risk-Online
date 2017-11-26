@@ -80,6 +80,10 @@ namespace risk_server
         //returns the room's name.
         public string GetName() { return _name; }
 
+        public int GetMaxUsers() { return _maxUsers; }
+
+        public string GetAdmin() { return _admin.GetUsername(); }
+
 
         /// <summary>
         /// this function generates a 108 message that contains all current users.

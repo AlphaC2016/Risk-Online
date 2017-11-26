@@ -28,7 +28,7 @@ namespace risk_server
             _roomsList = new Dictionary<int, Room>();
             _queRecMessages = new Queue<RecievedMessage>();
             _db = new Database();
-            _roomIdSequence++;
+            _roomIdSequence = 0;
         }
 
         ~Server()
@@ -60,7 +60,7 @@ namespace risk_server
         private void Accept()
         {
             TcpClient client = _socket.AcceptTcpClient();
-            Console.WriteLine("ACCEPTED CLIENT FROM " + Helper.GetIp(client));
+            Console.WriteLine("ACCEPTED CLIENT FROM " + Helper.GetIp(client)+'\n');
             Thread t = new Thread(ClientHandler);
             t.Start(client);
         }
@@ -72,7 +72,7 @@ namespace risk_server
 
             int sizes;
 
-            Console.WriteLine("BUILDING MESSAGE " + msgCode + "FROM SOCKET" + client);
+            Console.WriteLine("BUILDING MESSAGE " + msgCode + " FROM SOCKET " + Helper.GetIp(client)+'\n');
 
 
             switch (msgCode)
@@ -126,12 +126,6 @@ namespace risk_server
 
                     // No. of players
                     values.Add(Helper.GetStringPartFromSocket(client, 1));
-
-                    // No. of questions
-                    values.Add(Helper.GetStringPartFromSocket(client, 2));
-
-                    // Time to answer
-                    values.Add(Helper.GetStringPartFromSocket(client, 2));
                     break;
 
                 case Helper.CLOSE_ROOM:
@@ -186,7 +180,7 @@ namespace risk_server
             {
                 if (!_db.IsUserAndPassMatch(username, password))
                 {
-                    Console.WriteLine("SIGN IN: USERNAME AND PASSWORD DO NOT MATCH FROM SOCKET "+Helper.GetIp(msg.GetSocket()));
+                    Console.WriteLine("SIGN IN: USERNAME AND PASSWORD DO NOT MATCH FROM SOCKET "+Helper.GetIp(msg.GetSocket())+'\n');
                     Helper.SendData(Helper.SIGN_IN_WRONG_DETAILS.ToString(), msg.GetSocket());
                     return;
                 }
@@ -262,11 +256,13 @@ namespace risk_server
                 if (success)
                 {
                     _roomsList.Add(_roomIdSequence, user.GetRoom());
+                    user.Send(Helper.CREATE_ROOM_SUCCESS);
                     return true;
                 }
                 else
                 {
                     _roomIdSequence--;
+                    user.Send(Helper.CREATE_ROOM_FAIL);
                     return false;
                 }
             }
@@ -353,8 +349,12 @@ namespace risk_server
                 foreach (KeyValuePair<int, Room> pair in _roomsList)
                 {
                     ans += Helper.GetPaddedNumber(pair.Key, 4);
-                    ans += Helper.GetPaddedNumber(pair.Value.GetName().Length, 4);
-                    ans += pair.Value;
+                    ans += Helper.GetPaddedNumber(pair.Value.GetName().Length, 2);
+                    ans += pair.Value.GetName();
+                    ans += pair.Value.GetUsers().Count;
+                    ans += pair.Value.GetMaxUsers();
+                    ans += Helper.GetPaddedNumber(pair.Value.GetAdmin().Length,2);
+                    ans += pair.Value.GetAdmin();
                 }
                 user.Send(ans);
             }
@@ -492,9 +492,9 @@ namespace risk_server
                     }
                     break;
 
-                /*case Helper.EXSIT_ROOMS:
-                    Console.WriteLine("router :: entering ExsitRooms");
-                    HandleExsitRooms(rm);
+                case Helper.ACTIVE_ROOMS:
+                    Console.WriteLine("router :: entering GetRooms");
+                    HandleGetRooms(rm);
                     break;
 
                 case Helper.JOIN_ROOM:
@@ -502,12 +502,12 @@ namespace risk_server
                     HandleJoinRoom(rm);
                     break;
 
-                case Helper.USERS_IN_ROOM:
+                case Helper.GET_USERS:
                     Console.WriteLine("router :: entering UsersInRoom");
-                    HandleUsersInRoom(rm);
+                    HandleGetUsersInRoom(rm);
                     break;
 
-                case Helper.CREATE_ROOM:
+                case Helper.NEW_ROOM:
                     Console.WriteLine("router :: entering CreateRoom");
                     HandleCreateRoom(rm);
                     break;
@@ -522,7 +522,7 @@ namespace risk_server
                     HandleCloseRoom(rm);
                     break;
 
-                case Helper.START_GAME:
+                /*case Helper.START_GAME:
                     Console.WriteLine("router :: entering StartGame");
                     HandleStartGame(rm);
                     break;

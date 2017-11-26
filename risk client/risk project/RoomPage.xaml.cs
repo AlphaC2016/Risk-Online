@@ -22,9 +22,24 @@ namespace risk_project
     /// </summary>
     public sealed partial class RoomPage : Page
     {
+        TextBlock title;
+        List<TextBlock> users;
+        
         public RoomPage()
         {
             this.InitializeComponent();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            RecievedMessage msg = new RecievedMessage();
+
+        }
+
+        private void BtnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            Comms.SendData(Comms.LEAVE_ROOM);
+            Frame.Navigate(typeof(MainMenu));
         }
     }
 }
