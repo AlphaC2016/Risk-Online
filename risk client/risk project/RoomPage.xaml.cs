@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,24 +23,59 @@ namespace risk_project
     /// </summary>
     public sealed partial class RoomPage : Page
     {
-        TextBlock title;
         List<TextBlock> users;
+        string roomName;
         
         public RoomPage()
         {
             this.InitializeComponent();
+            users = new List<TextBlock>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            Comms.SendData(Comms.GET_USERS);
             RecievedMessage msg = new RecievedMessage();
 
+
+            TextBlock name;
+            LblTitle.Text = roomName;
+            for (int i=0; i<msg.GetArgs().Count; i++)
+            {
+                name = new TextBlock();
+                name.Text = msg[i];
+                name.FontFamily = new FontFamily("Papyrus");
+                name.Foreground = new SolidColorBrush(Colors.DarkGray);
+                name.HorizontalAlignment = HorizontalAlignment.Center;
+                name.VerticalAlignment = VerticalAlignment.Center;
+                Grid.SetRow(name, i);
+                UsersGrid.Children.Add(name);
+                users.Add(name);
+            }
+
+            FitSize(sender, null);
         }
 
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
             Comms.SendData(Comms.LEAVE_ROOM);
             Frame.Navigate(typeof(MainMenu));
+        }
+
+        private void FitSize(object sender, SizeChangedEventArgs e)
+        {
+            LblTitle.FontSize = (ActualHeight + ActualWidth) / 41.6;
+
+            foreach (TextBlock user in users)
+            {
+                user.FontSize = (ActualHeight + ActualWidth) / 71.4;
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            Name = e.Parameter.ToString();
         }
     }
 }
