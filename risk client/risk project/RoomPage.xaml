@@ -5,7 +5,7 @@
     xmlns:local="using:risk_project"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Loaded="Page_Loaded">
+    mc:Ignorable="d" Loaded="Page_Loaded" SizeChanged="FitSize">
 
     <Grid Name="MainGrid">
         <Grid.Background>
@@ -17,6 +17,9 @@
             <RowDefinition Height="4.5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
+        <TextBlock Name="LblTitle" Text="" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="DarkRed"></TextBlock>
+        
         <Grid Name="UsersGrid" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>

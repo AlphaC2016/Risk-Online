@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -76,10 +77,28 @@ namespace risk_project
             message += Comms.GetPaddedNumber(name.Length, 2);
             message += name;
             message += ((ComboBoxItem)CbxAmount.SelectedValue).Content.ToString();
-            Task send = new Task(() =>
-            {
-                Comms.SendData(message);
-            });
+
+            Comms.SendData(message);
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            //Task handleAnswer = new Task(async () =>
+            //{
+                RecievedMessage msg = new RecievedMessage();
+
+                if (msg.GetCode() == Comms.NEW_ROOM_RES)
+//                await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+//                {
+                    if (msg[0] == "0")
+                    {
+                        Frame.Navigate(typeof(RoomPage), name);
+                    }
+                    else
+                    {
+                        var dialog = new MessageDialog("Room creation failed. Please try again.");
+                        dialog.ShowAsync();
+                    }
+ //               });
+//            });
+ //           handleAnswer.Start();
         }
     }
 }
