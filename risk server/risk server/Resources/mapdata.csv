@@ -1,0 +1,42 @@
+Alaska,North West Territory,Alberta,Kamchatka
+North West Territory,Alaska,Alberta,Ontario,Greenland
+Greenland,North West Territory,Ontario,Quebec,Iceland
+Alberta,Alaska,North West Territory,Ontario,Western U.S.
+Ontario,Alberta,North West Territory,Greenland,Quebec,Eastern U.S.,Western U.S.
+Quebec,Ontario,Greenland,Eastern U.S.
+Western U.S.,Alberta,Ontario,Eastern U.S.,Central America
+Eastern U.S.,Central America,Western U.S.,Ontario,Quebec
+Central America,Western U.S.,Eastern U.S.,Venezuela
+Venezuela,Central America,Brazil,Peru
+Brazil,Venezuela,North Africa,Argentina,Peru
+Peru,Venezuela,Brazil,Argentina
+Argentina,Peru,Brazil
+Iceland,Greenland,Scandinavia,Great Britain
+Scandinavia,Iceland,Great Britain,Northern Europe,Ukraine
+Ukraine,Ural,Afghanistan,Middle East,Southern Europe,Northern Europe,Scandinavia
+Great Britain,Iceland,Scandinavia,Northern Europe,Western Europe
+Northern Europe,Scandinavia,Ukraine,Southern Europe,Western Europe,Great Britain
+Western Europe,Great Britain,Northern Europe,Southern Europe,North Africa
+Southern Europe,Northern Europe,Ukraine,Middle East,Egypt,North Africa,Western Europe
+North Africa,Brazil,Western Europe,Southern Europe,Egypt,East Africa,Congo
+Egypt,North Africa,Southern Europe,Middle East,East Africa
+East Africa,North Africa,Egypt,Middle East,Madagascar,South Africa,Congo
+Congo,North Africa,East Africa,South Africa
+South Africa,Congo,East Africa,Madagascar
+Madagascar,East Africa,South Africa
+Ural,Ukraine,Siberia,China,Afghanistan
+Siberia,Yakutsk,Irkutsk,Mongolia,China,Ural
+Yakutsk,Kamchatka,Irkutsk,Siberia
+Kamchatka,Alaska,Japan,Mongolia,Irkutsk,Yakutsk
+Irkutsk,Siberia,Yakutsk,Kamchatka,Mongolia
+Mongolia,Japan,China,Siberia,Irkutsk,Kamchatka
+Japan,Mongolia,Kamchatka
+Afghanistan,Ukraine,Ural,China,India,Middle East
+China,Afghanistan,Ural,Siberia,Mongolia,Siam,India
+Middle East,Southern Europe,Ukraine,Afghanistan,India,East Africa,Egypt
+India,Middle East,Afghanistan,China,Siam
+Siam,India,China,Indonesia
+Indonesia,Siam,New Guinea,Western Australia
+New Guinea,Eastern Australia,Western Australia,Indonesia
+Western Australia,Indonesia,New Guinea,Eastern Australia
+Eastern Australia,Western Australia,New Guinea

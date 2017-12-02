@@ -126,5 +126,18 @@ namespace risk_server
         {
             return ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
         }
+
+        public static List<string>[] GetMapData()
+        {
+            string[] rawData = Properties.Resources.mapdata.Split('\n');
+            List<string>[] ans = new List<string>[rawData.Length];
+
+            for (int i = 0; i < rawData.Length; i++)
+            {
+                ans[i] = new List<string>(rawData[i].Split(','));
+            }
+
+            return ans;
+        }
     }
 }

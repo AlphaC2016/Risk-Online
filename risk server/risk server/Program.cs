@@ -10,8 +10,10 @@ namespace risk_server
     {
         static void Main(string[] args)
         {
-            Server s = new Server();
-            s.Serve();
+            //Server s = new Server();
+            //s.Serve();
+            Game_classes.Game gm = new Game_classes.Game();
+
         }
     }
 }
