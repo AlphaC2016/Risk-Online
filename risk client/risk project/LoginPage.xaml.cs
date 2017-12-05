@@ -50,7 +50,12 @@ namespace risk_project
             buttons.Add(BtnLogin);
             buttons.Add(BtnSignUp);
 
-            Comms.InitSocket();
+            Task connect = new Task(() =>
+            {
+                while (!Comms.InitSocket())
+                    Task.Delay(5000);
+            });
+            connect.Start();
             Helper.Init();
         }
 

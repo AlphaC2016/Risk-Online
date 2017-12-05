@@ -81,7 +81,7 @@
                 That's it for now.
                 Good luck!
                 </TextBlock>
-                <Button Name="BtnReturn" Content="Go Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="White" Click="Return" Margin="0,5,5,0"></Button>
+                <Button Name="BtnReturn" Content="Go Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="White" Click="Return" Margin="0,5,5,0" Background="DarkBlue"></Button>
             </StackPanel>
         </ScrollViewer>
 

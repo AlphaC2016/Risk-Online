@@ -80,25 +80,26 @@ namespace risk_project
 
             Comms.SendData(message);
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
-            //Task handleAnswer = new Task(async () =>
-            //{
+            Task handleAnswer = new Task(async () =>
+            {
                 RecievedMessage msg = new RecievedMessage();
 
                 if (msg.GetCode() == Comms.NEW_ROOM_RES)
-//                await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-//                {
-                    if (msg[0] == "0")
+                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
-                        Frame.Navigate(typeof(RoomPage), name);
-                    }
-                    else
-                    {
-                        var dialog = new MessageDialog("Room creation failed. Please try again.");
-                        dialog.ShowAsync();
-                    }
- //               });
-//            });
- //           handleAnswer.Start();
+                        if (msg[0] == "0")
+                        {
+                            object[] arr = { name, msg[1], true };
+                            Frame.Navigate(typeof(RoomPage), arr);
+                        }
+                        else
+                        {
+                            var dialog = new MessageDialog("Room creation failed. Please try again.");
+                            dialog.ShowAsync();
+                        }
+                    });
+            });
+            handleAnswer.Start();
         }
     }
 }

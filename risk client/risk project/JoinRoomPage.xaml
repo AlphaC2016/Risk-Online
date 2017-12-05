@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="risk_project.JoinRoomPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:risk_project"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" SizeChanged="FitSize" Loaded="Page_Loaded">
+
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Backgrounds/joinroom_background.jpg" Stretch="Fill"></ImageBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.6*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1.6*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Name="LblTitle" Text="Join Room" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="DarkRed" FontWeight="Bold"/>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <StackPanel Name="StkRoomNames" Orientation="Vertical" Background="WhiteSmoke" Opacity="0.85"/>
+        </ScrollViewer>
+        <ScrollViewer Grid.Row="1" Grid.Column="3">
+            <StackPanel Name="StkRoomDetails" Orientation="Vertical" Background="WhiteSmoke" Opacity="0.85"/>
+        </ScrollViewer>
+
+        <Button Name="BtnReturn" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Go Back" FontFamily="Papyrus" FontSize="48" Background="DarkBlue" Foreground="White" Click="BtnReturn_Click"/>
+        <Button Name="BtnJoin" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Join!" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White"/>
+    </Grid>
+</Page>

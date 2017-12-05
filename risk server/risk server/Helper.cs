@@ -129,7 +129,7 @@ namespace risk_server
 
         public static List<string>[] GetMapData()
         {
-            string[] rawData = Properties.Resources.mapdata.Split('\n');
+            string[] rawData = Properties.Resources.mapdata.Replace("\r\n", "\n").Split('\n');
             List<string>[] ans = new List<string>[rawData.Length];
 
             for (int i = 0; i < rawData.Length; i++)

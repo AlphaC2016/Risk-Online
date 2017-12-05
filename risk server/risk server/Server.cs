@@ -256,7 +256,7 @@ namespace risk_server
                 if (success)
                 {
                     _roomsList.Add(_roomIdSequence, user.GetRoom());
-                    user.Send(Helper.CREATE_ROOM_SUCCESS);
+                    user.Send(Helper.CREATE_ROOM_SUCCESS+Helper.GetPaddedNumber(_roomIdSequence, 4));
                     return true;
                 }
                 else

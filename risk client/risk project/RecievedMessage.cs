@@ -87,8 +87,11 @@ namespace risk_project
                 }
 
             else if (code == Comms.NEW_ROOM_RES)                                                                       //114
+            {
                 ans.Add(Comms.RecvData(1));
-
+                ans.Add(Comms.RecvData(4));
+            }
+                
 
             else if (code == Comms.LEADERBOARDS_RES)
             {

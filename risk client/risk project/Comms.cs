@@ -89,12 +89,20 @@ namespace risk_project
         public const string FORGOT_PASS_NO_PARAMS = "2";
         public const string FORGOT_PASS_OTHER = "3";
 
-        public static async void InitSocket()
+        public static bool InitSocket()
         {
-            sc = new StreamSocket();
-            HostName serverHost = new HostName("127.0.0.1");
-            string port = "3000";
-            await sc.ConnectAsync(serverHost, port);
+            try
+            {
+                sc = new StreamSocket();
+                HostName serverHost = new HostName("127.0.0.1");
+                string port = "3000";
+                sc.ConnectAsync(serverHost, port);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
 
         public static void SendData(string message)

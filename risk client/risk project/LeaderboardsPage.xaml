@@ -23,7 +23,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="1.25*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -38,6 +38,6 @@
         <TextBlock Name="LblGamesWon" Text="Victories" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="DarkRed"></TextBlock>
 
 
-        <Button Name="BtnReturn" Content="Go Back" Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="48" Foreground="White" Click="Return" Background="DarkRed"></Button>
+        <Button Name="BtnReturn" Content="Go Back" Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Click="Return" Background="DarkBlue"></Button>
     </Grid>
 </Page>

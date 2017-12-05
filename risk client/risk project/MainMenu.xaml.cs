@@ -73,7 +73,7 @@ namespace risk_project
 
         private void BtnJoinRoom_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(GamePage));
+            Frame.Navigate(typeof(JoinRoomPage));
         }
 
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)

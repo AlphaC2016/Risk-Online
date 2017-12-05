@@ -111,6 +111,9 @@
     <Compile Include="HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JoinRoomPage.xaml.cs">
+      <DependentUpon>JoinRoomPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LeaderboardsPage.xaml.cs">
       <DependentUpon>LeaderboardsPage.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HelpPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JoinRoomPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

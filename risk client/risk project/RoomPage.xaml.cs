@@ -25,33 +25,48 @@ namespace risk_project
     {
         List<TextBlock> users;
         string roomName;
-        
+        bool isAdmin;
+        string id;
+
         public RoomPage()
         {
             this.InitializeComponent();
             users = new List<TextBlock>();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            object[] arr = (object[])e.Parameter;
+            roomName = (string)arr[0];
+            id = (string)arr[1];
+            isAdmin = (bool)arr[2];
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Comms.SendData(Comms.GET_USERS);
+            Comms.SendData(Comms.GET_USERS+id);
             RecievedMessage msg = new RecievedMessage();
-
 
             TextBlock name;
             LblTitle.Text = roomName;
-            for (int i=0; i<msg.GetArgs().Count; i++)
+            for (int i = 0; i < msg.GetArgs().Count; i++)
             {
                 name = new TextBlock();
                 name.Text = msg[i];
                 name.FontFamily = new FontFamily("Papyrus");
-                name.Foreground = new SolidColorBrush(Colors.DarkGray);
+                name.FontSize = 48;
+                name.Foreground = new SolidColorBrush(Colors.DarkRed);
                 name.HorizontalAlignment = HorizontalAlignment.Center;
                 name.VerticalAlignment = VerticalAlignment.Center;
                 Grid.SetRow(name, i);
                 UsersGrid.Children.Add(name);
                 users.Add(name);
             }
+
+
+            
 
             FitSize(sender, null);
         }
@@ -70,12 +85,6 @@ namespace risk_project
             {
                 user.FontSize = (ActualHeight + ActualWidth) / 71.4;
             }
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            Name = e.Parameter.ToString();
         }
     }
 }
