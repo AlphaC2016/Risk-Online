@@ -48,7 +48,7 @@ namespace risk_server
         /// a neater alternative to using a NetworkStream directly.
         /// </summary>
         /// <param name="message">the message to be sent.</param>
-        private void SendMessage(string message)
+        public void SendMessage(string message)
         {
             foreach (User user in _users)
             {
@@ -61,7 +61,7 @@ namespace risk_server
         /// </summary>
         /// <param name="excludeUser">the user to be excluded.</param>
         /// <param name="message">the </param>
-        private void SendMessage(User excludeUser, string message)
+        public void SendMessage(User excludeUser, string message)
         {
             foreach (User user in _users)
             {

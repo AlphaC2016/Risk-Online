@@ -35,6 +35,6 @@
         </ScrollViewer>
 
         <Button Name="BtnReturn" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Go Back" FontFamily="Papyrus" FontSize="48" Background="DarkBlue" Foreground="White" Click="BtnReturn_Click"/>
-        <Button Name="BtnJoin" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Join!" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White"/>
+        <Button Name="BtnJoin" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Join!" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White" Click="BtnJoin_Click"/>
     </Grid>
 </Page>

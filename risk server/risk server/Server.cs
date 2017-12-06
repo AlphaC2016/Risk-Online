@@ -298,13 +298,14 @@ namespace risk_server
                 int roomId = int.Parse(msg[0]);
                 Room rm = GetRoomById(roomId);
 
-                if (rm != null)
+                if (rm != null && user.JoinRoom(rm))
                 {
-                    return msg.GetUser().JoinRoom(rm);
+                    user.Send(Helper.JOIN_ROOM_SUCCESS);
+                    rm.SendMessage(rm.GetUserListMessage());
                 }
                 else
                 {
-                    msg.GetUser().Send(Helper.JOIN_ROOM_NOT_EXIST_OR_OTHER.ToString());
+                    user.Send(Helper.JOIN_ROOM_NOT_EXIST_OR_OTHER.ToString());
                 }
             }
             return false;

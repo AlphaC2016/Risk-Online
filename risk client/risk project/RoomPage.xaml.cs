@@ -46,9 +46,7 @@ namespace risk_project
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Comms.SendData(Comms.GET_USERS+id);
             RecievedMessage msg = new RecievedMessage();
-
             TextBlock name;
             LblTitle.Text = roomName;
             for (int i = 0; i < msg.GetArgs().Count; i++)

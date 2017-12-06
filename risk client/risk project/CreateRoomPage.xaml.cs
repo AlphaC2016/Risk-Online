@@ -89,6 +89,7 @@ namespace risk_project
                     {
                         if (msg[0] == "0")
                         {
+                            Comms.SendData(Comms.GET_USERS + msg[1]);
                             object[] arr = { name, msg[1], true };
                             Frame.Navigate(typeof(RoomPage), arr);
                         }

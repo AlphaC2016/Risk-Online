@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,18 +27,17 @@ namespace risk_project
     {
         Dictionary<string, int> roomIDs;
         List<TextBlock> rooms;
-        List<TextBlock> currRoom;
+        List<TextBlock> currRoomData;
         List<Button> buttons;
+        string currName;
 
         public JoinRoomPage()
         {
             this.InitializeComponent();
             roomIDs = new Dictionary<string, int>();
             rooms = new List<TextBlock>();
-            currRoom = new List<TextBlock>();
-
-            buttons.Add(BtnJoin);
-            buttons.Add(BtnReturn);
+            currRoomData = new List<TextBlock>();
+            buttons = new List<Button>();     
 
             Comms.SendData(Comms.ACTIVE_ROOMS);
 
@@ -51,7 +51,7 @@ namespace risk_project
 
                     for (int i=0; i<args.Count; i+=2)
                     {
-                        roomIDs.Add(args[i], int.Parse(args[i + 1]));
+                        roomIDs.Add(args[i + 1], int.Parse(args[i]));
                     }
                 }
             });
@@ -76,7 +76,7 @@ namespace risk_project
             {
                 text.FontSize = (ActualHeight + ActualWidth) / 62.5;
             }
-            foreach (TextBlock data in currRoom)
+            foreach (TextBlock data in currRoomData)
             {
                 data.FontSize = (ActualHeight + ActualWidth) / 62.5;
             }
@@ -84,6 +84,9 @@ namespace risk_project
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            buttons.Add(BtnJoin);
+            buttons.Add(BtnReturn);
+
             TextBlock t;
             foreach (string name in roomIDs.Keys)
             {
@@ -97,12 +100,71 @@ namespace risk_project
                 rooms.Add(t);
                 StkRoomNames.Children.Add(t);
             }
+
+            FitSize(sender, null);
         }
 
         private void RoomSelected(object sender, RoutedEventArgs e)
         {
-            TextBlock curr = (TextBlock)sender;
-            Comms.S
+            currName = ((TextBlock)sender).Text;
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            Task refresh = new Task(async () =>
+            {
+                Comms.SendData(Comms.GET_USERS + Comms.GetPaddedNumber(roomIDs[currName], 4));
+                RecievedMessage msg = new RecievedMessage();
+                await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    updateUsersList(msg);
+                });
+            });
+            refresh.Start();
+        }
+
+        private void updateUsersList(RecievedMessage msg)
+        {
+            StkRoomDetails.Children.Clear();
+            currRoomData = new List<TextBlock>();
+            TextBlock t;
+            foreach (string name in msg.GetArgs())
+            {
+                t = new TextBlock();
+                t.Text = name;
+                t.HorizontalAlignment = HorizontalAlignment.Center;
+                t.VerticalAlignment = VerticalAlignment.Center;
+                t.FontFamily = new FontFamily("Papyrus");
+                t.Foreground = new SolidColorBrush(Colors.DarkRed);
+                currRoomData.Add(t);
+                StkRoomDetails.Children.Add(t);
+            }
+        }
+
+        private void BtnJoin_Click(object sender, RoutedEventArgs e)
+        {
+            string id = Comms.GetPaddedNumber(roomIDs[currName],4);
+            Comms.SendData(Comms.JOIN_ROOM + id);
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            Task response = new Task(async () =>
+            {
+                RecievedMessage msg = new RecievedMessage();
+
+                if (msg.GetCode() == Comms.JOIN_ROOM_RES)
+                {
+                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                    {
+                        if (msg[0] == "0")
+                        {
+                            object[] data = { currName, id, false };
+                            Frame.Navigate(typeof(GamePage), data);
+                        }
+                        else
+                        {
+                            var dialog = new MessageDialog("An error occured. Please try again.");
+                            await dialog.ShowAsync();
+                        }
+                    });
+                }
+            });
+            response.Start();
         }
     }
 }
