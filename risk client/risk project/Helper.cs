@@ -38,7 +38,7 @@ namespace risk_project
         public static void InitMusic()
         {
             player = new MediaPlayer();
-            player.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/music.mp3"));
+            player.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/Data/music.mp3"));
             if (musicPlaying)
             {
                 player.Play();
