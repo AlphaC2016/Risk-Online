@@ -42,7 +42,7 @@ namespace risk_project
         {
             Task read = new Task(() =>
             {
-                string[] readFile = File.ReadAllLines(@"Assets/mapdata.csv");
+                string[] readFile = File.ReadAllLines(@"Assets/Data/mapdata.csv");
                 foreach (var line in readFile)
                 {
                     labelData.Add(line.Split(','));

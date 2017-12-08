@@ -19,7 +19,7 @@ namespace risk_project
         private static StreamReader reader = null;
         private static StreamSocket sc;
 
-        private const string CONFIG_PATH = "config.txt";
+        private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
         public const string SIGN_IN = "200"; //protocol values
         public const string SIGN_OUT = "201";
@@ -94,8 +94,12 @@ namespace risk_project
             try
             {
                 sc = new StreamSocket();
-                HostName serverHost = new HostName("192.168.1.34");
-                string port = "3000";
+
+                string[] data = File.ReadAllLines(CONFIG_PATH);
+                string rawIp = data[0].Split(' ')[1];
+                string port = data[1].Split(' ')[1];
+
+                HostName serverHost = new HostName(rawIp);
                 sc.ConnectAsync(serverHost, port);
             }
             catch (Exception e)

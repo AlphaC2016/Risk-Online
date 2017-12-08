@@ -93,7 +93,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Assets\mapdata.csv" />
+    <None Include="Assets\Data\mapdata.csv" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -147,13 +147,14 @@
     <Content Include="Assets\Backgrounds\map.jpg" />
     <Content Include="Assets\Backgrounds\roompage_background.jpg" />
     <Content Include="Assets\Backgrounds\settings_background.jpg" />
+    <Content Include="Assets\Data\config.txt" />
     <Content Include="Assets\Icons\Leaderboards.png" />
     <Content Include="Assets\Icons\CreateRoom.png" />
     <Content Include="Assets\Icons\flag.png" />
     <Content Include="Assets\Icons\Help.png" />
     <Content Include="Assets\Icons\JoinRoom.png" />
     <Content Include="Assets\Icons\Settings.png" />
-    <Content Include="Assets\music.mp3" />
+    <Content Include="Assets\Data\music.mp3" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
