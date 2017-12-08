@@ -94,7 +94,7 @@ namespace risk_project
             try
             {
                 sc = new StreamSocket();
-                HostName serverHost = new HostName("127.0.0.1");
+                HostName serverHost = new HostName("192.168.1.34");
                 string port = "3000";
                 sc.ConnectAsync(serverHost, port);
             }
