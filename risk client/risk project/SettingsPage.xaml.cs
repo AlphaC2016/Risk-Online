@@ -136,15 +136,13 @@ namespace risk_project
 
             if (((ComboBoxItem)CbxModes.SelectedValue).Content.ToString() == "Fullscreen")
             {
-                Helper.fullScreen = true;
-                view.TryEnterFullScreenMode();
+                Helper.GoFullscreen();
             }
                
 
             else if (view.IsFullScreenMode)
             {
-                Helper.fullScreen = false;
-                view.ExitFullScreenMode();
+                Helper.ExitFullScreen();
             }
                 
         }

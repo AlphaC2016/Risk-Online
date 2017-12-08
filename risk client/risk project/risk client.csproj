@@ -147,7 +147,7 @@
     <Content Include="Assets\Backgrounds\map.jpg" />
     <Content Include="Assets\Backgrounds\roompage_background.jpg" />
     <Content Include="Assets\Backgrounds\settings_background.jpg" />
-    <Content Include="Assets\Data\SocketData.txt" />
+    <Content Include="Assets\Data\config.txt" />
     <Content Include="Assets\Icons\Leaderboards.png" />
     <Content Include="Assets\Icons\CreateRoom.png" />
     <Content Include="Assets\Icons\flag.png" />

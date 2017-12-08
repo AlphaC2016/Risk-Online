@@ -19,7 +19,7 @@ namespace risk_project
         private static StreamReader reader = null;
         private static StreamSocket sc;
 
-        private const string CONFIG_PATH = @"Assets/Data/SocketData.txt";
+        private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
         public const string SIGN_IN = "200"; //protocol values
         public const string SIGN_OUT = "201";
