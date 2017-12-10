@@ -42,7 +42,7 @@ namespace risk_project
                 {
                     while (true)
                     {
-                        RecievedMessage msg = new RecievedMessage();
+                        RecievedMessage msg = new RecievedMessage(1);
                         var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
                         await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                     }
@@ -73,7 +73,6 @@ namespace risk_project
 
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
-            //getUpdates.
             Comms.SendData(Comms.LEAVE_ROOM);
             Frame.Navigate(typeof(MainMenu));
         }

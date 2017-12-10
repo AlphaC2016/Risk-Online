@@ -119,9 +119,9 @@ namespace risk_project
             }
         }
 
-        public static string RecvData(int size, int flags=0)
+        public static string RecvData(int size, int flags)
         {
-            if (!flags)
+            if (flags == 0)
             {
                 lock (sc)
                {

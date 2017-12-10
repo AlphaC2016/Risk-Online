@@ -32,7 +32,7 @@ namespace risk_project
         }
 
 
-        private List<string> GetArgsFromData()
+        private List<string> GetArgsFromData(int flags)
         {
             List<string> ans = new List<string>();
 
@@ -57,7 +57,7 @@ namespace risk_project
 
                 for (i = 0; i < amount; i++)
                 {
-                    ans.Add(Comms.RecvData(4)); //getting the room id
+                    ans.Add(Comms.RecvData(4, flags)); //getting the room id
                     size = int.Parse(Comms.RecvData(2, flags));
                     ans.Add(Comms.RecvData(size, flags));
                 }
