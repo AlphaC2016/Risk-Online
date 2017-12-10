@@ -11,10 +11,10 @@ namespace risk_project
         string code;
         List<string> args;
 
-        public RecievedMessage()
+        public RecievedMessage(int flags=0)
         {
-            code = GetMessageTypeCode();
-            args = GetArgsFromData();
+            code = GetMessageTypeCode(flags);
+            args = GetArgsFromData(flags);
         }
 
         public string GetCode() { return code; }
@@ -26,9 +26,9 @@ namespace risk_project
         }
 
 
-        private string GetMessageTypeCode()
+        private string GetMessageTypeCode(int flags)
         {
-            return Comms.RecvData(3);
+            return Comms.RecvData(3, flags);
         }
 
 
@@ -40,56 +40,56 @@ namespace risk_project
 
             if (code == Comms.SIGN_IN_RES)
             {
-                ans.Add(Comms.RecvData(1));
+                ans.Add(Comms.RecvData(1, flags));
             }//102
                     
 
 
 
             else if (code == Comms.SIGN_UP_RES)                                                                        //104
-                ans.Add(Comms.RecvData(1));
+                ans.Add(Comms.RecvData(1, flags));
 
 
 
             else if (code == Comms.ACTIVE_ROOMS_RES)                                                                   //106
             {
-                amount = int.Parse(Comms.RecvData(4));
+                amount = int.Parse(Comms.RecvData(4, flags));
 
                 for (i = 0; i < amount; i++)
                 {
                     ans.Add(Comms.RecvData(4)); //getting the room id
-                    size = int.Parse(Comms.RecvData(2));
-                    ans.Add(Comms.RecvData(size));
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
                 }
             }
 
             else if (code == Comms.GET_USERS_RES)                                                                      //108
             {
-                amount = int.Parse(Comms.RecvData(1));
+                amount = int.Parse(Comms.RecvData(1, flags));
 
                 for (i = 0; i < amount; i++)
                 {
-                    size = int.Parse(Comms.RecvData(2));
-                    ans.Add(Comms.RecvData(size));
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
                 }
             }
 
             else if (code == Comms.JOIN_ROOM_RES)                                                                      //110
                 {
-                    string code = Comms.RecvData(1);
+                    string code = Comms.RecvData(1, flags);
                     ans.Add(code);
 
                     if (code == "0")
                     {
-                        ans.Add(Comms.RecvData(2));
-                        ans.Add(Comms.RecvData(2));
+                        ans.Add(Comms.RecvData(2, flags));
+                        ans.Add(Comms.RecvData(2, flags));
                     }
                 }
 
             else if (code == Comms.NEW_ROOM_RES)                                                                       //114
             {
-                ans.Add(Comms.RecvData(1));
-                ans.Add(Comms.RecvData(4));
+                ans.Add(Comms.RecvData(1, flags));
+                ans.Add(Comms.RecvData(4, flags));
             }
                 
 
@@ -98,7 +98,7 @@ namespace risk_project
                 amount = 8;
                 for (i = 0; i < amount; i++)
                 {
-                    size = int.Parse(Comms.RecvData(2));
+                    size = int.Parse(Comms.RecvData(2, flags));
                     if (size == 0)
                     {
                         ans.Add("-----------");
@@ -106,8 +106,8 @@ namespace risk_project
                     }
                     else
                     {
-                        ans.Add(Comms.RecvData(size));
-                        ans.Add(Comms.RecvData(2));
+                        ans.Add(Comms.RecvData(size, flags));
+                        ans.Add(Comms.RecvData(2, flags));
                     }
                 }
             }

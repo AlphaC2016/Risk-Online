@@ -13,5 +13,9 @@
             <ImageBrush ImageSource="/Assets/Backgrounds/map.jpg" Opacity="0.8"></ImageBrush>
         </Canvas.Background>
 
+        <Grid Name="StkUsers" Canvas.Top="500" Canvas.Left="1300">
+            <Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Canvas>
 </Page>
