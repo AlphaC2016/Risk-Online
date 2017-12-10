@@ -18,7 +18,6 @@ namespace risk_project
         //private static StreamSocket sc;
         private static StreamReader reader = null;
         private static StreamSocket sc;
-
         private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
         public const string SIGN_IN = "200"; //protocol values
@@ -96,8 +95,8 @@ namespace risk_project
                 sc = new StreamSocket();
 
                 string[] data = File.ReadAllLines(CONFIG_PATH);
-                string rawIp = data[0].Split(' ')[1];
-                string port = data[1].Split(' ')[1];
+                string rawIp = data[0];
+                string port = data[1];
 
                 HostName serverHost = new HostName(rawIp);
                 sc.ConnectAsync(serverHost, port);
@@ -126,6 +125,7 @@ namespace risk_project
             {
                     if (reader == null)
                     {
+                        
                         Stream streamIn = sc.InputStream.AsStreamForRead();
                         reader = new StreamReader(streamIn);
                     }

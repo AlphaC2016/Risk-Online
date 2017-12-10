@@ -1,6 +1,6 @@
-﻿IP: 192.168.1.34
-PORT: 3000
-MUSIC: true
-SOUND: true
-FULLSCREEN: true
-COLOR: 0,0,128
+﻿127.0.0.1
+3000
+true
+true
+true
+0,0,128

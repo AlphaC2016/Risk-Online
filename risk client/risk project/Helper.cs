@@ -66,11 +66,11 @@ namespace risk_project
         public static void Init()
         {
             string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
-            musicPlaying = bool.Parse(rawData[2].Split(' ')[1]);
-            soundPlaying = bool.Parse(rawData[3].Split(' ')[1]);
-            fullScreen = bool.Parse(rawData[4].Split(' ')[1]);
+            musicPlaying = bool.Parse(rawData[2]);
+            soundPlaying = bool.Parse(rawData[3]);
+            fullScreen = bool.Parse(rawData[4]);
 
-            string[] colors = rawData[5].Split(' ')[1].Split(',');
+            string[] colors = rawData[5].Split(',');
             red = double.Parse(colors[0]);
             green = double.Parse(colors[1]);
             blue = double.Parse(colors[2]);
@@ -85,22 +85,13 @@ namespace risk_project
 
         public static void UpdateConfig()
         {
-            string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
-
-        }
-
-        public static string[,] GetDataMap()
-        {
-            string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
-            string[,] ans = new string[6, 2];
-            string[] temp;
-
-            for (int i=0; i<rawData.Length; i++)
-            {
-                temp = rawData[i].Split(' ');
-                ans[i,0] = temp[0];
-
-            }
+            //string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
+            //File.Delete(@"Assets/Data/config.txt");
+            //rawData[2] = musicPlaying.ToString();
+            //rawData[3] = soundPlaying.ToString();
+            //rawData[4] = fullScreen.ToString();
+            //rawData[5] = red.ToString() + ',' + green + ',' + blue;
+            //File.WriteAllLines(@"Assets/Data/config.txt", rawData);
         }
     }
 }
