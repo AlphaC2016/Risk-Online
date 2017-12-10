@@ -120,10 +120,12 @@ namespace risk_project
             }
         }
 
-        public static string RecvData(int size)
+        public static string RecvData(int size, int flags=0)
         {
-            lock (sc)
+            if (!flags)
             {
+                lock (sc)
+               {
                     if (reader == null)
                     {
                         Stream streamIn = sc.InputStream.AsStreamForRead();
@@ -132,6 +134,18 @@ namespace risk_project
                     char[] buf = new char[size];
                     reader.Read(buf, 0, size);
                     return new string(buf);
+                }
+            }
+            else
+            {
+                if (reader == null)
+                {
+                    Stream streamIn = sc.InputStream.AsStreamForRead();
+                    reader = new StreamReader(streamIn);
+                }
+                char[] buf = new char[size];
+                reader.Read(buf, 0, size);
+                return new string(buf);
             }
             
         }
