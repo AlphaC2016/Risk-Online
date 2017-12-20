@@ -78,12 +78,6 @@ namespace risk_project
                 {
                     string code = Comms.RecvData(1, flags);
                     ans.Add(code);
-
-                    if (code == "0")
-                    {
-                        ans.Add(Comms.RecvData(2, flags));
-                        ans.Add(Comms.RecvData(2, flags));
-                    }
                 }
 
             else if (code == Comms.NEW_ROOM_RES)                                                                       //114

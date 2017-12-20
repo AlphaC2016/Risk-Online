@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,11 +32,12 @@ namespace risk_project
         string id;
 
         Task getUpdates;
+        CoreDispatcher dispatcher;
         public RoomPage()
         {
             this.InitializeComponent();
             users = new List<TextBlock>();
-
+            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             getUpdates = new Task(async () =>
             {
                 try
@@ -43,8 +45,7 @@ namespace risk_project
                     while (true)
                     {
                         RecievedMessage msg = new RecievedMessage(1);
-                        var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
-                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                     }
                 }
                 catch (Exception) { }
