@@ -145,7 +145,7 @@ namespace risk_server
             {
                 return -1;
             }
-            SendMessage(Helper.CLOSE_ROOM_RES.ToString());
+            SendMessage(user, Helper.CLOSE_ROOM_RES.ToString());
 
             foreach (User u in _users)
             {
