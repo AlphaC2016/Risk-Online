@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,10 +33,12 @@ namespace risk_project
         string id;
 
         Task getUpdates;
+        CoreDispatcher dispatcher;
         public RoomPage()
         {
             this.InitializeComponent();
             users = new List<TextBlock>();
+            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
             getUpdates = new Task(async () =>
             {
@@ -43,8 +47,7 @@ namespace risk_project
                     while (true)
                     {
                         RecievedMessage msg = new RecievedMessage(1);
-                        var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
-                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                     }
                 }
                 catch (Exception) { }
@@ -66,6 +69,10 @@ namespace risk_project
             RecievedMessage msg = new RecievedMessage();
             
             LblTitle.Text = roomName;
+            if (isAdmin)
+            {
+                BtnPlay.Visibility = Visibility.Collapsed;
+            }
             HandleUpdate(msg);
             FitSize(sender, null);
             getUpdates.Start();
@@ -73,7 +80,14 @@ namespace risk_project
 
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
-            Comms.SendData(Comms.LEAVE_ROOM);
+            if (isAdmin)
+            {
+                Comms.SendData(Comms.CLOSE_ROOM);
+            }
+            else
+            {
+                Comms.SendData(Comms.LEAVE_ROOM);
+            }
             Frame.Navigate(typeof(MainMenu));
         }
 
@@ -108,9 +122,23 @@ namespace risk_project
                     users.Add(name);
                 }
             }
+            else if (msg.GetCode() == Comms.CLOSE_ROOM_RES)
+            {
+                MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
+                dialog.ShowAsync();
+                Frame.Navigate(typeof(MainMenu));
+            }
             else
             {
                 throw new Exception();
+            }
+        }
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            if (isAdmin)
+            {
+                Frame.Navigate(typeof(GamePage));
             }
         }
     }

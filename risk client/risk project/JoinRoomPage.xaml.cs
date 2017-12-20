@@ -154,7 +154,7 @@ namespace risk_project
                         if (msg[0] == "0")
                         {
                             object[] data = { currName, id, false };
-                            Frame.Navigate(typeof(GamePage), data);
+                            Frame.Navigate(typeof(RoomPage), data);
                         }
                         else
                         {

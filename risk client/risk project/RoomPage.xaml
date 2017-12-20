@@ -18,8 +18,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Name="LblTitle" Text="" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="DarkRed"></TextBlock>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Name="LblTitle" Text="" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="DarkRed"></TextBlock>
+
         <Grid Name="UsersGrid" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -32,5 +37,6 @@
         </Grid>
 
         <Button Name="BtnReturn" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Leave Room" Width="300" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White" Click="BtnReturn_Click"></Button>
+        <Button Name="BtnPlay" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Start Game!" Width="300" FontFamily="Papyrus" FontSize="48" Background="DarkGoldenRod" Foreground="White" Grid.Column="1" Margin="490,56,810,10" Click="BtnPlay_Click"/>
     </Grid>
 </Page>
