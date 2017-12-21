@@ -28,6 +28,7 @@ namespace risk_project
     public sealed partial class RoomPage : Page
     {
         List<TextBlock> users;
+        List<Button> buttons;
         string roomName;
         bool isAdmin;
         string id;
@@ -38,6 +39,7 @@ namespace risk_project
         {
             this.InitializeComponent();
             users = new List<TextBlock>();
+            buttons = new List<Button>();
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
             getUpdates = new Task(async () =>
@@ -67,7 +69,10 @@ namespace risk_project
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             RecievedMessage msg = new RecievedMessage();
-            
+
+            buttons.Add(BtnPlay);
+            buttons.Add(BtnReturn);
+
             LblTitle.Text = roomName;
             if (isAdmin)
             {
@@ -98,6 +103,12 @@ namespace risk_project
             foreach (TextBlock user in users)
             {
                 user.FontSize = (ActualHeight + ActualWidth) / 71.4;
+            }
+
+            foreach (Button button in buttons)
+            {
+                button.FontSize = (ActualHeight + ActualWidth) / 62.5;
+                button.Width = ActualWidth / 6.4;
             }
         }
 

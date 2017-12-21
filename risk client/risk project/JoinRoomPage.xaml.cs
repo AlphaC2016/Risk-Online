@@ -136,6 +136,7 @@ namespace risk_project
                 currRoomData.Add(t);
                 StkRoomDetails.Children.Add(t);
             }
+            FitSize(null, null);
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
