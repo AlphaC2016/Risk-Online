@@ -13,9 +13,21 @@
             <ImageBrush ImageSource="/Assets/Backgrounds/map.jpg" Opacity="0.8"></ImageBrush>
         </Canvas.Background>
 
-        <Grid Name="StkUsers" Canvas.Top="500" Canvas.Left="1300">
+        <Grid Name="GrdUsers" Canvas.Top="450" Canvas.Left="1550" Height="250" Width="330">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            
         </Grid>
     </Canvas>
 </Page>

@@ -17,13 +17,13 @@ namespace risk_server.Game_classes
             _players = new List<User>(users);
 
             InitMap();
-            Console.WriteLine("ding!");
         }
 
         private void InitMap()
         {
             BuildMap();
             SetUsersOnMap();
+            SendInitMessage();
         }
 
         private void BuildMap()
@@ -68,6 +68,20 @@ namespace risk_server.Game_classes
                     }
                 }
                 
+            }
+        }
+
+        private void SendInitMessage()
+        {
+            string message = Helper.INIT_MAP;
+
+        }
+
+        public void SendMessage(string message)
+        {
+            foreach (User user in _players)
+            {
+                user.Send(message);
             }
         }
     }

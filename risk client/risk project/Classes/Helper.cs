@@ -25,7 +25,11 @@ namespace risk_project
         public static double green;
         public static double blue;
 
+        public static string username { get; set; }
+
         static ApplicationView view = ApplicationView.GetForCurrentView();
+
+        public static int TERRITORY_AMOUNT = 42;
         
 
         //public static object RecordPlayer { get; private set; }
@@ -92,6 +96,17 @@ namespace risk_project
             //rawData[4] = fullScreen.ToString();
             //rawData[5] = red.ToString() + ',' + green + ',' + blue;
             //File.WriteAllLines(@"Assets/Data/config.txt", rawData);
+        }
+
+        public static Color GetRandomColor()
+        {
+            Random r = new Random();
+            return Color.FromArgb((byte)255, (byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256));
+        }
+
+        public static Color GetPlayerColor()
+        {
+            return Color.FromArgb((byte)255, (byte)red, (byte)green, (byte)blue);
         }
     }
 }

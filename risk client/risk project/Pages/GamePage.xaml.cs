@@ -18,8 +18,7 @@ using Windows.UI.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Windows.Storage;
-using Windows.UI.Core;
-using System.Collections.Specialized;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,14 +30,16 @@ namespace risk_project
     public sealed partial class GamePage : Page
     {
         List<string[]> labelData;
-        OrderedDictionary<string, StackPanel> names;
-		CoreDispatcher dispatcher;
-		
+        Dictionary<string, Territory> territories;
+
+        Dictionary<string, Color> colors;
+
         public GamePage()
         {
             this.InitializeComponent();
             labelData = new List<string[]>();
-            names = new OrderedDictionary<string, StackPanel>();
+            territories = new Dictionary<string, Territory>();
+            colors = new Dictionary<string, Color>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -58,12 +59,12 @@ namespace risk_project
             foreach (string[] line in labelData)
             {
                 TextBlock lbl = new TextBlock();
-                StackPanel stp = new StackPanel();
-				string name = line[0].Replace('#','\n');
+                Territory t = new Territory();
+
                 lbl.FontFamily = new FontFamily("Papyrus");
                 lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = name;
-                stp.Children.Add(lbl);
+                lbl.Text = line[0].Replace('#','\n');
+                t.Children.Add(lbl);
 
                 lbl = new TextBlock();
                 lbl.FontFamily = new FontFamily("Papyrus");
@@ -73,39 +74,33 @@ namespace risk_project
                 lbl.Foreground = new SolidColorBrush(Colors.Black);
                 lbl.Text = "0";
                 lbl.FontWeight = FontWeights.Bold;
-                stp.Children.Add(lbl);
+                t.Children.Add(lbl);
 
-                stp.Orientation = Orientation.Vertical;
-                stp.PointerPressed += Panel_Click;
-                stp.PointerEntered += Panel_PointerEntered;
-                names.Add(name, stp);
+                t.Orientation = Orientation.Vertical;
+                t.PointerPressed += Panel_Click;
+                t.PointerEntered += Panel_PointerEntered;
+                territories.Add(lbl.Text, t);
             }
 
             FitSize(sender, null);
 
-            foreach (StackPanel stp in names.Values)
+            foreach (Territory t in territories.Values)
             {
-                MainCanvas.Children.Add(stp);
+                MainCanvas.Children.Add(t);
             }
-			
-			Task t = new Task(async() =>
-			{
-				ReceivedMessage msg = new ReceivedMessage();
-				await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitBoard(msg));
-			});
-			t.Start();
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)
         {
             IEnumerable<TextBlock> content;
+            IEnumerable<Territory> vals = territories.Values;
 
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < territories.Count; i++)
             {
-                Canvas.SetLeft(names.ElementAt(i).Value, ActualWidth / double.Parse(labelData[i][1]));
-                Canvas.SetTop(names.ElementAt(i).Value, ActualHeight / double.Parse(labelData[i][2]));
+                Canvas.SetLeft(vals.ElementAt(i), ActualWidth / double.Parse(labelData[i][1]));
+                Canvas.SetTop(vals.ElementAt(i), ActualHeight / double.Parse(labelData[i][2]));
 
-                content = names.ElementAt(i).Value.Children.Cast<TextBlock>();
+                content = vals.ElementAt(i).Children.Cast<TextBlock>();
                 foreach (TextBlock lbl in content)
                 {
                     lbl.FontSize = (ActualHeight + ActualWidth) / 150;
@@ -133,10 +128,51 @@ namespace risk_project
             //StackPanel obj = (StackPanel)sender;
             //obj.Background = new SolidColorBrush(Colors.Gold);
         }
-		
-		private void InitBoard(ReceivedMessage msg)
-		{
-			
-		}
+
+        private void InitBoard(ReceivedMessage msg)
+        {
+            int count = int.Parse(msg[0]);
+            int i = 1;
+
+            TextBlock txb;
+            Rectangle rect;
+            Color color;
+            for (i=1; i<=count; i++)
+            {
+                txb = new TextBlock();
+                txb.Text = msg[i];
+                txb.VerticalAlignment = VerticalAlignment.Center;
+                txb.HorizontalAlignment = HorizontalAlignment.Left;
+
+                txb.FontFamily = new FontFamily("Papyrus");
+                txb.FontSize = 36;
+                txb.Foreground = new SolidColorBrush(Colors.Black);
+                Grid.SetColumn(txb, 1);
+                Grid.SetRow(txb, i - 1);
+                GrdUsers.Children.Add(txb);
+
+                rect = new Rectangle();
+                if (msg[i] == Helper.username)
+                {
+                    color = Helper.GetPlayerColor();
+                }
+                else
+                {
+                    color = Helper.GetRandomColor();
+                }
+                rect.Fill = new SolidColorBrush(color);
+                Grid.SetColumn(rect, 0);
+                Grid.SetRow(rect, i - 1);
+                GrdUsers.Children.Add(rect);
+
+                colors.Add(msg[i], color);
+            }
+
+            foreach (Territory t in territories.Values)
+            {
+                t.SetOwner(msg[i]);
+                t.SetColor(colors[msg[i]]);
+            }
+        }
     }
 }
