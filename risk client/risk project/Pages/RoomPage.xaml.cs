@@ -48,7 +48,7 @@ namespace risk_project
                 {
                     while (true)
                     {
-                        RecievedMessage msg = new RecievedMessage(1);
+                        ReceivedMessage msg = new ReceivedMessage(1);
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                     }
                 }
@@ -68,7 +68,7 @@ namespace risk_project
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            RecievedMessage msg = new RecievedMessage();
+            ReceivedMessage msg = new ReceivedMessage();
 
             buttons.Add(BtnPlay);
             buttons.Add(BtnReturn);
@@ -112,7 +112,7 @@ namespace risk_project
             }
         }
 
-        private void HandleUpdate(RecievedMessage msg)
+        private void HandleUpdate(ReceivedMessage msg)
         {
             if (msg.GetCode() == Comms.GET_USERS_RES)
             {

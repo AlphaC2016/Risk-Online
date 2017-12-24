@@ -38,17 +38,10 @@ namespace risk_project
         public const string CLOSE_ROOM = "215";
         public const string CLOSE_ROOM_RES = "116";
         public const string START_GAME = "217";
-        public const string SEND_QUESTIONS = "118";
-        public const string ANSWER = "219";
-        public const string ANSWER_RES = "120";
-        public const string END_GAME = "121";
-        public const string LEAVE_GAME = "222";
+        public const string START_GAME_RES = "118";
+        public const string INIT_MAP = "119";
         public const string LEADERBOARDS = "223";
         public const string LEADERBOARDS_RES = "124";
-        public const string PERSONAL_STATUS = "225";
-        public const string PERSONAL_STATUS_RES = "126";
-        public const string FORGOT = "227";
-        public const string FORGOT_RES = "128";
         public const string EXIT_APP = "299";
 
         public const string MSG_TYPE_CODE_LENGTH = "3";
@@ -87,6 +80,7 @@ namespace risk_project
         public const string FORGOT_PASS_EMAIL_DOES_NOT_EXIST = "1";
         public const string FORGOT_PASS_NO_PARAMS = "2";
         public const string FORGOT_PASS_OTHER = "3";
+
 
         public static bool InitSocket()
         {

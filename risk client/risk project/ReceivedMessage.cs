@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace risk_project
 {
-    class RecievedMessage
+    class ReceivedMessage
     {
         string code;
         List<string> args;
 
-        public RecievedMessage(int flags=0)
+        public ReceivedMessage(int flags=0)
         {
             code = GetMessageTypeCode(flags);
             args = GetArgsFromData(flags);
@@ -41,14 +41,13 @@ namespace risk_project
             if (code == Comms.SIGN_IN_RES)
             {
                 ans.Add(Comms.RecvData(1, flags));
-            }//102
+            }
                     
 
-
-
             else if (code == Comms.SIGN_UP_RES)                                                                        //104
+            {
                 ans.Add(Comms.RecvData(1, flags));
-
+            }
 
 
             else if (code == Comms.ACTIVE_ROOMS_RES)                                                                   //106
@@ -63,6 +62,7 @@ namespace risk_project
                 }
             }
 
+
             else if (code == Comms.GET_USERS_RES)                                                                      //108
             {
                 amount = int.Parse(Comms.RecvData(1, flags));
@@ -74,20 +74,41 @@ namespace risk_project
                 }
             }
 
+
             else if (code == Comms.JOIN_ROOM_RES)                                                                      //110
-                {
-                    string code = Comms.RecvData(1, flags);
-                    ans.Add(code);
-                }
+            {
+                string code = Comms.RecvData(1, flags);
+                ans.Add(code);
+            }
 
             else if (code == Comms.NEW_ROOM_RES)                                                                       //114
             {
                 ans.Add(Comms.RecvData(1, flags));
                 ans.Add(Comms.RecvData(4, flags));
             }
-                
 
-            else if (code == Comms.LEADERBOARDS_RES)
+            else if (code == Comms.INIT_MAP)                                                                           //118
+            {
+                string temp;
+                amount = int.Parse(Comms.RecvData(1, flags));
+                string[] users = new string[amount];
+
+                for (i=0; i<amount; i++)
+                {
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    temp = Comms.RecvData(size, flags);
+                    users[i] = temp;
+                    ans.Add(temp);
+                }
+
+                for (i=0; i<Helper.TERRITORY_AMOUNT; i++)
+                {
+                    temp = users[int.Parse(Comms.RecvData(1, flags))];
+                    ans.Add(temp);
+                }
+            }
+
+            else if (code == Comms.LEADERBOARDS_RES)                                                                   //124
             {
                 amount = 8;
                 for (i = 0; i < amount; i++)
@@ -105,6 +126,8 @@ namespace risk_project
                     }
                 }
             }
+
+
             else
             {
                 throw new Exception("UNSUPPORTED MESSAGE TYPE!");

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using risk_server.Game_classes;
 
 namespace risk_server
 {
@@ -136,7 +137,7 @@ namespace risk_server
                     // No Values!
                     break;
 
-                case Helper.ANSWER:
+                /*case Helper.ANSWER:
                     // Answer No.
                     values.Add(Helper.GetStringPartFromSocket(client, 1));
 
@@ -148,11 +149,13 @@ namespace risk_server
                     // No Values!
                     break;
 
-                case Helper.LEADERBOARDS:
-                    // No Values!
-                    break;
+                
 
                 case Helper.PERSONAL_STATUS:
+                    // No Values!
+                    break;*/
+
+                case Helper.LEADERBOARDS:
                     // No Values!
                     break;
 
@@ -356,6 +359,17 @@ namespace risk_server
                 user.Send(ans);
             }
         }
+
+        //----------------------GAME HANDLERS--------------------------------------
+
+        private void HandleStartGame(RecievedMessage msg)
+        {
+            Room room = msg.GetUser().GetRoom();
+            room.SendMessage(Helper.START_GAME_RES);
+            Game gm = new Game(room.GetUsers());
+            _roomsList.Remove(room.GetId());
+        }
+
 
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 

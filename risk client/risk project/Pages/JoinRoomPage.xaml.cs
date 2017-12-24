@@ -43,7 +43,7 @@ namespace risk_project
 
             Task fillDict = new Task(() =>
             {
-                RecievedMessage msg = new RecievedMessage();
+                ReceivedMessage msg = new ReceivedMessage();
 
                 if (msg.GetCode() == Comms.ACTIVE_ROOMS_RES)
                 {
@@ -111,7 +111,7 @@ namespace risk_project
             Task refresh = new Task(async () =>
             {
                 Comms.SendData(Comms.GET_USERS + Comms.GetPaddedNumber(roomIDs[currName], 4));
-                RecievedMessage msg = new RecievedMessage();
+                ReceivedMessage msg = new ReceivedMessage();
                 await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     updateUsersList(msg);
@@ -120,7 +120,7 @@ namespace risk_project
             refresh.Start();
         }
 
-        private void updateUsersList(RecievedMessage msg)
+        private void updateUsersList(ReceivedMessage msg)
         {
             StkRoomDetails.Children.Clear();
             currRoomData = new List<TextBlock>();
@@ -146,7 +146,7 @@ namespace risk_project
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             Task response = new Task(async () =>
             {
-                RecievedMessage msg = new RecievedMessage();
+                ReceivedMessage msg = new ReceivedMessage();
 
                 if (msg.GetCode() == Comms.JOIN_ROOM_RES)
                 {
