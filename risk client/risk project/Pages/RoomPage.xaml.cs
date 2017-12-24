@@ -74,7 +74,7 @@ namespace risk_project
             buttons.Add(BtnReturn);
 
             LblTitle.Text = roomName;
-            if (isAdmin)
+            if (!isAdmin)
             {
                 BtnPlay.Visibility = Visibility.Collapsed;
             }
@@ -114,7 +114,8 @@ namespace risk_project
 
         private void HandleUpdate(ReceivedMessage msg)
         {
-            if (msg.GetCode() == Comms.GET_USERS_RES)
+            string code = msg.GetCode();
+            if (code == Comms.GET_USERS_RES)
             {
                 UsersGrid.Children.Clear();
                 users.Clear();
@@ -133,11 +134,18 @@ namespace risk_project
                     users.Add(name);
                 }
             }
-            else if (msg.GetCode() == Comms.CLOSE_ROOM_RES)
+            else if (code == Comms.CLOSE_ROOM_RES)
             {
                 MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
                 dialog.ShowAsync();
                 Frame.Navigate(typeof(MainMenu));
+            }
+            else if (code == Comms.START_GAME_RES)
+            {
+                MessageDialog dialog = new MessageDialog("The game will begin shortly!");
+                dialog.ShowAsync();
+                Task.Delay(3000);
+                Frame.Navigate(typeof(GamePage));
             }
             else
             {

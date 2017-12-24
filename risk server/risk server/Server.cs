@@ -533,12 +533,12 @@ namespace risk_server
                     HandleCloseRoom(rm);
                     break;
 
-                /*case Helper.START_GAME:
+                case Helper.START_GAME:
                     Console.WriteLine("router :: entering StartGame");
                     HandleStartGame(rm);
                     break;
 
-                case Helper.PLAYER_MOVE:
+                /*case Helper.PLAYER_MOVE:
                     Console.WriteLine("router :: entering PlayerMove");
                     HandlePlayerMove(rm);
                     break;

@@ -75,6 +75,31 @@ namespace risk_server.Game_classes
         {
             string message = Helper.INIT_MAP;
 
+            message += _players.Count;
+            foreach (User p in _players)
+            {
+                message += Helper.GetPaddedNumber(p.GetUsername().Length, 2);
+                message += p.GetUsername();
+            }
+
+            int i;
+            foreach (Territory t in _territories.Values)
+            {
+                string temp = t.GetUser().GetUsername();
+                for (i=0; i<_players.Count; i++)
+                {
+                    if (temp == _players[i].GetUsername())
+                    {
+                        message += i;
+                    }
+                }
+            }
+            SendMessage(message);
+        }
+
+        private bool findUser(Territory t, string name)
+        {
+            return (t.GetUser().GetUsername() == name);
         }
 
         public void SendMessage(string message)

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Windows.Storage;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,60 +35,28 @@ namespace risk_project
 
         Dictionary<string, Color> colors;
 
+        CoreDispatcher dispatcher;
+
         public GamePage()
         {
             this.InitializeComponent();
             labelData = new List<string[]>();
             territories = new Dictionary<string, Territory>();
             colors = new Dictionary<string, Color>();
+            dispatcher = Window.Current.Dispatcher;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Task read = new Task(() =>
+            BuildBoard();
+
+            Task wait = new Task(async() =>
             {
-                string[] readFile = File.ReadAllLines(@"Assets/Data/mapdata.csv");
-                foreach (var line in readFile)
-                {
-                    labelData.Add(line.Split(','));
-                }
+                ReceivedMessage msg = new ReceivedMessage(0);
+
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitBoard(msg));
             });
-            read.Start();
-            read.Wait();
-            
-
-            foreach (string[] line in labelData)
-            {
-                TextBlock lbl = new TextBlock();
-                Territory t = new Territory();
-
-                lbl.FontFamily = new FontFamily("Papyrus");
-                lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = line[0].Replace('#','\n');
-                t.Children.Add(lbl);
-
-                lbl = new TextBlock();
-                lbl.FontFamily = new FontFamily("Papyrus");
-                lbl.HorizontalAlignment = HorizontalAlignment.Center;
-                lbl.VerticalAlignment = VerticalAlignment.Center;
-                //Color to be changed accordingly to player holding the point.
-                lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = "0";
-                lbl.FontWeight = FontWeights.Bold;
-                t.Children.Add(lbl);
-
-                t.Orientation = Orientation.Vertical;
-                t.PointerPressed += Panel_Click;
-                t.PointerEntered += Panel_PointerEntered;
-                territories.Add(lbl.Text, t);
-            }
-
-            FitSize(sender, null);
-
-            foreach (Territory t in territories.Values)
-            {
-                MainCanvas.Children.Add(t);
-            }
+            wait.Start();
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)
@@ -127,6 +96,54 @@ namespace risk_project
         {
             //StackPanel obj = (StackPanel)sender;
             //obj.Background = new SolidColorBrush(Colors.Gold);
+        }
+
+        private void BuildBoard()
+        {
+            Task read = new Task(() =>
+            {
+                string[] readFile = File.ReadAllLines(@"Assets/Data/mapdata.csv");
+                foreach (var line in readFile)
+                {
+                    labelData.Add(line.Split(','));
+                }
+            });
+            read.Start();
+            read.Wait();
+
+
+            foreach (string[] line in labelData)
+            {
+                TextBlock lbl = new TextBlock();
+                Territory t = new Territory();
+
+                lbl.FontFamily = new FontFamily("Papyrus");
+                lbl.Foreground = new SolidColorBrush(Colors.Black);
+                lbl.Text = line[0].Replace('#', '\n');
+                t.Children.Add(lbl);
+
+                lbl = new TextBlock();
+                lbl.FontFamily = new FontFamily("Papyrus");
+                lbl.HorizontalAlignment = HorizontalAlignment.Center;
+                lbl.VerticalAlignment = VerticalAlignment.Center;
+                //Color to be changed accordingly to player holding the point.
+                lbl.Foreground = new SolidColorBrush(Colors.Black);
+                lbl.Text = "0";
+                lbl.FontWeight = FontWeights.Bold;
+                t.Children.Add(lbl);
+
+                t.Orientation = Orientation.Vertical;
+                t.PointerPressed += Panel_Click;
+                t.PointerEntered += Panel_PointerEntered;
+                territories.Add(lbl.Text, t);
+            }
+
+            FitSize(null, null);
+
+            foreach (Territory t in territories.Values)
+            {
+                MainCanvas.Children.Add(t);
+            }
         }
 
         private void InitBoard(ReceivedMessage msg)
