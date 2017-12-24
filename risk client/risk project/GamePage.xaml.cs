@@ -18,6 +18,8 @@ using Windows.UI.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Windows.Storage;
+using Windows.UI.Core;
+using System.Collections.Specialized;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,13 +31,14 @@ namespace risk_project
     public sealed partial class GamePage : Page
     {
         List<string[]> labelData;
-        List<StackPanel> names;
-
+        OrderedDictionary<string, StackPanel> names;
+		CoreDispatcher dispatcher;
+		
         public GamePage()
         {
             this.InitializeComponent();
             labelData = new List<string[]>();
-            names = new List<StackPanel>();
+            names = new OrderedDictionary<string, StackPanel>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -56,10 +59,10 @@ namespace risk_project
             {
                 TextBlock lbl = new TextBlock();
                 StackPanel stp = new StackPanel();
-
+				string name = line[0].Replace('#','\n');
                 lbl.FontFamily = new FontFamily("Papyrus");
                 lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = line[0].Replace('#','\n');
+                lbl.Text = name;
                 stp.Children.Add(lbl);
 
                 lbl = new TextBlock();
@@ -75,15 +78,22 @@ namespace risk_project
                 stp.Orientation = Orientation.Vertical;
                 stp.PointerPressed += Panel_Click;
                 stp.PointerEntered += Panel_PointerEntered;
-                names.Add(stp);
+                names.Add(name, stp);
             }
 
             FitSize(sender, null);
 
-            foreach (StackPanel stp in names)
+            foreach (StackPanel stp in names.Values)
             {
                 MainCanvas.Children.Add(stp);
             }
+			
+			Task t = new Task(async() =>
+			{
+				ReceivedMessage msg = new ReceivedMessage();
+				await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitBoard(msg));
+			});
+			t.Start();
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)
@@ -92,10 +102,10 @@ namespace risk_project
 
             for (int i = 0; i < names.Count; i++)
             {
-                Canvas.SetLeft(names[i], ActualWidth / double.Parse(labelData[i][1]));
-                Canvas.SetTop(names[i], ActualHeight / double.Parse(labelData[i][2]));
+                Canvas.SetLeft(names.ElementAt(i).Value, ActualWidth / double.Parse(labelData[i][1]));
+                Canvas.SetTop(names.ElementAt(i).Value, ActualHeight / double.Parse(labelData[i][2]));
 
-                content = names[i].Children.Cast<TextBlock>();
+                content = names.ElementAt(i).Value.Children.Cast<TextBlock>();
                 foreach (TextBlock lbl in content)
                 {
                     lbl.FontSize = (ActualHeight + ActualWidth) / 150;
@@ -123,5 +133,10 @@ namespace risk_project
             //StackPanel obj = (StackPanel)sender;
             //obj.Background = new SolidColorBrush(Colors.Gold);
         }
+		
+		private void InitBoard(ReceivedMessage msg)
+		{
+			
+		}
     }
 }

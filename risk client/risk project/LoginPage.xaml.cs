@@ -100,7 +100,7 @@ namespace risk_project
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             Task getAnswer = new Task(async () =>
             {
-                RecievedMessage msg = new RecievedMessage();
+                ReceivedMessage msg = new ReceivedMessage();
 
                 if (msg.GetCode() == Comms.SIGN_IN_RES)
                 {
@@ -160,7 +160,7 @@ namespace risk_project
                 var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
                 Task getAnswer = new Task(async () =>
                 {
-                    RecievedMessage msg = new RecievedMessage();
+                    ReceivedMessage msg = new ReceivedMessage();
 
                     if (msg.GetCode() == Comms.SIGN_UP_RES)
                     {

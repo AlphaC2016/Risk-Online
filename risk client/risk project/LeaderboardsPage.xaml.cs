@@ -82,7 +82,7 @@ namespace risk_project
 
             Comms.SendData(Comms.LEADERBOARDS);
 
-            RecievedMessage msg = new RecievedMessage();
+            ReceivedMessage msg = new ReceivedMessage();
 
             string[,] ans = new string[8, 2];
             int count = msg.GetArgs().Count;

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace risk_project
 {
-    class RecievedMessage
+    class ReceivedMessage
     {
         string code;
         List<string> args;
 
-        public RecievedMessage(int flags=0)
+        public ReceivedMessage(int flags=0)
         {
             code = GetMessageTypeCode(flags);
             args = GetArgsFromData(flags);
