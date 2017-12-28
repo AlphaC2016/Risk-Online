@@ -116,10 +116,12 @@ namespace risk_project
             {
                 TextBlock lbl = new TextBlock();
                 Territory t = new Territory();
+                string name = line[0].Replace('#', '\n');
+
 
                 lbl.FontFamily = new FontFamily("Papyrus");
                 lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = line[0].Replace('#', '\n');
+                lbl.Text = name;
                 t.Children.Add(lbl);
 
                 lbl = new TextBlock();
@@ -135,7 +137,7 @@ namespace risk_project
                 t.Orientation = Orientation.Vertical;
                 t.PointerPressed += Panel_Click;
                 t.PointerEntered += Panel_PointerEntered;
-                territories.Add(lbl.Text, t);
+                territories.Add(name, t);
             }
 
             FitSize(null, null);
@@ -189,6 +191,7 @@ namespace risk_project
             {
                 t.SetOwner(msg[i]);
                 t.SetColor(colors[msg[i]]);
+                i++;
             }
         }
     }

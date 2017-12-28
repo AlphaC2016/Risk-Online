@@ -95,7 +95,7 @@ namespace risk_project
                 HostName serverHost = new HostName(rawIp);
                 sc.ConnectAsync(serverHost, port);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

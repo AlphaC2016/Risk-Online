@@ -87,10 +87,16 @@ namespace risk_project
                 ans.Add(Comms.RecvData(4, flags));
             }
 
-            else if (code == Comms.INIT_MAP)                                                                           //118
+            else if (code == Comms.START_GAME_RES)
+            {
+                //No Values!
+            }
+
+            else if (code == Comms.INIT_MAP)                                                                           //119
             {
                 string temp;
                 amount = int.Parse(Comms.RecvData(1, flags));
+                ans.Add(amount.ToString());
                 string[] users = new string[amount];
 
                 for (i=0; i<amount; i++)

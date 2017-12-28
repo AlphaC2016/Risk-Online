@@ -88,6 +88,7 @@ namespace risk_project
         {
             string message = Comms.SIGN_IN.ToString();
             string username = TxbLoginUsername.Text;
+            Helper.username = username;
             string password = TxbLoginPass.Text;
 
             message += Comms.GetPaddedNumber(username.Length, 2) + username;

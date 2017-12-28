@@ -32,11 +32,13 @@ namespace risk_project
         string roomName;
         bool isAdmin;
         string id;
+        bool done;
 
         Task getUpdates;
         CoreDispatcher dispatcher;
         public RoomPage()
         {
+            done = false;
             this.InitializeComponent();
             users = new List<TextBlock>();
             buttons = new List<Button>();
@@ -46,7 +48,7 @@ namespace risk_project
             {
                 try
                 {
-                    while (true)
+                    while (!done)
                     {
                         ReceivedMessage msg = new ReceivedMessage(1);
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
@@ -146,6 +148,7 @@ namespace risk_project
                 dialog.ShowAsync();
                 Task.Delay(3000);
                 Frame.Navigate(typeof(GamePage));
+                done = true;
             }
             else
             {
@@ -155,10 +158,7 @@ namespace risk_project
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if (isAdmin)
-            {
-                Frame.Navigate(typeof(GamePage));
-            }
+            Comms.SendData(Comms.START_GAME);
         }
     }
 }
