@@ -25,26 +25,46 @@ namespace risk_project
         public const string SIGN_IN_RES = "102";
         public const string SIGN_UP = "203";
         public const string SIGN_UP_RES = "104";
-        public const string ACTIVE_ROOMS = "205";
-        public const string ACTIVE_ROOMS_RES = "106";
+        public const string GET_ROOMS = "205";
+        public const string GET_ROOMS_RES = "106";
         public const string GET_USERS = "207";
         public const string GET_USERS_RES = "108";
         public const string JOIN_ROOM = "209";
         public const string JOIN_ROOM_RES = "110";
         public const string LEAVE_ROOM = "211";
         public const string LEAVE_ROOM_RES = "1120";
-        public const string NEW_ROOM = "213";
-        public const string NEW_ROOM_RES = "114";
+        public const string CREATE_ROOM = "213";
+        public const string CREATE_ROOM_RES = "114";
         public const string CLOSE_ROOM = "215";
         public const string CLOSE_ROOM_RES = "116";
         public const string START_GAME = "217";
         public const string START_GAME_RES = "118";
         public const string INIT_MAP = "119";
-        public const string LEADERBOARDS = "223";
-        public const string LEADERBOARDS_RES = "124";
+        public const string QUIT_GAME = "220";
+        public const string FORCES_INIT = "221";
+        public const string START_TURN = "122";
+        public const string SEND_REINFORCEMENTS = "223";
+        public const string MOVE_FORCES = "224";
+        public const string END_TURN = "226";
+        public const string START_BATTLE = "227";
+        public const string START_BATTLE_RES = "128";
+        public const string BATTLE_RETREAT = "229";
+        public const string ROLL_DICE = "230";
+        public const string ROLL_DICE_RES = "131";
+        public const string UPDATE_MAP = "132";
+        public const string END_GAME = "133";
+        public const string SEND_MESSAGE = "234";
+        public const string RECEIVE_MESSAGE = "135";
+        public const string LEADERBOARDS = "236";
+        public const string LEADERBOARDS_RES = "137";
         public const string EXIT_APP = "299";
 
         public const string MSG_TYPE_CODE_LENGTH = "3";
+
+
+        
+
+        //RESPONSE VERBOSE MEANINGS
 
         public const string SIGN_IN_SUCCESS = "0";
         public const string SIGN_IN_WRONG_DETAILS = "1";
@@ -59,19 +79,6 @@ namespace risk_project
         public const string CREATE_ROOM_SUCCESS = "0";
         public const string CREATE_ROOM_FAIL = "1";
 
-        public const string JOIN_ROOM_SUCCESS = "1100";
-        public const string JOIN_ROOM_FULL = "1101";
-        public const string JOIN_ROOM_NOT_EXIST_OR_OTHER = "1102";
-
-        public const string GET_ROOMS_SUCCESS = "106";
-
-        public const string GET_USERS_OF_ROOM_SUCCESS = "108";
-        public const string GET_USERS_OF_ROOM_FAIL = "1080";
-
-        public const string CREATE_GAME_SUCCESS = "118";
-        public const string CREATE_GAME_FAIL = "1180";
-
-        //RESPONSE VERBOSE MEANINGS
         public const string LOGIN_SUCCESS = "0";
         public const string LOGIN_WRONG_DETAILS = "1";
         public const string LOGIN_ALREADY_CONNECTED = "2";

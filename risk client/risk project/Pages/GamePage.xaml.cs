@@ -144,7 +144,7 @@ namespace risk_project
 
             foreach (Territory t in territories.Values)
             {
-                MainCanvas.Children.Add(t);
+                Arena.Children.Add(t);
             }
         }
 
