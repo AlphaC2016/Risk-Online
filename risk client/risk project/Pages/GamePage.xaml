@@ -17,13 +17,16 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="HOW FAR CAN THIS GO?"></TextBlock>
+        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="I'M JUST TESTING."></TextBlock>
 
-        <Canvas Name="Arena" Grid.Row="2">
-            <Grid Name="GrdUsers" Canvas.Top="680" Canvas.Left="45" Height="250" Width="300" BorderThickness="3" BorderBrush="White">
+        <Canvas Name="Arena" Grid.Row="1" Grid.RowSpan="2">
+            <Grid Name="GrdUsers" Canvas.Top="680" Canvas.Left="45" Height="250" Width="300" BorderThickness="3" BorderBrush="White" CornerRadius="2">
+                <Grid.Background>
+                    <SolidColorBrush Color="White" Opacity="0.7"></SolidColorBrush>
+                </Grid.Background>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -33,6 +36,8 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+
+                <TextBlock Name="tester" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" FontFamily="Papyrus"  Text="we're just testing here. Don't worry." />
             </Grid>
 
             <Grid Name="GrdChat" Canvas.Left="1600" Canvas.Top="310" Width="300" Height="300">

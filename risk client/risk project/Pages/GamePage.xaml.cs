@@ -37,12 +37,21 @@ namespace risk_project
 
         CoreDispatcher dispatcher;
 
+        List<Rectangle> colorRects;
+        List<TextBlock> messageLabels;
+        List<TextBlock> nameLabels;
+
         public GamePage()
         {
             this.InitializeComponent();
+
             labelData = new List<string[]>();
             territories = new Dictionary<string, Territory>();
             colors = new Dictionary<string, Color>();
+            colorRects = new List<Rectangle>();
+            messageLabels = new List<TextBlock>();
+            nameLabels = new List<TextBlock>();
+
             dispatcher = Window.Current.Dispatcher;
         }
 
@@ -74,6 +83,16 @@ namespace risk_project
                 {
                     lbl.FontSize = (ActualHeight + ActualWidth) / 150;
                 }
+
+                Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
+                Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
+                GrdUsers.Height = ActualHeight / 4.32;
+                GrdUsers.Width = ActualWidth / 6.4;
+                foreach (Rectangle rect in colorRects)
+                {
+                    rect.Height = rect.Width = ActualWidth / 64;
+                }
+                
             }
         }
 
@@ -169,6 +188,7 @@ namespace risk_project
                 Grid.SetColumn(txb, 1);
                 Grid.SetRow(txb, i - 1);
                 GrdUsers.Children.Add(txb);
+                nameLabels.Add(txb);
 
                 rect = new Rectangle();
                 if (msg[i] == Helper.username)
@@ -183,7 +203,7 @@ namespace risk_project
                 Grid.SetColumn(rect, 0);
                 Grid.SetRow(rect, i - 1);
                 GrdUsers.Children.Add(rect);
-
+                colorRects.Add(rect);
                 colors.Add(msg[i], color);
             }
 
