@@ -11,12 +11,13 @@ using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.Media.Playback;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Controls;
 
 namespace risk_project
 {
     static class Helper
     {
-        private static MediaPlayer player;
+        private static MediaElement player;
         public static bool musicPlaying;
         public static bool soundPlaying;
         public static bool fullScreen;
@@ -55,14 +56,14 @@ namespace risk_project
             view.ExitFullScreenMode();
         }
 
-        public static void InitMusic()
+        public static async void InitMusic()
         {
-            player = new MediaPlayer();
-            player.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/Data/music.mp3"));
-            if (musicPlaying)
-            {
-                player.Play();
-            }
+            player = new MediaElement();
+            StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            Folder = await Folder.GetFolderAsync(@"Assets\\Data");
+            StorageFile sf = await Folder.GetFileAsync("music.mp3");
+            player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
+            player.Play();
         }
 
         public static bool IsMusicPlaying() { return musicPlaying; }
