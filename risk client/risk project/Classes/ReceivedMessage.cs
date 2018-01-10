@@ -50,7 +50,7 @@ namespace risk_project
             }
 
 
-            else if (code == Comms.ACTIVE_ROOMS_RES)                                                                   //106
+            else if (code == Comms.GET_ROOMS_RES)                                                                   //106
             {
                 amount = int.Parse(Comms.RecvData(4, flags));
 
@@ -81,7 +81,7 @@ namespace risk_project
                 ans.Add(code);
             }
 
-            else if (code == Comms.NEW_ROOM_RES)                                                                       //114
+            else if (code == Comms.CREATE_ROOM_RES)                                                                       //114
             {
                 ans.Add(Comms.RecvData(1, flags));
                 ans.Add(Comms.RecvData(4, flags));

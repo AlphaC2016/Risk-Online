@@ -72,7 +72,7 @@ namespace risk_project
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
-            string message = Comms.NEW_ROOM;
+            string message = Comms.CREATE_ROOM;
             string name = TxbRoomName.Text;
             message += Comms.GetPaddedNumber(name.Length, 2);
             message += name;
@@ -84,7 +84,7 @@ namespace risk_project
             {
                 ReceivedMessage msg = new ReceivedMessage();
 
-                if (msg.GetCode() == Comms.NEW_ROOM_RES)
+                if (msg.GetCode() == Comms.CREATE_ROOM_RES)
                     await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {
                         if (msg[0] == "0")

@@ -39,13 +39,13 @@ namespace risk_project
             currRoomData = new List<TextBlock>();
             buttons = new List<Button>();     
 
-            Comms.SendData(Comms.ACTIVE_ROOMS);
+            Comms.SendData(Comms.GET_ROOMS);
 
             Task fillDict = new Task(() =>
             {
                 ReceivedMessage msg = new ReceivedMessage();
 
-                if (msg.GetCode() == Comms.ACTIVE_ROOMS_RES)
+                if (msg.GetCode() == Comms.GET_ROOMS_RES)
                 {
                     List<string> args = msg.GetArgs();
 

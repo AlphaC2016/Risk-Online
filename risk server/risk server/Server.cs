@@ -102,7 +102,7 @@ namespace risk_server
                     values.Add(Helper.GetStringPartFromSocket(client, sizes));
                     break;
 
-                case Helper.ACTIVE_ROOMS:
+                case Helper.GET_ROOMS:
                     // No Values!
                     break;
 
@@ -120,7 +120,7 @@ namespace risk_server
                     // No Values!
                     break;
 
-                case Helper.NEW_ROOM:
+                case Helper.CREATE_ROOM:
                     // Room name
                     sizes = Helper.GetIntPartFromSocket(client, 2);
                     values.Add(Helper.GetStringPartFromSocket(client, sizes));
@@ -503,7 +503,7 @@ namespace risk_server
                     }
                     break;
 
-                case Helper.ACTIVE_ROOMS:
+                case Helper.GET_ROOMS:
                     Console.WriteLine("router :: entering GetRooms");
                     HandleGetRooms(rm);
                     break;
@@ -518,7 +518,7 @@ namespace risk_server
                     HandleGetUsersInRoom(rm);
                     break;
 
-                case Helper.NEW_ROOM:
+                case Helper.CREATE_ROOM:
                     Console.WriteLine("router :: entering CreateRoom");
                     HandleCreateRoom(rm);
                     break;
