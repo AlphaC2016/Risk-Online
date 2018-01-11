@@ -41,6 +41,8 @@ namespace risk_project
         List<TextBlock> messageLabels;
         List<TextBlock> nameLabels;
 
+        bool done;
+        Task handler;
         public GamePage()
         {
             this.InitializeComponent();
@@ -53,67 +55,18 @@ namespace risk_project
             nameLabels = new List<TextBlock>();
 
             dispatcher = Window.Current.Dispatcher;
+            done = false;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BuildBoard();
 
-            Task wait = new Task(async() =>
+            handler = new Task(() =>
             {
-                ReceivedMessage msg = new ReceivedMessage(0);
-
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitBoard(msg));
+                ServerHandler();
             });
-            wait.Start();
-        }
-
-        private void FitSize(object sender, SizeChangedEventArgs e)
-        {
-            IEnumerable<TextBlock> content;
-            IEnumerable<Territory> vals = territories.Values;
-
-            for (int i = 0; i < territories.Count; i++)
-            {
-                Canvas.SetLeft(vals.ElementAt(i), this.ActualWidth / double.Parse(labelData[i][1]));
-                Canvas.SetTop(vals.ElementAt(i), this.ActualHeight / double.Parse(labelData[i][2]));
-
-                content = vals.ElementAt(i).Children.Cast<TextBlock>();
-                foreach (TextBlock lbl in content)
-                {
-                    lbl.FontSize = (ActualHeight + ActualWidth) / 150;
-                }    
-            }
-
-            Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
-            Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
-            GrdUsers.Height = ActualHeight / 4.32;
-            GrdUsers.Width = ActualWidth / 6.4;
-            foreach (Rectangle rect in colorRects)
-            {
-                rect.Height = rect.Width = ActualWidth / 64;
-            }
-        }
-
-        private async void readStuffAsync()
-        {
-            var path = @"../mapdata.csv";
-            var folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            // acquire file
-            var file = await folder.GetFileAsync(path);
-            var readFile = await Windows.Storage.FileIO.ReadLinesAsync(file);
-        
-        }
-
-        private void Panel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Panel_PointerEntered(object sender, RoutedEventArgs e)
-        {
-            StackPanel obj = (StackPanel)sender;
-            obj.Background = new SolidColorBrush(Colors.Gold);
+            handler.Start();
         }
 
         private void BuildBoard()
@@ -153,8 +106,6 @@ namespace risk_project
                 t.Children.Add(lbl);
 
                 t.Orientation = Orientation.Vertical;
-                t.PointerPressed += Panel_Click;
-                t.PointerEntered += Panel_PointerEntered;
                 territories.Add(name, t);
             }
 
@@ -166,7 +117,34 @@ namespace risk_project
             }
         }
 
-        private void InitBoard(ReceivedMessage msg)
+        private void FitSize(object sender, SizeChangedEventArgs e)
+        {
+            IEnumerable<TextBlock> content;
+            IEnumerable<Territory> vals = territories.Values;
+
+            for (int i = 0; i < territories.Count; i++)
+            {
+                Canvas.SetLeft(vals.ElementAt(i), this.ActualWidth / double.Parse(labelData[i][1]));
+                Canvas.SetTop(vals.ElementAt(i), this.ActualHeight / double.Parse(labelData[i][2]));
+
+                content = vals.ElementAt(i).Children.Cast<TextBlock>();
+                foreach (TextBlock lbl in content)
+                {
+                    lbl.FontSize = (ActualHeight + ActualWidth) / 150;
+                }    
+            }
+
+            Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
+            Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
+            GrdUsers.Height = ActualHeight / 4.32;
+            GrdUsers.Width = ActualWidth / 6.4;
+            foreach (Rectangle rect in colorRects)
+            {
+                rect.Height = rect.Width = ActualWidth / 64;
+            }
+        }
+
+        private void InitMap(ReceivedMessage msg)
         {
             int count = int.Parse(msg[0]);
             int i = 1;
@@ -211,6 +189,22 @@ namespace risk_project
                 t.SetOwner(msg[i]);
                 t.SetColor(colors[msg[i]]);
                 i++;
+            }
+        }
+
+        private async void ServerHandler()
+        {
+            ReceivedMessage msg;
+            string code;
+            while (!done)
+            {
+                msg = new ReceivedMessage();
+                code = msg.GetCode();
+
+                if (code == Comms.INIT_MAP)
+                {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitMap(msg) );
+                }
             }
         }
     }
