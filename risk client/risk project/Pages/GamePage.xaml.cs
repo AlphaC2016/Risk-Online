@@ -75,24 +75,23 @@ namespace risk_project
 
             for (int i = 0; i < territories.Count; i++)
             {
-                Canvas.SetLeft(vals.ElementAt(i), ActualWidth / double.Parse(labelData[i][1]));
-                Canvas.SetTop(vals.ElementAt(i), ActualHeight / double.Parse(labelData[i][2]));
+                Canvas.SetLeft(vals.ElementAt(i), this.ActualWidth / double.Parse(labelData[i][1]));
+                Canvas.SetTop(vals.ElementAt(i), this.ActualHeight / double.Parse(labelData[i][2]));
 
                 content = vals.ElementAt(i).Children.Cast<TextBlock>();
                 foreach (TextBlock lbl in content)
                 {
                     lbl.FontSize = (ActualHeight + ActualWidth) / 150;
-                }
+                }    
+            }
 
-                Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
-                Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
-                GrdUsers.Height = ActualHeight / 4.32;
-                GrdUsers.Width = ActualWidth / 6.4;
-                foreach (Rectangle rect in colorRects)
-                {
-                    rect.Height = rect.Width = ActualWidth / 64;
-                }
-                
+            Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
+            Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
+            GrdUsers.Height = ActualHeight / 4.32;
+            GrdUsers.Width = ActualWidth / 6.4;
+            foreach (Rectangle rect in colorRects)
+            {
+                rect.Height = rect.Width = ActualWidth / 64;
             }
         }
 
@@ -113,8 +112,8 @@ namespace risk_project
 
         private void Panel_PointerEntered(object sender, RoutedEventArgs e)
         {
-            //StackPanel obj = (StackPanel)sender;
-            //obj.Background = new SolidColorBrush(Colors.Gold);
+            StackPanel obj = (StackPanel)sender;
+            obj.Background = new SolidColorBrush(Colors.Gold);
         }
 
         private void BuildBoard()
@@ -175,7 +174,7 @@ namespace risk_project
             TextBlock txb;
             Rectangle rect;
             Color color;
-            for (i=1; i<=count; i++)
+            for (i = 1; i <= count; i++)
             {
                 txb = new TextBlock();
                 txb.Text = msg[i];

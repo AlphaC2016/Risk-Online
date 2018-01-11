@@ -137,6 +137,11 @@ namespace risk_server
                     // No Values!
                     break;
 
+                case Helper.SEND_MESSAGE:
+                    sizes = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    break;
+
                 /*case Helper.ANSWER:
                     // Answer No.
                     values.Add(Helper.GetStringPartFromSocket(client, 1));
@@ -406,6 +411,15 @@ namespace risk_server
             
         }
 
+        //------------------------MESSAGE HANDLERS---------------------------------
+
+        private void HandleUserMessage(RecievedMessage msg)
+        {
+            Game gm = msg.GetUser().GetGame();
+            string content = Helper.RECEIVE_MESSAGE + msg[0];
+            gm.SendMessage(content);
+        }
+
         //--------------------------CLIENT HANDLERS--------------------------------
         private void ClientHandler(object data)
         {
@@ -536,6 +550,11 @@ namespace risk_server
                 case Helper.START_GAME:
                     Console.WriteLine("router :: entering StartGame");
                     HandleStartGame(rm);
+                    break;
+
+                case Helper.SEND_MESSAGE:
+                    Console.WriteLine("router :: entering HandleUserMessage");
+                    HandleUserMessage(rm);
                     break;
 
                 /*case Helper.PLAYER_MOVE:
