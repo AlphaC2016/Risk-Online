@@ -13,6 +13,10 @@ using System.IO;
 
 namespace risk_project
 {
+    /// <summary>
+    /// This static class handles all back-end communiction with the server.
+    /// It includes all protocol codes and send/receive functions.
+    /// </summary>
     static class Comms
     {
         //private static StreamSocket sc;
@@ -20,7 +24,8 @@ namespace risk_project
         private static StreamSocket sc;
         private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
-        public const string SIGN_IN = "200"; //protocol values
+        //these are the protocol code values. a matching list is found on the server.
+        public const string SIGN_IN = "200";
         public const string SIGN_OUT = "201";
         public const string SIGN_IN_RES = "102";
         public const string SIGN_UP = "203";
@@ -89,6 +94,10 @@ namespace risk_project
         public const string FORGOT_PASS_OTHER = "3";
 
 
+        /// <summary>
+        /// This function handles the initial connection to the server.
+        /// </summary>
+        /// <returns>True if the connection was sucessful, false otherwise.</returns>
         public static bool InitSocket()
         {
             try
@@ -109,6 +118,11 @@ namespace risk_project
             return true;
         }
 
+
+        /// <summary>
+        /// This function sends data to the server.
+        /// </summary>
+        /// <param name="message">The content of the message.</param>
         public static void SendData(string message)
         {
             lock (sc)
@@ -120,6 +134,19 @@ namespace risk_project
             }
         }
 
+
+        /// <summary>
+        /// This function recieves data from the server, while locking / not locking the socket according to flags.
+        /// </summary>
+        /// 
+        /// Why lock, or NOT lock, you ask?
+        /// In normal activity mode, locking the socket while receiving works better in order to avoid messages getting mixed up.
+        /// However, while room browsing / in game, you cannot know when a message will pop up, or when you'll need to send - 
+        /// so using a lock will actually jam the whole thing.
+        /// 
+        /// <param name="size">The size of the message to be received in bytes.</param>
+        /// <param name="flags">Indicate whtether to lock the socket or not. 0 means locked, anything else means not locked.</param>
+        /// <returns>Returns the data from the server.</returns>
         public static string RecvData(int size, int flags)
         {
             if (flags == 0)
@@ -151,6 +178,12 @@ namespace risk_project
             
         }
 
+        /// <summary>
+        /// This function turns an int into a string of a given size, with 0s to pad in case of free space.
+        /// </summary>
+        /// <param name="num">the number to be turned into a string.</param>
+        /// <param name="size">the size of the target string.</param>
+        /// <returns>Returns the wanted string.</returns>
         public static string GetPaddedNumber(int num, int size)
         {
             return num.ToString().PadLeft(size, '0');

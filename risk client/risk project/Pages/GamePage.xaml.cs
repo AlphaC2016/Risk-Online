@@ -34,15 +34,18 @@ namespace risk_project
         Dictionary<string, Territory> territories;
 
         Dictionary<string, Color> colors;
-
-        CoreDispatcher dispatcher;
-
         List<Rectangle> colorRects;
         List<TextBlock> messageLabels;
         List<TextBlock> nameLabels;
 
         bool done;
         Task handler;
+        CoreDispatcher dispatcher;
+
+
+        /// <summary>
+        /// The regular constructor. Initializes all the containers.
+        /// </summary>
         public GamePage()
         {
             this.InitializeComponent();
@@ -58,6 +61,12 @@ namespace risk_project
             done = false;
         }
 
+
+        /// <summary>
+        /// This function starts the board building and starts up the comms task.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BuildBoard();
@@ -69,6 +78,10 @@ namespace risk_project
             handler.Start();
         }
 
+
+        /// <summary>
+        /// This function builds the basic board for the game according to mapdata.csv
+        /// </summary>
         private void BuildBoard()
         {
             Task read = new Task(() =>
@@ -117,6 +130,12 @@ namespace risk_project
             }
         }
 
+
+        /// <summary>
+        /// This function fits all elements to the new screen size, thus making everything adaptive. (yaaaaaay.)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FitSize(object sender, SizeChangedEventArgs e)
         {
             IEnumerable<TextBlock> content;
@@ -144,6 +163,11 @@ namespace risk_project
             }
         }
 
+
+        /// <summary>
+        /// This function sets the territories' ownership according to the users.
+        /// </summary>
+        /// <param name="msg">The server message which contains the ownership data.</param>
         private void InitMap(ReceivedMessage msg)
         {
             int count = int.Parse(msg[0]);
@@ -192,6 +216,29 @@ namespace risk_project
             }
         }
 
+
+        /// <summary>
+        /// This function handles a user message and displays it in the message log.
+        /// </summary>
+        /// <param name="msg">The server message.</param>
+        private void HandleUserMessage(ReceivedMessage msg)
+        {
+            TextBlock txb = new TextBlock();
+            string user = msg[0], content = msg[1];
+            txb.Text = user + ": " + content;
+            txb.HorizontalAlignment = HorizontalAlignment.Center;
+            txb.VerticalAlignment = VerticalAlignment.Center;
+            txb.FontFamily = new FontFamily("Papyrus");
+            txb.Foreground = new SolidColorBrush(Colors.DarkRed);
+            messageLabels.Add(txb);
+            StkMessages.Children.Add(txb);
+            FitSize(null, null);
+        }
+
+
+        /// <summary>
+        /// This function is a thread-like task that handles all communication with the server.
+        /// </summary>
         private async void ServerHandler()
         {
             ReceivedMessage msg;
@@ -205,7 +252,24 @@ namespace risk_project
                 {
                     await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitMap(msg) );
                 }
+                else if (code == Comms.RECEIVE_MESSAGE)
+                {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                }
             }
+        }
+
+
+        /// <summary>
+        /// This function sends a message to all the other players in the game.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendUserMessage(object sender, RoutedEventArgs e)
+        {
+            string content = Comms.SEND_MESSAGE;
+            content += TxbMessage.Text;
+            Comms.SendData(content);
         }
     }
 }

@@ -60,7 +60,7 @@
                 </ScrollViewer>
 
                 <TextBox Name="TxbMessage" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontFamily="Papyrus" FontSize="18"></TextBox>
-                <Button Name="BtnSend" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" Content="SEND" FontSize="16"></Button>
+                <Button Name="BtnSend" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" Content="SEND" FontSize="16" Click="SendUserMessage"></Button>
             </Grid>
         </Canvas>
     </Grid>

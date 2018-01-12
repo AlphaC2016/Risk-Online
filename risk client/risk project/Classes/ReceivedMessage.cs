@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace risk_project
 {
+    /// <summary>
+    /// This class represents a received message from te server.
+    /// </summary>
     class ReceivedMessage
     {
-        string code;
-        List<string> args;
+        string code; //the message code.
+        List<string> args; //the message's arguments.
 
+
+        /// <summary>
+        /// The standard constructor for a received message. the message itself is received in the "Get" functions.
+        /// </summary>
+        /// <param name="flags">Indicates whether to lock the socket or not. 0 in regular communications, 1 in room page or in-game.</param>
         public ReceivedMessage(int flags=0)
         {
             code = GetMessageTypeCode(flags);
@@ -20,18 +28,32 @@ namespace risk_project
         public string GetCode() { return code; }
         public List<string> GetArgs() { return args; }
 
+        /// <summary>
+        /// This function allows random-access into the message arguments without digging into the fields themselves.
+        /// </summary>
+        /// <param name="index">the index of the requested argument.</param>
+        /// <returns>The requested argument.</returns>
         public string this[int index]
         {
             get { return args[index]; }
         }
 
-
+        /// <summary>
+        /// This function gets the message code of the incoming message.
+        /// </summary>
+        /// <param name="flags">Flag use described in general class descripion.</param>
+        /// <returns>Returns the message code.</returns>
         private string GetMessageTypeCode(int flags)
         {
             return Comms.RecvData(3, flags);
         }
 
 
+        /// <summary>
+        /// This function gets all the arguments from the server, according to each message's struture.
+        /// </summary>
+        /// <param name="flags">Flag use described in general class descripion.</param>
+        /// <returns>Returns a list that contains all arguments.</returns>
         private List<string> GetArgsFromData(int flags)
         {
             List<string> ans = new List<string>();

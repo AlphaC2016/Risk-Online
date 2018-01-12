@@ -615,6 +615,29 @@ namespace risk_server
         private void SafeDeleteUser(RecievedMessage msg)
         {
             TcpClient sc = msg.GetSocket();
+            User u = msg.GetUser();
+            if (u != null)
+            {
+                if (u.GetRoom() != null)
+                {
+                    Room rm = u.GetRoom();
+                    if (rm.GetAdmin() == u.GetUsername())
+                    {
+                        Console.WriteLine("SafeDelete :: closing room "+rm.GetName());
+                        rm.CloseRoom(u);
+                    }
+                    else
+                    {
+                        Console.WriteLine("SafeDelete :: leaving room "+rm.GetName());
+                        rm.LeaveRoom(u);
+                    }
+                }
+                else if (u.GetRoom() != null)
+                {
+                    Console.WriteLine("SafeDelete :: leaving the game");
+                    u.LeaveGame();
+                }
+            }
             HandleSignOut(msg);
             sc.Close();
         }
