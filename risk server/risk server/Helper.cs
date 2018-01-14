@@ -89,6 +89,8 @@ namespace risk_server
         public const string FORGOT_PASS_NO_PARAMS = "2";
         public const string FORGOT_PASS_OTHER = "3";
 
+        public const int TERRITORY_AMOUNT = 42;
+
         public const string DB_PATH = "MyDatabase.db";
 
         public static void SendData(string message, TcpClient client)

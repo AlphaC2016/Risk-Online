@@ -188,5 +188,9 @@ namespace risk_project
         {
             return num.ToString().PadLeft(size, '0');
         }
+        public static string GetPaddedNumber(string num, int size)
+        {
+            return num.PadLeft(size, '0');
+        }
     }
 }

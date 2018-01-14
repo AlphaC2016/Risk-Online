@@ -28,5 +28,7 @@ namespace risk_server.Game_classes
 
         public User GetUser() { return _owner; }
         public void SetUser(User owner) { _owner = owner; }
+        public int GetAmount() { return _amount; }
+        public void SetAmount(int amount) { _amount = amount; }
     }
 }

@@ -21,7 +21,7 @@
         <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="I'M JUST TESTING."></TextBlock>
 
         <Canvas Name="Arena" >
-            <Grid Name="GrdUsers" Canvas.Top="680" Canvas.Left="45" Height="250" Width="300" BorderThickness="3" BorderBrush="White" CornerRadius="2">
+            <Grid Name="GrdUsers" Canvas.Top="780" Canvas.Left="40" Height="250" Width="300" BorderThickness="3" BorderBrush="White" CornerRadius="2">
                 <Grid.Background>
                     <SolidColorBrush Color="White" Opacity="0.7"></SolidColorBrush>
                 </Grid.Background>
@@ -37,11 +37,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-
-                
             </Grid>
 
-            <Grid Name="GrdChat" Canvas.Left="1600" Canvas.Top="310" Width="300" Height="300">
+            <Grid Name="GrdChat" Canvas.Left="1600" Canvas.Top="410" Width="300" Height="300" BorderBrush="White" BorderThickness="3" CornerRadius="2">
                 <Grid.Background>
                     <SolidColorBrush Color="White" Opacity="0.5"></SolidColorBrush>
                 </Grid.Background>
@@ -62,6 +60,21 @@
                 <TextBox Name="TxbMessage" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontFamily="Papyrus" FontSize="18"></TextBox>
                 <Button Name="BtnSend" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" Content="SEND" FontSize="16" Click="SendUserMessage"></Button>
             </Grid>
+
+            <TextBlock Name="LblSecondary" Text="TESTING AGAIN." Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
+
+
+            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1825" Canvas.Top="23" PointerPressed="ElpNo_PointerPressed">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Assets/Icons/no.png"/>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <Ellipse Name="ElpYes" Height="75" Width="75" Canvas.Left="1728" Canvas.Top="780" PointerPressed="ElpYes_PointerPressed">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Assets/Icons/Yes.png"/>
+                </Ellipse.Fill>
+            </Ellipse>
         </Canvas>
     </Grid>
 </Page>

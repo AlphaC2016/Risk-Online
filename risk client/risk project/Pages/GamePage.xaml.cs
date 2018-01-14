@@ -25,6 +25,13 @@ using Windows.UI.Core;
 
 namespace risk_project
 {
+    enum GameState
+    {
+        InitialReinforcments,
+        Attacker,
+        Spectator
+    }
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -42,6 +49,10 @@ namespace risk_project
         Task handler;
         CoreDispatcher dispatcher;
 
+        GameState currState;
+        int temp;
+
+        //---------------------------------------PAGE HANDLING CODE---------------------------------------------------
 
         /// <summary>
         /// The regular constructor. Initializes all the containers.
@@ -119,6 +130,7 @@ namespace risk_project
                 t.Children.Add(lbl);
 
                 t.Orientation = Orientation.Vertical;
+                t.PointerPressed += T_PointerPressed;
                 territories.Add(name, t);
             }
 
@@ -165,10 +177,77 @@ namespace risk_project
 
 
         /// <summary>
+        /// This function is a thread-like task that handles all communication with the server.
+        /// </summary>
+        private async void ServerHandler()
+        {
+            ReceivedMessage msg;
+            string code;
+            while (!done)
+            {
+                msg = new ReceivedMessage();
+                code = msg.GetCode();
+
+                if (code == Comms.INIT_MAP)
+                {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        HandleInitMap(msg);
+                        
+                    });
+                }
+                else if (code == Comms.RECEIVE_MESSAGE)
+                {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// This function sends a message to all the other players in the game.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendUserMessage(object sender, RoutedEventArgs e)
+        {
+            string content = Comms.SEND_MESSAGE;
+            content += TxbMessage.Text;
+            Comms.SendData(content);
+        }
+
+        
+        private void PresentError(string message)
+        {
+            string currContent = LblSecondary.Text;
+            Task t = new Task(async() =>
+            {
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    LblSecondary.Text = message;
+                    LblSecondary.Foreground = new SolidColorBrush(Colors.Red);
+                });
+                await Task.Delay(5000);
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    if (LblSecondary.Text == message)
+                    {
+                        LblSecondary.Text = currContent;
+                        LblSecondary.Foreground = new SolidColorBrush(Colors.White);
+                    }
+                });
+            });
+            t.Start();
+        }
+
+        //-----------------------------GAME HANDLING CODE------------------------------------------
+
+
+        /// <summary>
         /// This function sets the territories' ownership according to the users.
         /// </summary>
         /// <param name="msg">The server message which contains the ownership data.</param>
-        private void InitMap(ReceivedMessage msg)
+        private void HandleInitMap(ReceivedMessage msg)
         {
             int count = int.Parse(msg[0]);
             int i = 1;
@@ -235,41 +314,77 @@ namespace risk_project
             FitSize(null, null);
         }
 
-
-        /// <summary>
-        /// This function is a thread-like task that handles all communication with the server.
-        /// </summary>
-        private async void ServerHandler()
+        private void SetReinforcements()
         {
-            ReceivedMessage msg;
-            string code;
-            while (!done)
-            {
-                msg = new ReceivedMessage();
-                code = msg.GetCode();
+            currState = GameState.InitialReinforcments;
+            LblInstructions.Text = "SET YOUR FORCES IN PLACE";
 
-                if (code == Comms.INIT_MAP)
+            temp = Helper.TERRITORY_AMOUNT / colorRects.Count();
+            LblSecondary.Text = "amount Left: " + temp + " units";
+            
+        }
+
+        private void T_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (currState == GameState.InitialReinforcments)
+            {
+                Territory curr = sender as Territory;
+                var clickType = e.GetCurrentPoint(null).Properties;
+                int currNo = int.Parse(curr[1].Text);
+
+                if (clickType.IsLeftButtonPressed)
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => InitMap(msg) );
+                    if (temp > 0)
+                    {
+                        curr[1].Text = (currNo + 1).ToString();
+                        LblSecondary.Text = "amount Left: " + --temp + " units";
+                    }
                 }
-                else if (code == Comms.RECEIVE_MESSAGE)
+                else if (clickType.IsRightButtonPressed)
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                    if (currNo > 0)
+                    {
+                        curr[1].Text = (currNo - 1).ToString();
+                        LblSecondary.Text = "amount Left: " + ++temp + " units";
+                    }
                 }
+            }
+            
+        }
+
+        private void ElpYes_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            switch (currState)
+            {
+                case GameState.InitialReinforcments:
+                    string message = Comms.FORCES_INIT;
+                    bool ok = true;
+
+                    foreach (Territory t in territories.Values)
+                    {
+                        if (t[1].Text != "0" || t.GetOwner() != Helper.username)
+                        {
+                            message += Comms.GetPaddedNumber(t[1].Text, 2);
+                        }
+                        else
+                        {
+                            PresentError("all your territories must contain at least one unit.");
+                            ok = false;
+                            break;
+                        }
+                    }
+                    if (ok)
+                    {
+                        Comms.SendData(message);
+                    }
+                    break;
             }
         }
 
-
-        /// <summary>
-        /// This function sends a message to all the other players in the game.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SendUserMessage(object sender, RoutedEventArgs e)
+        private void ElpNo_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            string content = Comms.SEND_MESSAGE;
-            content += TxbMessage.Text;
-            Comms.SendData(content);
+            Comms.SendData(Comms.QUIT_GAME);
+            Frame.Navigate(typeof(MainMenu));
         }
     }
 }

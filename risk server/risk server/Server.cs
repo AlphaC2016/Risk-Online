@@ -66,12 +66,11 @@ namespace risk_server
             t.Start(client);
         }
 
-
         private RecievedMessage BuildRecievedMessage(TcpClient client, string msgCode)
         {
             List<string> values = new List<string>();
 
-            int sizes;
+            int size, i;
 
             Console.WriteLine("BUILDING MESSAGE " + msgCode + " FROM SOCKET " + Helper.GetIp(client)+'\n');
 
@@ -80,12 +79,12 @@ namespace risk_server
             {
                 case Helper.SIGN_IN:
                     // username
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
 
                     // password
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
                     break;
 
                 case Helper.SIGN_OUT:
@@ -94,12 +93,12 @@ namespace risk_server
 
                 case Helper.SIGN_UP:
                     // username
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
 
                     // password
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
                     break;
 
                 case Helper.GET_ROOMS:
@@ -122,8 +121,8 @@ namespace risk_server
 
                 case Helper.CREATE_ROOM:
                     // Room name
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
 
                     // No. of players
                     values.Add(Helper.GetStringPartFromSocket(client, 1));
@@ -137,9 +136,20 @@ namespace risk_server
                     // No Values!
                     break;
 
+                case Helper.FORCES_INIT:
+                    for (i=0; i<Helper.TERRITORY_AMOUNT; i++)
+                    {
+                        values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    }
+                    break;
+
+                case Helper.QUIT_GAME:
+                    // No Values!
+                    break;
+
                 case Helper.SEND_MESSAGE:
-                    sizes = Helper.GetIntPartFromSocket(client, 2);
-                    values.Add(Helper.GetStringPartFromSocket(client, sizes));
+                    size = Helper.GetIntPartFromSocket(client, 2);
+                    values.Add(Helper.GetStringPartFromSocket(client, size));
                     break;
 
                 /*case Helper.ANSWER:
@@ -176,7 +186,7 @@ namespace risk_server
         }
 
 
-        //--------------------------------HANDLERS---------------------------------
+        /*--------------------------------------------------------------------------HANDLERS--------------------------------------------------------------------------*/
 
         //-------------------SIGN HANDLERS-----------------------------------------
         private void HandleSignIn(RecievedMessage msg)
@@ -243,9 +253,9 @@ namespace risk_server
         {
             if (msg.GetUser() != null)
             {
-                //HandleLeaveGame(msg);
-                //HandleLeaveRoom(msg);
-                //HandleCloseRoom(msg);
+                HandleQuitGame(msg);
+                HandleLeaveRoom(msg);
+                HandleCloseRoom(msg);
 
                 _connectedUsers.Remove(msg.GetUser().GetSocket());
             }
@@ -375,6 +385,15 @@ namespace risk_server
             _roomsList.Remove(room.GetId());
         }
 
+        private void HandleQuitGame(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().RemovePlayer(msg.GetUser());
+        }
+
+        private void HandleForcesInit(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleInitialReinforcements(msg);
+        }
 
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
@@ -493,25 +512,25 @@ namespace risk_server
             }
         }
 
-        private void Router(RecievedMessage rm)
+        private void Router(RecievedMessage msg)
         {
-            string messageCode = rm.GetMessageCode();
+            string messageCode = msg.GetMessageCode();
 
             switch (messageCode)
             {
                 case Helper.SIGN_IN:
                     Console.WriteLine("router :: entering SignIn");
-                    HandleSignIn(rm);
+                    HandleSignIn(msg);
                     break;
 
                 case Helper.SIGN_OUT:
                     Console.WriteLine("router :: entering SignOut");
-                    HandleSignOut(rm);
+                    HandleSignOut(msg);
                     break;
 
                 case Helper.SIGN_UP:
                     Console.WriteLine("router :: entering SignUp");
-                    if (!HandleSignUp(rm))
+                    if (!HandleSignUp(msg))
                     {
                         Console.WriteLine("router :: ErrorSignUp");
                     }
@@ -519,64 +538,74 @@ namespace risk_server
 
                 case Helper.GET_ROOMS:
                     Console.WriteLine("router :: entering GetRooms");
-                    HandleGetRooms(rm);
+                    HandleGetRooms(msg);
                     break;
 
                 case Helper.JOIN_ROOM:
                     Console.WriteLine("router :: entering JoinRoom");
-                    HandleJoinRoom(rm);
+                    HandleJoinRoom(msg);
                     break;
 
                 case Helper.GET_USERS:
                     Console.WriteLine("router :: entering UsersInRoom");
-                    HandleGetUsersInRoom(rm);
+                    HandleGetUsersInRoom(msg);
                     break;
 
                 case Helper.CREATE_ROOM:
                     Console.WriteLine("router :: entering CreateRoom");
-                    HandleCreateRoom(rm);
+                    HandleCreateRoom(msg);
                     break;
 
                 case Helper.LEAVE_ROOM:
                     Console.WriteLine("router :: entering LeaveRoom");
-                    HandleLeaveRoom(rm);
+                    HandleLeaveRoom(msg);
                     break;
 
                 case Helper.CLOSE_ROOM:
                     Console.WriteLine("router :: entering CloseRoom");
-                    HandleCloseRoom(rm);
+                    HandleCloseRoom(msg);
                     break;
 
                 case Helper.START_GAME:
                     Console.WriteLine("router :: entering StartGame");
-                    HandleStartGame(rm);
+                    HandleStartGame(msg);
                     break;
 
                 case Helper.SEND_MESSAGE:
                     Console.WriteLine("router :: entering HandleUserMessage");
-                    HandleUserMessage(rm);
+                    HandleUserMessage(msg);
+                    break;
+
+                case Helper.QUIT_GAME:
+                    Console.WriteLine("router :: entering HandleQuitGame");
+                    HandleQuitGame(msg);
+                    break;
+
+                case Helper.FORCES_INIT:
+                    Console.WriteLine("Router :: entering HandleForcesInit");
+                    HandleForcesInit(msg);
                     break;
 
                 /*case Helper.PLAYER_MOVE:
                     Console.WriteLine("router :: entering PlayerMove");
-                    HandlePlayerMove(rm);
+                    HandlePlayerMove(msg);
                     break;
 
                 
 
                 case Helper.ADD_SCORE:
                     Console.WriteLine("router :: entering AddScore");
-                    HandleAddScore(rm);
+                    HandleAddScore(msg);
                     break;*/
 
                 case Helper.LEADERBOARDS:
                     Console.WriteLine("router :: entering Leaderboards");
-                    HandleGetLeaderboards(rm);
+                    HandleGetLeaderboards(msg);
                     break;
 
                 case Helper.EXIT_APP:
                     Console.WriteLine("router :: entering SafeDeleteUser");
-                    this.SafeDeleteUser(rm);
+                    this.SafeDeleteUser(msg);
                     break;
 
                 default:
@@ -615,29 +644,6 @@ namespace risk_server
         private void SafeDeleteUser(RecievedMessage msg)
         {
             TcpClient sc = msg.GetSocket();
-            User u = msg.GetUser();
-            if (u != null)
-            {
-                if (u.GetRoom() != null)
-                {
-                    Room rm = u.GetRoom();
-                    if (rm.GetAdmin() == u.GetUsername())
-                    {
-                        Console.WriteLine("SafeDelete :: closing room "+rm.GetName());
-                        rm.CloseRoom(u);
-                    }
-                    else
-                    {
-                        Console.WriteLine("SafeDelete :: leaving room "+rm.GetName());
-                        rm.LeaveRoom(u);
-                    }
-                }
-                else if (u.GetRoom() != null)
-                {
-                    Console.WriteLine("SafeDelete :: leaving the game");
-                    u.LeaveGame();
-                }
-            }
             HandleSignOut(msg);
             sc.Close();
         }

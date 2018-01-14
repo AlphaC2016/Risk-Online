@@ -97,6 +97,13 @@ namespace risk_server.Game_classes
             SendMessage(message);
         }
 
+        public void RemovePlayer(User u)
+        {
+            _players.Remove(u);
+            SetUsersOnMap();
+            SendInitMessage();
+        }
+
         private bool findUser(Territory t, string name)
         {
             return (t.GetUser().GetUsername() == name);
@@ -107,6 +114,25 @@ namespace risk_server.Game_classes
             foreach (User user in _players)
             {
                 user.Send(message);
+            }
+        }
+
+        public void HandleInitialReinforcements(RecievedMessage msg)
+        {
+            bool done = true;
+            for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
+            {
+                if (msg[i] != "0")
+                {
+                    _territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i]));
+                }
+
+                done = (_territories.ElementAt(i).Value.GetAmount() != 0);
+            }
+
+            if (done)
+            {
+                //Start the game!
             }
         }
     }
