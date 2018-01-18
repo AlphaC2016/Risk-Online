@@ -12,9 +12,13 @@ namespace risk_server.Game_classes
         Dictionary<string, Territory> _territories;
         Dictionary<User, int> _territoryCount;
 
+        int currAttackerIndex;
+
         public Game(List<User> users)
         {
+            Random r = new Random();
             _players = new List<User>(users);
+            currAttackerIndex = r.Next(_players.Count);
 
             InitMap();
         }
@@ -134,6 +138,15 @@ namespace risk_server.Game_classes
             {
                 //Start the game!
             }
+        }
+
+        private void StartTurn()
+        {
+            string message = Helper.START_TURN;
+            string curr = _players[currAttackerIndex].GetUsername();
+
+            message += Helper.GetPaddedNumber(curr.Length, 2) + curr;
+            SendMessage(message);
         }
     }
 }

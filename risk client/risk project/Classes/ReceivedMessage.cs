@@ -60,107 +60,88 @@ namespace risk_project
 
             int i, amount, size;
 
-            if (code == Comms.SIGN_IN_RES)
+            switch (code)
             {
-                ans.Add(Comms.RecvData(1, flags));
-            }
-                    
+                case Comms.SIGN_IN_RES:
+                    ans.Add(Comms.RecvData(1, flags));
+                    break;
 
-            else if (code == Comms.SIGN_UP_RES)                                                                        //104
-            {
-                ans.Add(Comms.RecvData(1, flags));
-            }
+                case Comms.SIGN_UP_RES:
+                    ans.Add(Comms.RecvData(1, flags));
+                    break;
 
+                case Comms.GET_USERS_RES:
+                    amount = int.Parse(Comms.RecvData(4, flags));
 
-            else if (code == Comms.GET_ROOMS_RES)                                                                   //106
-            {
-                amount = int.Parse(Comms.RecvData(4, flags));
-
-                for (i = 0; i < amount; i++)
-                {
-                    ans.Add(Comms.RecvData(4, flags)); //getting the room id
-                    size = int.Parse(Comms.RecvData(2, flags));
-                    ans.Add(Comms.RecvData(size, flags));
-                }
-            }
-
-
-            else if (code == Comms.GET_USERS_RES)                                                                      //108
-            {
-                amount = int.Parse(Comms.RecvData(1, flags));
-
-                for (i = 0; i < amount; i++)
-                {
-                    size = int.Parse(Comms.RecvData(2, flags));
-                    ans.Add(Comms.RecvData(size, flags));
-                }
-            }
-
-
-            else if (code == Comms.JOIN_ROOM_RES)                                                                      //110
-            {
-                string code = Comms.RecvData(1, flags);
-                ans.Add(code);
-            }
-
-            else if (code == Comms.CREATE_ROOM_RES)                                                                       //114
-            {
-                ans.Add(Comms.RecvData(1, flags));
-                ans.Add(Comms.RecvData(4, flags));
-            }
-
-            else if (code == Comms.START_GAME_RES)
-            {
-                //No Values!
-            }
-
-            else if (code == Comms.INIT_MAP)                                                                           //119
-            {
-                string temp;
-                amount = int.Parse(Comms.RecvData(1, flags));
-                ans.Add(amount.ToString());
-                string[] users = new string[amount];
-
-                for (i=0; i<amount; i++)
-                {
-                    size = int.Parse(Comms.RecvData(2, flags));
-                    temp = Comms.RecvData(size, flags);
-                    users[i] = temp;
-                    ans.Add(temp);
-                }
-
-                for (i=0; i<Helper.TERRITORY_AMOUNT; i++)
-                {
-                    temp = users[int.Parse(Comms.RecvData(1, flags))];
-                    ans.Add(temp);
-                }
-            }
-
-            else if (code == Comms.LEADERBOARDS_RES)                                                                   //124
-            {
-                amount = 8;
-                for (i = 0; i < amount; i++)
-                {
-                    size = int.Parse(Comms.RecvData(2, flags));
-                    if (size == 0)
+                    for (i = 0; i < amount; i++)
                     {
-                        ans.Add("-----------");
-                        ans.Add("-----------");
-                    }
-                    else
-                    {
+                        ans.Add(Comms.RecvData(4, flags)); //getting the room id
+                        size = int.Parse(Comms.RecvData(2, flags));
                         ans.Add(Comms.RecvData(size, flags));
-                        ans.Add(Comms.RecvData(2, flags));
                     }
-                }
+                    break;
+
+                case Comms.JOIN_ROOM_RES:
+                    string code = Comms.RecvData(1, flags);
+                    ans.Add(code);
+                    break;
+
+                case Comms.CREATE_ROOM_RES:
+                    ans.Add(Comms.RecvData(1, flags));
+                    ans.Add(Comms.RecvData(4, flags));
+                    break;
+
+                case Comms.START_GAME_RES:
+                    // No Values!
+                    break;
+
+                case Comms.INIT_MAP:
+                    string temp;
+                    amount = int.Parse(Comms.RecvData(1, flags));
+                    ans.Add(amount.ToString());
+                    string[] users = new string[amount];
+
+                    for (i = 0; i < amount; i++)
+                    {
+                        size = int.Parse(Comms.RecvData(2, flags));
+                        temp = Comms.RecvData(size, flags);
+                        users[i] = temp;
+                        ans.Add(temp);
+                    }
+
+                    for (i = 0; i < Helper.TERRITORY_AMOUNT; i++)
+                    {
+                        temp = users[int.Parse(Comms.RecvData(1, flags))];
+                        ans.Add(temp);
+                    }
+                    break;
+
+                case Comms.LEADERBOARDS_RES:
+                    amount = 8;
+                    for (i = 0; i < amount; i++)
+                    {
+                        size = int.Parse(Comms.RecvData(2, flags));
+                        if (size == 0)
+                        {
+                            ans.Add("-----------");
+                            ans.Add("-----------");
+                        }
+                        else
+                        {
+                            ans.Add(Comms.RecvData(size, flags));
+                            ans.Add(Comms.RecvData(2, flags));
+                        }
+                    }
+                    break;
+
+                case Comms.START_TURN:
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
+                    break;
+
+                default:
+                    throw new Exception("UNSUPPORTED MESSAGE TYPE!");
             }
-
-
-            else
-            {
-                throw new Exception("UNSUPPORTED MESSAGE TYPE!");
-            }
-
             return ans;
         }
     }

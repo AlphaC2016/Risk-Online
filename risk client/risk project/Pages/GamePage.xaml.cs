@@ -29,7 +29,9 @@ namespace risk_project
     {
         InitialReinforcments,
         Attacker,
-        Spectator
+        Spectator,
+        Reinforcements,
+        Defender
     }
 
     /// <summary>
@@ -51,6 +53,7 @@ namespace risk_project
 
         GameState currState;
         int temp;
+        int territoryCount;
 
         //---------------------------------------PAGE HANDLING CODE---------------------------------------------------
 
@@ -70,6 +73,7 @@ namespace risk_project
 
             dispatcher = Window.Current.Dispatcher;
             done = false;
+            territoryCount = 0;
         }
 
 
@@ -274,6 +278,7 @@ namespace risk_project
                 if (msg[i] == Helper.username)
                 {
                     color = Helper.GetPlayerColor();
+                    territoryCount++;
                 }
                 else
                 {
@@ -314,19 +319,35 @@ namespace risk_project
             FitSize(null, null);
         }
 
+
+        private void HandleStartTurn(ReceivedMessage msg)
+        {
+            if (Helper.username == msg[0])
+            {
+                currState = GameState.Reinforcements;
+                LblInstructions.Text = "IT'S YOUR TURN!\nSET YOUR FORCES";
+                temp = territoryCount / 3;
+                LblSecondary.Text = "Units Remaining: " + temp;
+            }
+            else
+            {
+                currState = GameState.Spectator;
+            }
+        }
+
         private void SetReinforcements()
         {
             currState = GameState.InitialReinforcments;
             LblInstructions.Text = "SET YOUR FORCES IN PLACE";
 
-            temp = Helper.TERRITORY_AMOUNT / colorRects.Count();
+            temp = 50 - (5*colorRects.Count());
             LblSecondary.Text = "amount Left: " + temp + " units";
             
         }
 
         private void T_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            if (currState == GameState.InitialReinforcments)
+            if (currState == GameState.InitialReinforcments || currState == GameState.Reinforcements)
             {
                 Territory curr = sender as Territory;
                 var clickType = e.GetCurrentPoint(null).Properties;
@@ -340,14 +361,14 @@ namespace risk_project
                         LblSecondary.Text = "amount Left: " + --temp + " units";
                     }
                 }
-                else if (clickType.IsRightButtonPressed)
-                {
-                    if (currNo > 0)
-                    {
-                        curr[1].Text = (currNo - 1).ToString();
-                        LblSecondary.Text = "amount Left: " + ++temp + " units";
-                    }
-                }
+                //else if (clickType.IsRightButtonPressed)
+                //{
+                //    if (currNo > 0)
+                //    {
+                //        curr[1].Text = (currNo - 1).ToString();
+                //        LblSecondary.Text = "amount Left: " + ++temp + " units";
+                //    }
+                //}
             }
             
         }
@@ -377,6 +398,15 @@ namespace risk_project
                     {
                         Comms.SendData(message);
                     }
+                    break;
+
+                case GameState.Reinforcements:
+                    message = Comms.SEND_REINFORCEMENTS;
+                    foreach (Territory t in territories.Values)
+                    {
+                        message += Comms.GetPaddedNumber(t[1].Text, 2);
+                    }
+                    Comms.SendData(message);
                     break;
             }
         }

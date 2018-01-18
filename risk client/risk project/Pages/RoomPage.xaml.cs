@@ -94,6 +94,7 @@ namespace risk_project
             else
             {
                 Comms.SendData(Comms.LEAVE_ROOM);
+            }
             Frame.Navigate(typeof(MainMenu));
         }
 
