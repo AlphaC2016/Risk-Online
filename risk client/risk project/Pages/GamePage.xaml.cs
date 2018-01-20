@@ -162,6 +162,11 @@ namespace risk_project
             {
                 txb.FontSize = (ActualHeight + ActualWidth) / 83.333;
             }
+            
+            foreach (TextBlock txb in StkMessages.Children)
+            {
+                txb.FontSize = (ActualHeight * ActualWidth) / 100000;
+            }
 
             LblInstructions.FontSize = (ActualHeight / ActualWidth) / 83.333;
 
@@ -181,8 +186,8 @@ namespace risk_project
             Canvas.SetTop(LblSecondary, ActualHeight / 1.091);
             LblSecondary.FontSize = (ActualHeight + ActualWidth) / 100;
 
-            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 115200;
-            BtnSend.FontSize = (ActualHeight * ActualWidth) / 129600;
+            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 100000;
+            BtnSend.FontSize = (ActualHeight * ActualWidth) / 120000;
         }
 
 
@@ -195,20 +200,22 @@ namespace risk_project
             string code;
             while (!done)
             {
-                msg = new ReceivedMessage();
+                msg = new ReceivedMessage(1);
                 code = msg.GetCode();
 
-                if (code == Comms.INIT_MAP)
+                switch (code)
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        HandleInitMap(msg);
-                        SetReinforcements();
-                    });
-                }
-                else if (code == Comms.RECEIVE_MESSAGE)
-                {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                    case Comms.INIT_MAP:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            HandleInitMap(msg);
+                            SetReinforcements();
+                        });
+                        break;
+
+                    case Comms.RECEIVE_MESSAGE:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                        break;
                 }
             }
         }
@@ -222,6 +229,7 @@ namespace risk_project
         private void SendUserMessage(object sender, RoutedEventArgs e)
         {
             string content = Comms.SEND_MESSAGE;
+            content += Comms.GetPaddedNumber(TxbMessage.Text.Length, 2);
             content += TxbMessage.Text;
             Comms.SendData(content);
         }
@@ -320,7 +328,7 @@ namespace risk_project
             txb.HorizontalAlignment = HorizontalAlignment.Center;
             txb.VerticalAlignment = VerticalAlignment.Center;
             txb.FontFamily = new FontFamily("Papyrus");
-            txb.Foreground = new SolidColorBrush(Colors.DarkRed);
+            txb.Foreground = new SolidColorBrush(colors[user]);
             messageLabels.Add(txb);
             StkMessages.Children.Add(txb);
             FitSize(null, null);
@@ -357,20 +365,25 @@ namespace risk_project
             if (currState == GameState.InitialReinforcments || currState == GameState.Reinforcements)
             {
                 Territory curr = sender as Territory;
-                var clickType = e.GetCurrentPoint(null).Properties;
+                if (curr.GetOwner() == Helper.username)
+                {
+                    var clickType = e.GetCurrentPoint(null).Properties;
 
-                if (clickType.IsLeftButtonPressed)
-                {
-                    if (curr.Inc(temp))
+                    if (clickType.IsLeftButtonPressed)
                     {
-                        LblSecondary.Text = "amount Left: " + --temp + " units";
+                        if (curr.Inc(temp))
+                        {
+                            temp--;
+                            LblSecondary.Text = "amount Left: " + temp + " units";
+                        }
                     }
-                }
-                else if (clickType.IsRightButtonPressed)
-                {
-                    if (curr.Dec())
+                    else if (clickType.IsRightButtonPressed)
                     {
-                        LblSecondary.Text = "amount Left: " + ++temp + " units";
+                        if (curr.Dec())
+                        {
+                            temp++;
+                            LblSecondary.Text = "amount Left: " + temp + " units";
+                        }
                     }
                 }
             }

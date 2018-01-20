@@ -148,6 +148,12 @@ namespace risk_project
                     ans.Add(Comms.RecvData(size, flags));
                     break;
 
+                case Comms.RECEIVE_MESSAGE:
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags)); size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
+                    break;
+
                 default:
                     throw new Exception("UNSUPPORTED MESSAGE TYPE!");
             }

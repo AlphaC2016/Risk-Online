@@ -98,7 +98,7 @@ namespace risk_project
             else
             {
                 ((TextBlock)Children[1]).Text = (--_amount).ToString();
-                return false;
+                return true;
             }
         }
 

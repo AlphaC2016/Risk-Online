@@ -18,6 +18,12 @@ namespace risk_server.Game_classes
         {
             Random r = new Random();
             _players = new List<User>(users);
+
+            foreach (User p in _players)
+            {
+                p.SetGame(this);
+            }
+
             currAttackerIndex = r.Next(_players.Count);
 
             InitMap();
@@ -156,16 +162,18 @@ namespace risk_server.Game_classes
             bool done = true;
             for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
             {
-                if (msg[i] != "0")
+                if (msg[i] != "00")
                 {
                     _territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i]));
                 }
 
-                done = (_territories.ElementAt(i).Value.GetAmount() != 0);
+                if (done)
+                    done = (_territories.ElementAt(i).Value.GetAmount() != 0);
             }
 
             if (done)
             {
+                Console.WriteLine("THE TURN SHOULD START NOW.");
                 //StartTurn();
             }
         }
@@ -185,6 +193,16 @@ namespace risk_server.Game_classes
 
             message += Helper.GetPaddedNumber(curr.Length, 2) + curr;
             SendMessage(message);
+        }
+
+        public void SendUpdate()
+        {
+            string message = Helper.UPDATE_MAP;
+            foreach (var pair in _territories)
+            {
+                message += Helper.GetPaddedNumber(pair.Key.Length, 2) + pair.Key;
+                message += Helper.GetPaddedNumber(pair.Value.GetAmount(), 2);
+            }
         }
     }
 }

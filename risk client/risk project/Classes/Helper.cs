@@ -63,7 +63,7 @@ namespace risk_project
             Folder = await Folder.GetFolderAsync(@"Assets\\Data");
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
             player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
-            player.Play();
+            player.AutoPlay = false;
         }
 
         public static bool IsMusicPlaying() { return musicPlaying; }

@@ -39,7 +39,7 @@ namespace risk_server
         }
 
         /*simple setter.*/
-        void SetGame(Game game)
+        public void SetGame(Game game)
         {
             _currGame = game;
             _currRoom = null;
