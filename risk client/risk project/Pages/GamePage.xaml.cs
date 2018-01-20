@@ -110,39 +110,20 @@ namespace risk_project
             read.Start();
             read.Wait();
 
-
+            Territory t;
             foreach (string[] line in labelData)
             {
-                TextBlock lbl = new TextBlock();
-                Territory t = new Territory();
                 string name = line[0].Replace('#', '\n');
-
-
-                lbl.FontFamily = new FontFamily("Papyrus");
-                lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = name;
-                t.Children.Add(lbl);
-
-                lbl = new TextBlock();
-                lbl.FontFamily = new FontFamily("Papyrus");
-                lbl.HorizontalAlignment = HorizontalAlignment.Center;
-                lbl.VerticalAlignment = VerticalAlignment.Center;
-                //Color to be changed accordingly to player holding the point.
-                lbl.Foreground = new SolidColorBrush(Colors.Black);
-                lbl.Text = "0";
-                lbl.FontWeight = FontWeights.Bold;
-                t.Children.Add(lbl);
-
-                t.Orientation = Orientation.Vertical;
+                t = new Territory(name);
                 t.PointerPressed += T_PointerPressed;
                 territories.Add(name, t);
             }
 
             FitSize(null, null);
 
-            foreach (Territory t in territories.Values)
+            foreach (Territory curr in territories.Values)
             {
-                Arena.Children.Add(t);
+                Arena.Children.Add(curr);
             }
         }
 
@@ -351,24 +332,21 @@ namespace risk_project
             {
                 Territory curr = sender as Territory;
                 var clickType = e.GetCurrentPoint(null).Properties;
-                int currNo = int.Parse(curr[1].Text);
 
                 if (clickType.IsLeftButtonPressed)
                 {
-                    if (temp > 0)
+                    if (curr.Inc(temp))
                     {
-                        curr[1].Text = (currNo + 1).ToString();
                         LblSecondary.Text = "amount Left: " + --temp + " units";
                     }
                 }
-                //else if (clickType.IsRightButtonPressed)
-                //{
-                //    if (currNo > 0)
-                //    {
-                //        curr[1].Text = (currNo - 1).ToString();
-                //        LblSecondary.Text = "amount Left: " + ++temp + " units";
-                //    }
-                //}
+                else if (clickType.IsRightButtonPressed)
+                {
+                    if (curr.Dec())
+                    {
+                        LblSecondary.Text = "amount Left: " + ++temp + " units";
+                    }
+                }
             }
             
         }
@@ -383,9 +361,10 @@ namespace risk_project
 
                     foreach (Territory t in territories.Values)
                     {
-                        if (t[1].Text != "0" || t.GetOwner() != Helper.username)
+                        if (t.GetAmount() != 0 || t.GetOwner() != Helper.username)
                         {
-                            message += Comms.GetPaddedNumber(t[1].Text, 2);
+                            
+                            message += Comms.GetPaddedNumber(t.GetAmount(), 2);
                         }
                         else
                         {
@@ -397,6 +376,10 @@ namespace risk_project
                     if (ok)
                     {
                         Comms.SendData(message);
+                        foreach (Territory t in territories.Values)
+                        {
+                            t.Confirm();
+                        }
                     }
                     break;
 
@@ -404,7 +387,7 @@ namespace risk_project
                     message = Comms.SEND_REINFORCEMENTS;
                     foreach (Territory t in territories.Values)
                     {
-                        message += Comms.GetPaddedNumber(t[1].Text, 2);
+                        message += Comms.GetPaddedNumber(t.GetAmount(), 2);
                     }
                     Comms.SendData(message);
                     break;

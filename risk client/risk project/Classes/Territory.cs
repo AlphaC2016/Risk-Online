@@ -24,13 +24,49 @@ namespace risk_project
     {
         string owner;
 
-        public Territory() : base()
-        {
+        int _amount;
+        int _prevAmount;
 
+        public Territory(string name) : base()
+        {
+            TextBlock lbl = new TextBlock();
+            lbl.FontFamily = new FontFamily("Papyrus");
+            lbl.Foreground = new SolidColorBrush(Colors.Black);
+            lbl.Text = name;
+            Children.Add(lbl);
+
+            lbl = new TextBlock();
+            lbl.FontFamily = new FontFamily("Papyrus");
+            lbl.HorizontalAlignment = HorizontalAlignment.Center;
+            lbl.VerticalAlignment = VerticalAlignment.Center;
+            //Color to be changed accordingly to player holding the point.
+            lbl.Foreground = new SolidColorBrush(Colors.Black);
+            lbl.Text = "0";
+            lbl.FontWeight = FontWeights.Bold;
+            Children.Add(lbl);
+            Orientation = Orientation.Vertical;
         }
 
-        public void SetOwner(string owner) { this.owner = owner; }
-        public string GetOwner() { return this.owner; }
+        public void SetOwner(string owner)
+        {
+            this.owner = owner;
+        }
+
+        public string GetOwner()
+        {
+            return this.owner;
+        }
+
+        public int GetAmount()
+        {
+            return this._amount;
+        }
+
+        public void SetAmount(int amount)
+        {
+            _prevAmount = _amount = amount;
+            ((TextBlock)Children[1]).Text = amount.ToString();
+        }
 
         public void SetColor(Color color)
         {
@@ -39,10 +75,36 @@ namespace risk_project
                 element.Foreground = new SolidColorBrush(color);
             }
         }
-
-        public TextBlock this[int index]
+        
+        public bool Inc(int total)
         {
-            get { return (TextBlock)Children.ElementAt(index); }
+            if (total == 0)
+            {
+                return false;
+            }
+            else
+            {
+                ((TextBlock)Children[1]).Text = (++_amount).ToString();
+                return true;
+            }
+        }
+
+        public bool Dec()
+        {
+            if (_amount == _prevAmount)
+            {
+                return false;
+            }
+            else
+            {
+                ((TextBlock)Children[1]).Text = (--_amount).ToString();
+                return false;
+            }
+        }
+
+        public void Confirm()
+        {
+            _prevAmount = _amount;
         }
     }
 }

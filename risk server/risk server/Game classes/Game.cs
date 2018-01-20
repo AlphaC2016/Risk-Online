@@ -23,6 +23,9 @@ namespace risk_server.Game_classes
             InitMap();
         }
 
+        /// <summary>
+        /// This function activates all the initialization functions.
+        /// </summary>
         private void InitMap()
         {
             BuildMap();
@@ -30,6 +33,9 @@ namespace risk_server.Game_classes
             SendInitMessage();
         }
 
+        /// <summary>
+        /// This function takes the data from the mapdata.csv file and builds the basic data structure.
+        /// </summary>
         private void BuildMap()
         {
             List<string>[] data = Helper.GetMapData();
@@ -52,6 +58,9 @@ namespace risk_server.Game_classes
             }
         }
 
+        /// <summary>
+        /// This function randomly assigns the territories to the players.
+        /// </summary>
         private void SetUsersOnMap()
         {
             Random r = new Random();
@@ -75,6 +84,9 @@ namespace risk_server.Game_classes
             }
         }
 
+        /// <summary>
+        /// This function sends the 119 message to all the players.
+        /// </summary>
         private void SendInitMessage()
         {
             string message = Helper.INIT_MAP;
@@ -101,6 +113,10 @@ namespace risk_server.Game_classes
             SendMessage(message);
         }
 
+        /// <summary>
+        /// This function removes a player from the game.
+        /// </summary>
+        /// <param name="u">The player to be removed.</param>
         public void RemovePlayer(User u)
         {
             _players.Remove(u);
@@ -108,12 +124,22 @@ namespace risk_server.Game_classes
             SendInitMessage();
         }
 
+        /// <summary>
+        /// This function checks whether a user owns a specific territory.
+        /// </summary>
+        /// <param name="t">The territory to be checked.</param>
+        /// <param name="name">The wanted user.</param>
+        /// <returns>True if the user owns it, false otherwise.</returns>
         private bool findUser(Territory t, string name)
         {
             return (t.GetUser().GetUsername() == name);
         }
 
-        public void SendMessage(string message)
+        /// <summary>
+        /// This function sends a message to all the players.
+        /// </summary>
+        /// <param name="message">The message to be sent.</param>
+        private void SendMessage(string message)
         {
             foreach (User user in _players)
             {
@@ -121,6 +147,10 @@ namespace risk_server.Game_classes
             }
         }
 
+        /// <summary>
+        /// This function handles a player's initial reinforcements demand.
+        /// </summary>
+        /// <param name="msg">The player's message.</param>
         public void HandleInitialReinforcements(RecievedMessage msg)
         {
             bool done = true;
@@ -136,7 +166,7 @@ namespace risk_server.Game_classes
 
             if (done)
             {
-                //Start the game!
+                //StartTurn();
             }
         }
 
