@@ -150,14 +150,39 @@ namespace risk_project
                 }    
             }
 
-            Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
             Canvas.SetLeft(GrdUsers, ActualWidth / 42.6667);
+            Canvas.SetTop(GrdUsers, ActualHeight / 1.558);
             GrdUsers.Height = ActualHeight / 4.32;
             GrdUsers.Width = ActualWidth / 6.4;
             foreach (Rectangle rect in colorRects)
             {
                 rect.Height = rect.Width = ActualWidth / 64;
             }
+            foreach (TextBlock txb in nameLabels)
+            {
+                txb.FontSize = (ActualHeight + ActualWidth) / 83.333;
+            }
+
+            LblInstructions.FontSize = (ActualHeight / ActualWidth) / 83.333;
+
+            Canvas.SetLeft(GrdChat, ActualWidth / 1.2);
+            Canvas.SetTop(GrdChat, ActualHeight / 2.634);
+            GrdChat.Height = GrdChat.Width = (ActualHeight + ActualWidth) / 10;
+
+            Canvas.SetLeft(ElpNo, ActualWidth / 1.052);
+            Canvas.SetTop(ElpNo, ActualHeight / 43.2);
+            ElpNo.Height = ElpNo.Width = (ActualHeight + ActualWidth) / 40;
+
+            Canvas.SetLeft(ElpYes, ActualWidth / 1.111);
+            Canvas.SetTop(ElpYes, ActualHeight / 1.384);
+            ElpYes.Height = ElpYes.Width = (ActualHeight + ActualWidth) / 40;
+
+            Canvas.SetLeft(LblSecondary, ActualWidth / 3.84);
+            Canvas.SetTop(LblSecondary, ActualHeight / 1.091);
+            LblSecondary.FontSize = (ActualHeight + ActualWidth) / 100;
+
+            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 115200;
+            BtnSend.FontSize = (ActualHeight * ActualWidth) / 129600;
         }
 
 
@@ -178,7 +203,7 @@ namespace risk_project
                     await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         HandleInitMap(msg);
-                        
+                        SetReinforcements();
                     });
                 }
                 else if (code == Comms.RECEIVE_MESSAGE)
@@ -279,6 +304,7 @@ namespace risk_project
                 t.SetColor(colors[msg[i]]);
                 i++;
             }
+            SetReinforcements();
         }
 
 
@@ -399,5 +425,7 @@ namespace risk_project
             Comms.SendData(Comms.QUIT_GAME);
             Frame.Navigate(typeof(MainMenu));
         }
+
+
     }
 }

@@ -144,9 +144,9 @@ namespace risk_project
             }
             else if (code == Comms.START_GAME_RES)
             {
-                MessageDialog dialog = new MessageDialog("The game will begin shortly!");
-                dialog.ShowAsync();
-                Task.Delay(3000);
+                //MessageDialog dialog = new MessageDialog("The game will begin shortly!");
+                //dialog.ShowAsync();
+                //Task.Delay(3000);
                 Frame.Navigate(typeof(GamePage));
                 done = true;
             }

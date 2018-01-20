@@ -387,7 +387,8 @@ namespace risk_server
 
         private void HandleQuitGame(RecievedMessage msg)
         {
-            msg.GetUser().GetGame().RemovePlayer(msg.GetUser());
+            if (msg.GetUser() != null)
+                msg.GetUser().GetGame().RemovePlayer(msg.GetUser());
         }
 
         private void HandleForcesInit(RecievedMessage msg)
@@ -436,7 +437,7 @@ namespace risk_server
         {
             Game gm = msg.GetUser().GetGame();
             string content = Helper.RECEIVE_MESSAGE + msg[0];
-            gm.SendMessage(content);
+            gm.HandleUserMessage(content);
         }
 
         //--------------------------CLIENT HANDLERS--------------------------------

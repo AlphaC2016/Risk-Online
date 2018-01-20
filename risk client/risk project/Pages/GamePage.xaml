@@ -64,7 +64,7 @@
             <TextBlock Name="LblSecondary" Text="TESTING AGAIN." Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
 
 
-            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1825" Canvas.Top="23" PointerPressed="ElpNo_PointerPressed">
+            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1825" Canvas.Top="25" PointerPressed="ElpNo_PointerPressed">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="/Assets/Icons/no.png"/>
                 </Ellipse.Fill>

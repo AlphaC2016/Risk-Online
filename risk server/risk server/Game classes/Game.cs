@@ -170,6 +170,14 @@ namespace risk_server.Game_classes
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void HandleUserMessage(string message)
+        {
+            SendMessage(message);
+        }
+
         private void StartTurn()
         {
             string message = Helper.START_TURN;

@@ -71,6 +71,15 @@ namespace risk_project
                     break;
 
                 case Comms.GET_USERS_RES:
+                    amount = int.Parse(Comms.RecvData(1, flags));
+                    for (i=0; i<amount; i++)
+                    {
+                        size = int.Parse(Comms.RecvData(2, flags));
+                        ans.Add(Comms.RecvData(size, flags));
+                    }
+                    break;
+
+                case Comms.GET_ROOMS_RES:
                     amount = int.Parse(Comms.RecvData(4, flags));
 
                     for (i = 0; i < amount; i++)
