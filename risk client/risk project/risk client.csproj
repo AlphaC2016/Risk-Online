@@ -157,6 +157,7 @@
     <Content Include="Assets\Icons\no.png" />
     <Content Include="Assets\Icons\Settings.png" />
     <Content Include="Assets\Data\music.mp3" />
+    <Content Include="Assets\Icons\shine.png" />
     <Content Include="Assets\Icons\yes.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

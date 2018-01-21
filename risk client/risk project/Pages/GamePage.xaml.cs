@@ -85,7 +85,7 @@ namespace risk_project
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BuildBoard();
-
+            LblInstructions.Text = "SET YOUR FORCES IN PLACE";
             handler = new Task(() =>
             {
                 ServerHandler();
@@ -116,6 +116,8 @@ namespace risk_project
                 string name = line[0].Replace('#', '\n');
                 t = new Territory(name);
                 t.PointerPressed += T_PointerPressed;
+                t.PointerEntered += T_PointerEntered;
+                t.PointerExited += T_PointerExited;
                 territories.Add(name, t);
             }
 
@@ -168,19 +170,23 @@ namespace risk_project
                 txb.FontSize = (ActualHeight * ActualWidth) / 100000;
             }
 
-            LblInstructions.FontSize = (ActualHeight / ActualWidth) / 83.333;
+            LblInstructions.FontSize = (ActualHeight + ActualWidth) / 83.333;
 
             Canvas.SetLeft(GrdChat, ActualWidth / 1.2);
             Canvas.SetTop(GrdChat, ActualHeight / 2.634);
             GrdChat.Height = GrdChat.Width = (ActualHeight + ActualWidth) / 10;
 
-            Canvas.SetLeft(ElpNo, ActualWidth / 1.052);
-            Canvas.SetTop(ElpNo, ActualHeight / 43.2);
+            Canvas.SetLeft(ElpNo, ActualWidth / 1.066);
+            Canvas.SetTop(ElpNo, ActualHeight / 1.384);
             ElpNo.Height = ElpNo.Width = (ActualHeight + ActualWidth) / 40;
 
-            Canvas.SetLeft(ElpYes, ActualWidth / 1.111);
+            Canvas.SetLeft(ElpYes, ActualWidth / 1.164);
             Canvas.SetTop(ElpYes, ActualHeight / 1.384);
             ElpYes.Height = ElpYes.Width = (ActualHeight + ActualWidth) / 40;
+
+            Canvas.SetLeft(RectQuit, ActualWidth / 1.052);
+            Canvas.SetTop(RectQuit, ActualHeight / 43.2);
+            RectQuit.Height = RectQuit.Width = (ActualHeight + ActualWidth) / 40;
 
             Canvas.SetLeft(LblSecondary, ActualWidth / 3.84);
             Canvas.SetTop(LblSecondary, ActualHeight / 1.091);
@@ -215,6 +221,10 @@ namespace risk_project
 
                     case Comms.RECEIVE_MESSAGE:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUserMessage(msg));
+                        break;
+
+                    case Comms.UPDATE_MAP:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                         break;
                 }
             }
@@ -310,6 +320,10 @@ namespace risk_project
             {
                 t.SetOwner(msg[i]);
                 t.SetColor(colors[msg[i]]);
+                if (msg[i] == Helper.username)
+                {
+                    t.SetAmount(0);
+                }
                 i++;
             }
             SetReinforcements();
@@ -358,6 +372,15 @@ namespace risk_project
             temp = 50 - (5*colorRects.Count());
             LblSecondary.Text = "amount Left: " + temp + " units";
             
+        }
+
+        private void HandleUpdate(ReceivedMessage msg)
+        {
+            for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
+            {
+                territories.ElementAt(i).Value.SetOwner(msg[i * 2]);
+                territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i * 2 + 1]));
+            }
         }
 
         private void T_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -435,10 +458,36 @@ namespace risk_project
 
         private void ElpNo_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            switch (currState)
+            {
+                case GameState.InitialReinforcments | GameState.Reinforcements:
+                    foreach (Territory t in territories.Values)
+                    {
+                        if (t.GetOwner() == Helper.username)
+                        {
+                            t.Revert();
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void RectQuit_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
             Comms.SendData(Comms.QUIT_GAME);
             Frame.Navigate(typeof(MainMenu));
         }
 
+        private void T_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Territory t = (Territory)sender;
+            t.Background.Opacity = 0.8;
+        }
 
+        private void T_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            Territory t = (Territory)sender;
+            t.Background.Opacity = 0;
+        }
     }
 }

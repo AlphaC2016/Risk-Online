@@ -203,6 +203,7 @@ namespace risk_server.Game_classes
                 message += Helper.GetPaddedNumber(pair.Key.Length, 2) + pair.Key;
                 message += Helper.GetPaddedNumber(pair.Value.GetAmount(), 2);
             }
+            SendMessage(message);
         }
     }
 }

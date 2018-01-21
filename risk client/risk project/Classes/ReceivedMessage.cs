@@ -125,6 +125,15 @@ namespace risk_project
                     }
                     break;
 
+                case Comms.UPDATE_MAP:
+                    for (i=0; i<Helper.TERRITORY_AMOUNT; i++)
+                    {
+                        size = int.Parse(Comms.RecvData(2, flags));
+                        ans.Add(Comms.RecvData(size, flags));
+                        ans.Add(Comms.RecvData(2, flags));
+                    }
+                    break;
+
                 case Comms.LEADERBOARDS_RES:
                     amount = 8;
                     for (i = 0; i < amount; i++)

@@ -18,6 +18,8 @@ using Windows.UI.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
+
 namespace risk_project
 {
     class Territory : StackPanel
@@ -41,10 +43,19 @@ namespace risk_project
             lbl.VerticalAlignment = VerticalAlignment.Center;
             //Color to be changed accordingly to player holding the point.
             lbl.Foreground = new SolidColorBrush(Colors.Black);
-            lbl.Text = "0";
+            lbl.Text = "?";
+            _amount = _prevAmount = 0;
             lbl.FontWeight = FontWeights.Bold;
             Children.Add(lbl);
             Orientation = Orientation.Vertical;
+
+
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/shine.png"));
+            Background = new ImageBrush
+            {
+                ImageSource = bmp, Stretch = Stretch.Fill, Opacity=0
+            };
+            
         }
 
         public void SetOwner(string owner)
@@ -105,6 +116,11 @@ namespace risk_project
         public void Confirm()
         {
             _prevAmount = _amount;
+        }
+
+        public void Revert()
+        {
+            _amount = _prevAmount;
         }
     }
 }

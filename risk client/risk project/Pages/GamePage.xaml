@@ -64,17 +64,23 @@
             <TextBlock Name="LblSecondary" Text="TESTING AGAIN." Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
 
 
-            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1825" Canvas.Top="25" PointerPressed="ElpNo_PointerPressed">
+            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1800" Canvas.Top="780" PointerPressed="ElpNo_PointerPressed">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="/Assets/Icons/no.png"/>
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Ellipse Name="ElpYes" Height="75" Width="75" Canvas.Left="1728" Canvas.Top="780" PointerPressed="ElpYes_PointerPressed">
+            <Ellipse Name="ElpYes" Height="75" Width="75" Canvas.Left="1650" Canvas.Top="780" PointerPressed="ElpYes_PointerPressed">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="/Assets/Icons/Yes.png"/>
                 </Ellipse.Fill>
             </Ellipse>
+
+            <Rectangle Name="RectQuit" Width="75" Height="75" Canvas.Left="1825" Canvas.Top="25" PointerPressed="RectQuit_PointerPressed">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Icons/flag.png"/>
+                </Rectangle.Fill>
+            </Rectangle>
         </Canvas>
     </Grid>
 </Page>
