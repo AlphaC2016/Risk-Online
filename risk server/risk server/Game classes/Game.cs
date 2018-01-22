@@ -174,6 +174,7 @@ namespace risk_server.Game_classes
             if (done)
             {
                 Console.WriteLine("THE TURN SHOULD START NOW.");
+                SendUpdate();
                 //StartTurn();
             }
         }

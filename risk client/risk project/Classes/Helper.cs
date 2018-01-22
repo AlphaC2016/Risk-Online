@@ -64,11 +64,13 @@ namespace risk_project
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
             player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
             player.AutoPlay = false;
+            if (!musicPlaying)
+                player.Volume = 0;
         }
 
         public static bool IsMusicPlaying() { return musicPlaying; }
 
-        public static void Init()
+        public async static void Init()
         {
             string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
             musicPlaying = bool.Parse(rawData[2]);
@@ -86,6 +88,10 @@ namespace risk_project
             }
 
             InitMusic();
+
+            await Task.Delay(250);
+            if (!musicPlaying)
+                player.Pause();
         }
 
         public static void UpdateConfig()

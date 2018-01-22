@@ -130,7 +130,7 @@ namespace risk_project
                 StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
                 writer.Write(message);
                 writer.Flush();
-                reader = null;
+                //reader = null;
             }
         }
 
@@ -191,6 +191,11 @@ namespace risk_project
         public static string GetPaddedNumber(string num, int size)
         {
             return num.PadLeft(size, '0');
+        }
+
+        public static void Reset()
+        {
+            reader = null;
         }
     }
 }

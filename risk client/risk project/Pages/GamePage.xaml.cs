@@ -241,6 +241,7 @@ namespace risk_project
             string content = Comms.SEND_MESSAGE;
             content += Comms.GetPaddedNumber(TxbMessage.Text.Length, 2);
             content += TxbMessage.Text;
+            TxbMessage.Text = "";
             Comms.SendData(content);
         }
 
@@ -339,7 +340,7 @@ namespace risk_project
             TextBlock txb = new TextBlock();
             string user = msg[0], content = msg[1];
             txb.Text = user + ": " + content;
-            txb.HorizontalAlignment = HorizontalAlignment.Center;
+            txb.HorizontalAlignment = HorizontalAlignment.Left;
             txb.VerticalAlignment = VerticalAlignment.Center;
             txb.FontFamily = new FontFamily("Papyrus");
             txb.Foreground = new SolidColorBrush(colors[user]);

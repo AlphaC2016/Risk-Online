@@ -100,6 +100,10 @@ namespace risk_project
                     ans.Add(Comms.RecvData(4, flags));
                     break;
 
+                case Comms.CLOSE_ROOM_RES:
+                    // No Values!
+                    break;
+
                 case Comms.START_GAME_RES:
                     // No Values!
                     break;
@@ -159,7 +163,8 @@ namespace risk_project
 
                 case Comms.RECEIVE_MESSAGE:
                     size = int.Parse(Comms.RecvData(2, flags));
-                    ans.Add(Comms.RecvData(size, flags)); size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
+                    size = int.Parse(Comms.RecvData(2, flags));
                     ans.Add(Comms.RecvData(size, flags));
                     break;
 

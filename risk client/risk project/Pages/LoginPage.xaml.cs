@@ -56,7 +56,13 @@ namespace risk_project
                     Task.Delay(5000);
             });
             connect.Start();
+            
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             Helper.Init();
+            FitSize(null, null);
         }
 
         private void FitSize(object sender, RoutedEventArgs e)
