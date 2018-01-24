@@ -122,5 +122,10 @@ namespace risk_project
         {
             _amount = _prevAmount;
         }
+
+        public bool Compare()
+        {
+            return _amount == _prevAmount;
+        }
     }
 }

@@ -175,7 +175,7 @@ namespace risk_server.Game_classes
             {
                 Console.WriteLine("THE TURN SHOULD START NOW.");
                 SendUpdate();
-                //StartTurn();
+                StartTurn();
             }
         }
 
@@ -201,10 +201,15 @@ namespace risk_server.Game_classes
             string message = Helper.UPDATE_MAP;
             foreach (var pair in _territories)
             {
-                message += Helper.GetPaddedNumber(pair.Key.Length, 2) + pair.Key;
+                message += Helper.GetPaddedNumber(pair.Value.GetUser().GetUsername().Length, 2) + pair.Value.GetUser().GetUsername();
                 message += Helper.GetPaddedNumber(pair.Value.GetAmount(), 2);
             }
             SendMessage(message);
+        }
+
+        private void HandleTurnRrinforcements(RecievedMessage msg)
+        {
+
         }
     }
 }

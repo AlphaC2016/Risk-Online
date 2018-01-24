@@ -227,6 +227,10 @@ namespace risk_project
                     case Comms.UPDATE_MAP:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUpdate(msg));
                         break;
+
+                    case Comms.START_TURN:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleStartTurn(msg));
+                        break;
                 }
             }
         }
@@ -304,7 +308,6 @@ namespace risk_project
                 if (msg[i] == Helper.username)
                 {
                     color = Helper.GetPlayerColor();
-                    territoryCount++;
                 }
                 else
                 {
@@ -325,6 +328,7 @@ namespace risk_project
                 if (msg[i] == Helper.username)
                 {
                     t.SetAmount(0);
+                    territoryCount++;
                 }
                 i++;
             }
@@ -452,7 +456,8 @@ namespace risk_project
                     message = Comms.SEND_REINFORCEMENTS;
                     foreach (Territory t in territories.Values)
                     {
-                        message += Comms.GetPaddedNumber(t.GetAmount(), 2);
+                        if (t.Compare())
+                            message += Comms.GetPaddedNumber(t.GetAmount(), 2);
                     }
                     Comms.SendData(message);
                     break;
@@ -525,7 +530,7 @@ namespace risk_project
 
         private void ElpNo_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No2.png"));
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No1.png"));
             ElpNo.Fill = new ImageBrush
             {
                 ImageSource = bmp,
