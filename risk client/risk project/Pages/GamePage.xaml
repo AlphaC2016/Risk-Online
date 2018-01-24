@@ -64,15 +64,15 @@
             <TextBlock Name="LblSecondary" Text="TESTING AGAIN." Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
 
 
-            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1800" Canvas.Top="780" PointerPressed="ElpNo_PointerPressed">
+            <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1800" Canvas.Top="780" PointerPressed="ElpNo_PointerPressed" PointerEntered="ElpNo_PointerEntered" PointerExited="ElpNo_PointerExited">
                 <Ellipse.Fill>
-                    <ImageBrush ImageSource="/Assets/Icons/no.png"/>
+                    <ImageBrush ImageSource="/Assets/Icons/no1.png"/>
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Ellipse Name="ElpYes" Height="75" Width="75" Canvas.Left="1650" Canvas.Top="780" PointerPressed="ElpYes_PointerPressed">
+            <Ellipse Name="ElpYes" Height="75" Width="75" Canvas.Left="1650" Canvas.Top="780" PointerPressed="ElpYes_PointerPressed" PointerEntered="ElpYes_PointerEntered" PointerExited="ElpYes_PointerExited">
                 <Ellipse.Fill>
-                    <ImageBrush ImageSource="/Assets/Icons/Yes.png"/>
+                    <ImageBrush ImageSource="/Assets/Icons/Yes1.png"/>
                 </Ellipse.Fill>
             </Ellipse>
 

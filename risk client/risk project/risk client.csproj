@@ -154,11 +154,13 @@
     <Content Include="Assets\Icons\flag.png" />
     <Content Include="Assets\Icons\Help.png" />
     <Content Include="Assets\Icons\JoinRoom.png" />
-    <Content Include="Assets\Icons\no.png" />
+    <Content Include="Assets\Icons\no1.png" />
+    <Content Include="Assets\Icons\no2.png" />
     <Content Include="Assets\Icons\Settings.png" />
     <Content Include="Assets\Data\music.mp3" />
     <Content Include="Assets\Icons\shine.png" />
-    <Content Include="Assets\Icons\yes.png" />
+    <Content Include="Assets\Icons\yes1.png" />
+    <Content Include="Assets\Icons\yes2.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

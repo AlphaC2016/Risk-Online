@@ -20,6 +20,7 @@ using System.Threading;
 using Windows.Storage;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -443,6 +444,7 @@ namespace risk_project
                         {
                             t.Confirm();
                         }
+                        LblInstructions.Text = "Waiting for other players...";
                     }
                     break;
 
@@ -489,6 +491,46 @@ namespace risk_project
         {
             Territory t = (Territory)sender;
             t.Background.Opacity = 0;
+        }
+
+        private void ElpYes_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes2.png"));
+            ElpYes.Fill = new ImageBrush
+            {
+                ImageSource = bmp,
+                Stretch = Stretch.Fill,
+            };
+        }
+
+        private void ElpYes_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes1.png"));
+            ElpYes.Fill = new ImageBrush
+            {
+                ImageSource = bmp,
+                Stretch = Stretch.Fill,
+            };
+        }
+
+        private void ElpNo_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No2.png"));
+            ElpNo.Fill = new ImageBrush
+            {
+                ImageSource = bmp,
+                Stretch = Stretch.Fill,
+            };
+        }
+
+        private void ElpNo_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No2.png"));
+            ElpNo.Fill = new ImageBrush
+            {
+                ImageSource = bmp,
+                Stretch = Stretch.Fill,
+            };
         }
     }
 }
