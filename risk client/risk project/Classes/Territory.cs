@@ -87,9 +87,9 @@ namespace risk_project
             }
         }
         
-        public bool Inc(int total)
+        public bool Inc(int total = 0, GameState state = GameState.InitialReinforcments)
         {
-            if (total == 0)
+            if (state == GameState.InitialReinforcments && total == 0)
             {
                 return false;
             }
@@ -100,9 +100,10 @@ namespace risk_project
             }
         }
 
-        public bool Dec()
+        public bool Dec(GameState state = GameState.InitialReinforcments)
         {
-            if (_amount == _prevAmount)
+
+            if ((state == GameState.InitialReinforcments && _amount == _prevAmount) || _amount == 0)
             {
                 return false;
             }

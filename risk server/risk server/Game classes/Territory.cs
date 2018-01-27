@@ -10,7 +10,7 @@ namespace risk_server.Game_classes
     {
         private string _name;
         private User _owner;
-        private int _amount;
+        public int Amount { get; set; }
         Dictionary<string, Territory> _adj;
 
         public string GetName() { return _name; }
@@ -28,7 +28,18 @@ namespace risk_server.Game_classes
 
         public User GetUser() { return _owner; }
         public void SetUser(User owner) { _owner = owner; }
-        public int GetAmount() { return _amount; }
-        public void SetAmount(int amount) { _amount = amount; }
+        public IEnumerable<Territory> GetAdj() { return _adj.Values; }
+
+        public bool IsAdj(Territory other)
+        {
+            bool found = false;
+
+            for (int i=0; i<_adj.Count && !found; i++)
+            {
+                found = (_adj.ElementAt(i).Value == other);
+            }
+
+            return found;
+        }
     }
 }

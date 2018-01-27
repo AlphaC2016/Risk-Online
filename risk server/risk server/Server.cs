@@ -143,6 +143,21 @@ namespace risk_server
                     }
                     break;
 
+                case Helper.SEND_REINFORCEMENTS:
+                    size = int.Parse(Helper.GetStringPartFromSocket(client, 2));
+                    for (i=0; i<size; i++)
+                    {
+                        values.Add(Helper.GetStringPartFromSocket(client, 2));
+                        values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    }
+                    break;
+
+                case Helper.MOVE_FORCES:
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -395,6 +410,16 @@ namespace risk_server
         {
             msg.GetUser().GetGame().HandleInitialReinforcements(msg);
         }
+        
+        private void HandleTurnReinforcements(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleTurnRerinforcements(msg);
+        }
+
+        private void HandleMoveForces(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleMoveForces(msg);
+        }
 
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
@@ -592,17 +617,15 @@ namespace risk_server
                     HandleForcesInit(msg);
                     break;
 
-                /*case Helper.PLAYER_MOVE:
-                    Console.WriteLine("router :: entering PlayerMove");
-                    HandlePlayerMove(msg);
+                case Helper.SEND_REINFORCEMENTS:
+                    Console.WriteLine("Router :: entering HandleTurnReinforcements");
+                    HandleTurnReinforcements(msg);
                     break;
 
-                
-
-                case Helper.ADD_SCORE:
-                    Console.WriteLine("router :: entering AddScore");
-                    HandleAddScore(msg);
-                    break;*/
+                case Helper.MOVE_FORCES:
+                    Console.WriteLine("Router :: ewntering HandleMoveForces");
+                    HandleMoveForces(msg);
+                    break;
 
                 case Helper.LEADERBOARDS:
                     Console.WriteLine("router :: entering Leaderboards");

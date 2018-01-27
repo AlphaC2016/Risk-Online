@@ -23,6 +23,8 @@ namespace risk_server
         private string _messageCode;
         private List<string> _values;
 
+        public int Length { get; }
+
         /// <summary>
         /// This constructor is in case of a message without any special values.
         /// </summary>
@@ -45,6 +47,7 @@ namespace risk_server
             _socket = socket;
             _messageCode = messageCode;
             _values = values;
+            Length = values.Count;
         }
 
 

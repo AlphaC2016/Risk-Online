@@ -29,10 +29,12 @@ namespace risk_project
     enum GameState
     {
         InitialReinforcments,
+        Reinforcements,
+        StopOrAttack,
         Attacker,
         Spectator,
-        Reinforcements,
-        Defender
+        Defender,
+        MoveForces
     }
 
     /// <summary>
@@ -55,6 +57,9 @@ namespace risk_project
         GameState currState;
         int temp;
         int territoryCount;
+
+        Territory src;
+        Territory dst;
 
         //---------------------------------------PAGE HANDLING CODE---------------------------------------------------
 
@@ -274,7 +279,7 @@ namespace risk_project
             t.Start();
         }
 
-        //-----------------------------GAME HANDLING CODE------------------------------------------
+        //---------------------------------------- MESSAGE HANDLERS -----------------------------------------------
 
 
         /// <summary>
@@ -370,6 +375,17 @@ namespace risk_project
             }
         }
 
+        private void HandleMoveForcesRes(ReceivedMessage msg)
+        {
+            if (msg[0] == "1")
+            {
+                PresentError("The territories must be connected.");
+                src.Revert();
+                dst.Revert();
+            }
+            src = dst = null;
+        }
+
         private void SetReinforcements()
         {
             currState = GameState.InitialReinforcments;
@@ -387,13 +403,25 @@ namespace risk_project
                 territories.ElementAt(i).Value.SetOwner(msg[i * 2]);
                 territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i * 2 + 1]));
             }
+
+            switch (currState)
+            {
+                case GameState.Reinforcements:
+                    LblInstructions.Text = "Would you like to attack?";
+                    LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                    currState = GameState.StopOrAttack;
+                    break;
+            }
         }
+
+
+        //---------------------------------------- PRACTICAL BUTTON FUNCTIONS -------------------------------------
 
         private void T_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            Territory curr = sender as Territory;
             if (currState == GameState.InitialReinforcments || currState == GameState.Reinforcements)
             {
-                Territory curr = sender as Territory;
                 if (curr.GetOwner() == Helper.username)
                 {
                     var clickType = e.GetCurrentPoint(null).Properties;
@@ -416,6 +444,37 @@ namespace risk_project
                     }
                 }
             }
+
+            else if (currState == GameState.MoveForces)
+            {
+                if (curr.GetOwner() == Helper.username)
+                {
+                    if (src == null)
+                    {
+                        src = curr;
+                    }
+                    else if (dst == null)
+                    {
+                        dst = curr;
+                    }
+                    else if (curr == src)
+                    {
+                        if (dst.Dec(currState))
+                        {
+                            src.Inc(state: currState);
+                            temp--;
+                        }
+                    }
+                    else if (curr == dst)
+                    {
+                        if (src.Dec(currState))
+                        {
+                            dst.Inc(state: currState);
+                            temp++;
+                        }
+                    }
+                }
+            }
             
         }
 
@@ -427,12 +486,12 @@ namespace risk_project
                     string message = Comms.FORCES_INIT;
                     bool ok = true;
 
-                    foreach (Territory t in territories.Values)
+                    foreach (Territory curr in territories.Values)
                     {
-                        if (t.GetAmount() != 0 || t.GetOwner() != Helper.username)
+                        if (curr.GetAmount() != 0 || curr.GetOwner() != Helper.username)
                         {
                             
-                            message += Comms.GetPaddedNumber(t.GetAmount(), 2);
+                            message += Comms.GetPaddedNumber(curr.GetAmount(), 2);
                         }
                         else
                         {
@@ -444,28 +503,58 @@ namespace risk_project
                     if (ok)
                     {
                         Comms.SendData(message);
-                        foreach (Territory t in territories.Values)
+                        foreach (Territory curr in territories.Values)
                         {
-                            t.Confirm();
+                            curr.Confirm();
                         }
                         LblInstructions.Text = "Waiting for other players...";
                     }
                     break;
 
                 case GameState.Reinforcements:
+
+                    int count = 0;
                     message = Comms.SEND_REINFORCEMENTS;
-                    foreach (Territory t in territories.Values)
+                    Territory t;
+                    for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
                     {
-                        if (t.Compare())
+                        t = territories.ElementAt(i).Value;
+                        if (!t.Compare())
+                        {
+                            message += Comms.GetPaddedNumber(i, 2);
                             message += Comms.GetPaddedNumber(t.GetAmount(), 2);
+                            t.Confirm();
+                            count++;
+                        }
                     }
+                    message = message.Insert(3, Comms.GetPaddedNumber(count, 2));
                     Comms.SendData(message);
+                    break;
+
+                case GameState.StopOrAttack:
+                    currState = GameState.Attacker;
+                    LblInstructions.Text = "ATTACK MODE // DEBUG";
+                    LblSecondary.Text = "ATTACK MODE // DEBUG";
+                    break;
+
+                case GameState.MoveForces:
+                    if (src != null && dst != null)
+                    {
+                        message = Comms.MOVE_FORCES;
+                        message += Comms.PrepString(src.GetOwner());
+                        message += Comms.PrepString(dst.GetOwner());
+                        message += Comms.GetPaddedNumber(temp, 2);
+                        Comms.SendData(message);
+
+                        temp = 0;
+                    }
                     break;
             }
         }
 
         private void ElpNo_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            string message;
             switch (currState)
             {
                 case GameState.InitialReinforcments | GameState.Reinforcements:
@@ -477,6 +566,30 @@ namespace risk_project
                         }
                     }
                     break;
+
+                case GameState.StopOrAttack:
+                    currState = GameState.MoveForces;
+                    LblInstructions.Text = "MOVE YOUR FORCES!";
+                    LblSecondary.Text = "pick the forrce movement pair.";
+                    break;
+
+                case GameState.MoveForces:
+                    if (src != null)
+                    {
+                        src.Revert();
+                        if (dst != null)
+                        {
+                            dst.Revert();
+                        }
+                        src = dst = null;
+                    }
+
+                    else
+                    {
+                        message = Comms.END_TURN;
+                        Comms.SendData(message);
+                    }
+                    break;
             }
         }
 
@@ -485,6 +598,9 @@ namespace risk_project
             Comms.SendData(Comms.QUIT_GAME);
             Frame.Navigate(typeof(MainMenu));
         }
+
+
+        //------------------------------------------- COSMETIC FUNCTIONS ------------------------------------------
 
         private void T_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
@@ -495,7 +611,9 @@ namespace risk_project
         private void T_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Territory t = (Territory)sender;
-            t.Background.Opacity = 0;
+
+            if (t != src && t != dst)
+                t.Background.Opacity = 0;
         }
 
         private void ElpYes_PointerEntered(object sender, PointerRoutedEventArgs e)

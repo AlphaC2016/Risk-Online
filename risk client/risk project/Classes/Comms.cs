@@ -50,6 +50,7 @@ namespace risk_project
         public const string START_TURN = "122";
         public const string SEND_REINFORCEMENTS = "223";
         public const string MOVE_FORCES = "224";
+        public const string MOVE_FORCES_RES = "125";
         public const string END_TURN = "226";
         public const string START_BATTLE = "227";
         public const string START_BATTLE_RES = "128";
@@ -191,6 +192,11 @@ namespace risk_project
         public static string GetPaddedNumber(string num, int size)
         {
             return num.PadLeft(size, '0');
+        }
+
+        public static string PrepString(string str)
+        {
+            return GetPaddedNumber(str.Length, 2) + str;
         }
 
         public static void Reset()

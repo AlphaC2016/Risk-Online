@@ -38,6 +38,7 @@ namespace risk_server
         public const string START_TURN = "122";
         public const string SEND_REINFORCEMENTS = "223";
         public const string MOVE_FORCES = "224";
+        public const string MOVE_FORCES_RES = "125";
         public const string END_TURN = "226";
         public const string START_BATTLE = "227";
         public const string START_BATTLE_RES = "128";

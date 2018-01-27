@@ -153,6 +153,7 @@ namespace risk_server.Game_classes
             }
         }
 
+
         /// <summary>
         /// This function handles a player's initial reinforcements demand.
         /// </summary>
@@ -164,11 +165,11 @@ namespace risk_server.Game_classes
             {
                 if (msg[i] != "00")
                 {
-                    _territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i]));
+                    _territories.ElementAt(i).Value.Amount = int.Parse(msg[i]);
                 }
 
                 if (done)
-                    done = (_territories.ElementAt(i).Value.GetAmount() != 0);
+                    done = (_territories.ElementAt(i).Value.Amount != 0);
             }
 
             if (done)
@@ -202,14 +203,61 @@ namespace risk_server.Game_classes
             foreach (var pair in _territories)
             {
                 message += Helper.GetPaddedNumber(pair.Value.GetUser().GetUsername().Length, 2) + pair.Value.GetUser().GetUsername();
-                message += Helper.GetPaddedNumber(pair.Value.GetAmount(), 2);
+                message += Helper.GetPaddedNumber(pair.Value.Amount, 2);
             }
             SendMessage(message);
         }
 
-        private void HandleTurnRrinforcements(RecievedMessage msg)
+        public void HandleTurnRerinforcements(RecievedMessage msg)
         {
+            int index, value;
+            for (int i=0; i<msg.Length; i+=2)
+            {
+                index = int.Parse(msg[i]);
+                value = int.Parse(msg[i + 1]);
 
+                _territories.ElementAt(index).Value.Amount = value;
+            }
+            SendUpdate();
+        }
+
+        public void HandleMoveForces(RecievedMessage msg)
+        {
+            int index1 = int.Parse(msg[0]);
+            int index2 = int.Parse(msg[1]);
+            Territory t1 = _territories.ElementAt(index1).Value;
+            Territory t2 = _territories.ElementAt(index2).Value;
+
+            string message = Helper.MOVE_FORCES_RES;
+
+            if (AreConnected(t1, t2))
+            {
+                int temp = int.Parse(msg[2]);
+                t1.Amount += temp;
+                t2.Amount -= temp;
+                message += "0";
+            }
+            else
+            {
+                message += "1";
+            }
+            msg.GetUser().Send(message);
+        }
+
+        public bool AreConnected(Territory t1, Territory t2, int count = 15)
+        {
+            if (t1.IsAdj(t2))
+                return true;
+
+            else
+            {
+                foreach (Territory t in t1.GetAdj())
+                {
+                    if (AreConnected(t, t2, count - 1))
+                        return true;
+                }
+                return false;
+            }
         }
     }
 }
