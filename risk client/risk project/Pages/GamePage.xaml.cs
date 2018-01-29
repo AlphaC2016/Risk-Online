@@ -97,6 +97,7 @@ namespace risk_project
                 ServerHandler();
             });
             handler.Start();
+            FitSize();
         }
 
 
@@ -141,7 +142,7 @@ namespace risk_project
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FitSize(object sender, SizeChangedEventArgs e)
+        private void FitSize(object sender = null, SizeChangedEventArgs e = null)
         {
             IEnumerable<TextBlock> content;
             IEnumerable<Territory> vals = territories.Values;
@@ -173,7 +174,7 @@ namespace risk_project
             
             foreach (TextBlock txb in StkMessages.Children)
             {
-                txb.FontSize = (ActualHeight * ActualWidth) / 100000;
+                txb.FontSize = (ActualHeight * ActualWidth) / 80000;
             }
 
             LblInstructions.FontSize = (ActualHeight + ActualWidth) / 83.333;
@@ -198,7 +199,7 @@ namespace risk_project
             Canvas.SetTop(LblSecondary, ActualHeight / 1.091);
             LblSecondary.FontSize = (ActualHeight + ActualWidth) / 100;
 
-            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 100000;
+            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 80000;
             BtnSend.FontSize = (ActualHeight * ActualWidth) / 120000;
         }
 
@@ -235,6 +236,10 @@ namespace risk_project
 
                     case Comms.START_TURN:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleStartTurn(msg));
+                        break;
+
+                    case Comms.MOVE_FORCES_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleMoveForcesRes(msg));
                         break;
                 }
             }
@@ -337,6 +342,7 @@ namespace risk_project
                 }
                 i++;
             }
+            FitSize();
             SetReinforcements();
         }
 
@@ -541,8 +547,8 @@ namespace risk_project
                     if (src != null && dst != null)
                     {
                         message = Comms.MOVE_FORCES;
-                        message += Comms.PrepString(src.GetOwner());
-                        message += Comms.PrepString(dst.GetOwner());
+                        message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
+                        message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
                         message += Comms.GetPaddedNumber(temp, 2);
                         Comms.SendData(message);
 

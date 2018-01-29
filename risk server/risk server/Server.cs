@@ -158,6 +158,10 @@ namespace risk_server
                     values.Add(Helper.GetStringPartFromSocket(client, 2));
                     break;
 
+                case Helper.END_TURN:
+                    // No Values!
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -166,24 +170,6 @@ namespace risk_server
                     size = Helper.GetIntPartFromSocket(client, 2);
                     values.Add(Helper.GetStringPartFromSocket(client, size));
                     break;
-
-                /*case Helper.ANSWER:
-                    // Answer No.
-                    values.Add(Helper.GetStringPartFromSocket(client, 1));
-
-                    // Answer time
-                    values.Add(Helper.GetStringPartFromSocket(client, 2));
-                    break;
-
-                case Helper.LEAVE_GAME:
-                    // No Values!
-                    break;
-
-                
-
-                case Helper.PERSONAL_STATUS:
-                    // No Values!
-                    break;*/
 
                 case Helper.LEADERBOARDS:
                     // No Values!
@@ -421,6 +407,11 @@ namespace risk_server
             msg.GetUser().GetGame().HandleMoveForces(msg);
         }
 
+        private void HandleEndTurn(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleEndTurn(msg);
+        }
+
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
         private void HandleGetLeaderboards(RecievedMessage msg)
@@ -457,7 +448,7 @@ namespace risk_server
         }
 
         //------------------------MESSAGE HANDLERS---------------------------------
-
+        
         private void HandleUserMessage(RecievedMessage msg)
         {
             Game gm = msg.GetUser().GetGame();
@@ -623,8 +614,13 @@ namespace risk_server
                     break;
 
                 case Helper.MOVE_FORCES:
-                    Console.WriteLine("Router :: ewntering HandleMoveForces");
+                    Console.WriteLine("Router :: entering HandleMoveForces");
                     HandleMoveForces(msg);
+                    break;
+
+                case Helper.END_TURN:
+                    Console.WriteLine("Router :: entering HandleEndTurn");
+                    HandleEndTurn(msg);
                     break;
 
                 case Helper.LEADERBOARDS:

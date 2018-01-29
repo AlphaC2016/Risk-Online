@@ -244,7 +244,13 @@ namespace risk_server.Game_classes
             msg.GetUser().Send(message);
         }
 
-        public bool AreConnected(Territory t1, Territory t2, int count = 15)
+        public void HandleEndTurn(RecievedMessage msg)
+        {
+            currAttackerIndex = (currAttackerIndex + 1) % _players.Count;
+            StartTurn();
+        }
+
+        private bool AreConnected(Territory t1, Territory t2, int count = 10)
         {
             if (t1.IsAdj(t2))
                 return true;

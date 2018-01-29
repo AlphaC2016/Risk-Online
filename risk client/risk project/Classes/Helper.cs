@@ -115,5 +115,18 @@ namespace risk_project
         {
             return Color.FromArgb((byte)255, (byte)red, (byte)green, (byte)blue);
         }
+
+
+        public static int GetIndex(Dictionary<string, Territory> dict, Territory val)
+        {
+            int i = 0;
+            foreach (Territory t in dict.Values)
+            {
+                if (t == val)
+                    return i;
+                i++;
+            }
+            return -1;
+        }
     }
 }
