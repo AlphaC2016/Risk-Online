@@ -26,7 +26,7 @@ namespace risk_project
         public static double green;
         public static double blue;
 
-        public static string username { get; set; }
+        public static string Username { get; set; }
 
         static ApplicationView view = ApplicationView.GetForCurrentView();
 
@@ -56,6 +56,11 @@ namespace risk_project
             view.ExitFullScreenMode();
         }
 
+        public static bool IsMusicPlaying() { return musicPlaying; }
+
+        /// <summary>
+        /// Initializes the Game's music.
+        /// </summary>
         public static async void InitMusic()
         {
             player = new MediaElement();
@@ -64,12 +69,12 @@ namespace risk_project
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
             player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
             player.AutoPlay = false;
-            if (!musicPlaying)
-                player.Volume = 0;
         }
 
-        public static bool IsMusicPlaying() { return musicPlaying; }
-
+        
+        /// <summary>
+        /// This function Initializes the static class - settings and music included.
+        /// </summary>
         public async static void Init()
         {
             string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
@@ -116,7 +121,12 @@ namespace risk_project
             return Color.FromArgb((byte)255, (byte)red, (byte)green, (byte)blue);
         }
 
-
+        /// <summary>
+        /// This function returns the index of a territory in a string-Territory dictionary.
+        /// </summary>
+        /// <param name="dict">The dictionary to be searched.</param>
+        /// <param name="val">The seeked value.</param>
+        /// <returns>Returns the index of the said territory. If not found, returns -1.</returns>
         public static int GetIndex(Dictionary<string, Territory> dict, Territory val)
         {
             int i = 0;

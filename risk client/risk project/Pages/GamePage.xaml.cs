@@ -315,7 +315,7 @@ namespace risk_project
                 nameLabels.Add(txb);
 
                 rect = new Rectangle();
-                if (msg[i] == Helper.username)
+                if (msg[i] == Helper.Username)
                 {
                     color = Helper.GetPlayerColor();
                 }
@@ -335,7 +335,7 @@ namespace risk_project
             {
                 t.SetOwner(msg[i]);
                 t.SetColor(colors[msg[i]]);
-                if (msg[i] == Helper.username)
+                if (msg[i] == Helper.Username)
                 {
                     t.SetAmount(0);
                     territoryCount++;
@@ -368,7 +368,7 @@ namespace risk_project
 
         private void HandleStartTurn(ReceivedMessage msg)
         {
-            if (Helper.username == msg[0])
+            if (Helper.Username == msg[0])
             {
                 currState = GameState.Reinforcements;
                 LblInstructions.Text = "IT'S YOUR TURN!\nSET YOUR FORCES";
@@ -428,7 +428,7 @@ namespace risk_project
             Territory curr = sender as Territory;
             if (currState == GameState.InitialReinforcments || currState == GameState.Reinforcements)
             {
-                if (curr.GetOwner() == Helper.username)
+                if (curr.GetOwner() == Helper.Username)
                 {
                     var clickType = e.GetCurrentPoint(null).Properties;
 
@@ -453,7 +453,7 @@ namespace risk_project
 
             else if (currState == GameState.MoveForces)
             {
-                if (curr.GetOwner() == Helper.username)
+                if (curr.GetOwner() == Helper.Username)
                 {
                     if (src == null)
                     {
@@ -494,7 +494,7 @@ namespace risk_project
 
                     foreach (Territory curr in territories.Values)
                     {
-                        if (curr.GetAmount() != 0 || curr.GetOwner() != Helper.username)
+                        if (curr.GetAmount() != 0 || curr.GetOwner() != Helper.Username)
                         {
                             
                             message += Comms.GetPaddedNumber(curr.GetAmount(), 2);
@@ -566,7 +566,7 @@ namespace risk_project
                 case GameState.InitialReinforcments | GameState.Reinforcements:
                     foreach (Territory t in territories.Values)
                     {
-                        if (t.GetOwner() == Helper.username)
+                        if (t.GetOwner() == Helper.Username)
                         {
                             t.Revert();
                         }

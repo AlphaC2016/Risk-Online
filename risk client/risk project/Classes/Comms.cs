@@ -98,11 +98,8 @@ namespace risk_project
         /// <summary>
         /// This function handles the initial connection to the server.
         /// </summary>
-        /// <returns>True if the connection was sucessful, false otherwise.</returns>
-        public static bool InitSocket()
+        public static async void InitSocket()
         {
-            try
-            {
                 sc = new StreamSocket();
 
                 string[] data = File.ReadAllLines(CONFIG_PATH);
@@ -110,13 +107,7 @@ namespace risk_project
                 string port = data[1];
 
                 HostName serverHost = new HostName(rawIp);
-                sc.ConnectAsync(serverHost, port);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
+                await sc.ConnectAsync(serverHost, port);
         }
 
 
@@ -131,7 +122,6 @@ namespace risk_project
                 StreamWriter writer = new StreamWriter(sc.OutputStream.AsStreamForWrite());
                 writer.Write(message);
                 writer.Flush();
-                //reader = null;
             }
         }
 
@@ -189,6 +179,13 @@ namespace risk_project
         {
             return num.ToString().PadLeft(size, '0');
         }
+
+        /// <summary>
+        /// Takes an int and turns it into a strin of a defined length.
+        /// </summary>
+        /// <param name="num">the number to be parsed.</param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         public static string GetPaddedNumber(string num, int size)
         {
             return num.PadLeft(size, '0');

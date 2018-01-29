@@ -28,6 +28,7 @@ namespace risk_project
         public string GetCode() { return code; }
         public List<string> GetArgs() { return args; }
 
+
         /// <summary>
         /// This function allows random-access into the message arguments without digging into the fields themselves.
         /// </summary>
@@ -37,6 +38,7 @@ namespace risk_project
         {
             get { return args[index]; }
         }
+
 
         /// <summary>
         /// This function gets the message code of the incoming message.
