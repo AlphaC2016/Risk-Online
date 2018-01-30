@@ -139,6 +139,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Backgrounds\battle_background.jpg" />
     <Content Include="Assets\Backgrounds\createroom_background.jpg" />
     <Content Include="Assets\Backgrounds\help_background.jpg" />
     <Content Include="Assets\Backgrounds\joinroom_background.jpg" />
@@ -149,6 +150,20 @@
     <Content Include="Assets\Backgrounds\roompage_background.jpg" />
     <Content Include="Assets\Backgrounds\settings_background.jpg" />
     <Content Include="Assets\Data\config.txt" />
+    <Content Include="Assets\Dice\Red\0.png" />
+    <Content Include="Assets\Dice\Red\1.png" />
+    <Content Include="Assets\Dice\Red\2.png" />
+    <Content Include="Assets\Dice\Red\3.png" />
+    <Content Include="Assets\Dice\Red\4.png" />
+    <Content Include="Assets\Dice\Red\5.png" />
+    <Content Include="Assets\Dice\Red\6.png" />
+    <Content Include="Assets\Dice\White\0.png" />
+    <Content Include="Assets\Dice\White\1.png" />
+    <Content Include="Assets\Dice\White\2.png" />
+    <Content Include="Assets\Dice\White\3.png" />
+    <Content Include="Assets\Dice\White\4.png" />
+    <Content Include="Assets\Dice\White\5.png" />
+    <Content Include="Assets\Dice\White\6.png" />
     <Content Include="Assets\Icons\Leaderboards.png" />
     <Content Include="Assets\Icons\CreateRoom.png" />
     <Content Include="Assets\Icons\flag.png" />
