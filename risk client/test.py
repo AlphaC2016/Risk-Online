@@ -12,3 +12,5 @@ s.send("23405sandy")
 print s.recv(1024)
 print s.recv(1024)
 s.recv(1024)
+#is this how a comment looks like?
+#guess so.

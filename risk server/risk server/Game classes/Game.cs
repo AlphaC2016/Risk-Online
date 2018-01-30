@@ -175,7 +175,6 @@ namespace risk_server.Game_classes
             if (done)
             {
                 Console.WriteLine("THE TURN SHOULD START NOW.");
-                SendUpdate();
                 StartTurn();
             }
         }
@@ -190,6 +189,7 @@ namespace risk_server.Game_classes
 
         private void StartTurn()
         {
+            SendUpdate();
             string message = Helper.START_TURN;
             string curr = _players[currAttackerIndex].GetUsername();
 
@@ -230,7 +230,7 @@ namespace risk_server.Game_classes
 
             string message = Helper.MOVE_FORCES_RES;
 
-            if (AreConnected(t1, t2))
+            if (t1.IsAdj(t2) && t1.GetUser() == t2.GetUser())
             {
                 int temp = int.Parse(msg[2]);
                 t1.Amount += temp;
@@ -250,20 +250,20 @@ namespace risk_server.Game_classes
             StartTurn();
         }
 
-        private bool AreConnected(Territory t1, Territory t2, int count = 10)
-        {
-            if (t1.IsAdj(t2))
-                return true;
+        //private bool AreConnected(Territory t1, Territory t2, int count = 10)
+        //{
+        //    if (t1.IsAdj(t2) && t1.GetUser() == t2.GetUser())
+        //        return true;
 
-            else
-            {
-                foreach (Territory t in t1.GetAdj())
-                {
-                    if (AreConnected(t, t2, count - 1))
-                        return true;
-                }
-                return false;
-            }
-        }
+        //    else
+        //    {
+        //        foreach (Territory t in t1.GetAdj())
+        //        {
+        //            if (AreConnected(t, t2, count - 1))
+        //                return true;
+        //        }
+        //        return false;
+        //    }
+        //}
     }
 }

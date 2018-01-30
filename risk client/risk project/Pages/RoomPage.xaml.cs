@@ -48,6 +48,7 @@ namespace risk_project
             {
                 try
                 {
+                    Comms.SendData(Comms.GET_ROOMS);
                     HandleUpdate();
                 }
                 catch (Exception) { }

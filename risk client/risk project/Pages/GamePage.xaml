@@ -9,7 +9,7 @@
 
     <Grid Name="MainGrid">
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/Backgrounds/map.jpg" Opacity="0.8"></ImageBrush>
+            <ImageBrush ImageSource="/Assets/Backgrounds/map.jpg"></ImageBrush>
         </Grid.Background>
 
         <Grid.RowDefinitions>

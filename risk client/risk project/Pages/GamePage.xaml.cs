@@ -378,6 +378,9 @@ namespace risk_project
             else
             {
                 currState = GameState.Spectator;
+                LblInstructions.Text = "It's " + msg[0] + "'s turn";
+                LblSecondary.Text = "Waiting for update...";
+                LblSecondary.Foreground = new SolidColorBrush(Colors.White);
             }
         }
 
@@ -389,7 +392,7 @@ namespace risk_project
                 src.Revert();
                 dst.Revert();
             }
-            src = dst = null;
+            ResetPair();
         }
 
         private void SetReinforcements()
@@ -660,6 +663,13 @@ namespace risk_project
                 ImageSource = bmp,
                 Stretch = Stretch.Fill,
             };
+        }
+
+        private void ResetPair()
+        {
+            src.Background.Opacity = 0;
+            dst.Background.Opacity = 0;
+            src = dst = null;
         }
     }
 }
