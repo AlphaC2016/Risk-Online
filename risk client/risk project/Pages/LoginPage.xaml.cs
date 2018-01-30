@@ -50,12 +50,7 @@ namespace risk_project
             buttons.Add(BtnLogin);
             buttons.Add(BtnSignUp);
 
-            Task connect = new Task(() =>
-            {
-                while (!Comms.InitSocket())
-                    Task.Delay(5000);
-            });
-            connect.Start();
+            Comms.InitSocket();
             
         }
 
@@ -94,7 +89,7 @@ namespace risk_project
         {
             string message = Comms.SIGN_IN.ToString();
             string username = TxbLoginUsername.Text;
-            Helper.username = username;
+            Helper.Username = username;
             string password = TxbLoginPass.Text;
 
             message += Comms.GetPaddedNumber(username.Length, 2) + username;

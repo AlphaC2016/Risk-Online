@@ -661,5 +661,10 @@ namespace risk_project
                 Stretch = Stretch.Fill,
             };
         }
+
+        private void Fit_Size_Battle(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 }
