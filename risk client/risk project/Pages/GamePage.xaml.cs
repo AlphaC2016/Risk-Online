@@ -51,6 +51,9 @@ namespace risk_project
         List<TextBlock> messageLabels;
         List<TextBlock> nameLabels;
 
+        List<Image> dice;
+        List<TextBlock> battleLabels; 
+
         bool done;
         Task handler;
         CoreDispatcher dispatcher;
@@ -136,6 +139,8 @@ namespace risk_project
             {
                 Arena.Children.Add(curr);
             }
+
+            
         }
 
 
@@ -424,6 +429,81 @@ namespace risk_project
             }
         }
 
+        private void HandleStartBattleRes(ReceivedMessage msg)
+        {
+            switch (msg[0])
+            {
+                case "0":
+                    src = territories.ElementAt(int.Parse(msg[1])).Value;
+                    dst = territories.ElementAt(int.Parse(msg[2])).Value;
+
+                    if (currState == GameState.Spectator)
+                    {
+                        currState = GameState.BattleDefender;
+                        GrdBattle.Visibility = Visibility.Visible;
+                        InitBattleGrid();
+                        //NEED TO COMPLETE
+                    }
+                    else if (currState == GameState.Attacker)
+                    {
+                        currState = GameState.BattleDefender;
+                        GrdBattle.Visibility = Visibility.Visible;
+                        InitBattleGrid();
+                        //NEED TO COMPLETE
+                    }
+                    break;
+
+                case "1":
+                    PresentError("The attacking territory needs more than 1 soldier to attack.");
+                    break;
+
+                case "2":
+                    PresentError("Invalid source.");
+                    break;
+
+                case "3":
+                    PresentError("Invalid destination.");
+                    break;
+
+                case "4":
+                    PresentError("Source and destination must be connected.");
+                    break;
+            }
+        }
+
+
+        //---------------------------------------- BATTLE FUNCTIONS -----------------------------------------------
+
+        private void Fit_Size_Battle(object sender, SizeChangedEventArgs e)
+        {
+            LblState.FontSize = (ActualHeight + ActualWidth) / 41.66;
+            
+            foreach (TextBlock t in battleLabels)
+            {
+                t.FontSize = (ActualHeight + ActualWidth) / 62.5;
+            }
+
+            foreach (Image img in dice)
+            {
+                img.Height = img.Width = (ActualHeight + ActualWidth)/27.273;
+            }
+
+        }
+
+        private void InitBattleGrid()
+        {
+            dice.Add(ImgAtk1);
+            dice.Add(ImgAtk2);
+            dice.Add(ImgAtk3);
+            dice.Add(ImgDef1);
+            dice.Add(ImgDef2);
+
+            battleLabels.Add(LblUser1);
+            battleLabels.Add(LblUser2);
+            battleLabels.Add(LblAttacker);
+            battleLabels.Add(LblDefender);
+
+        }
 
         //---------------------------------------- PRACTICAL BUTTON FUNCTIONS -------------------------------------
 
@@ -510,22 +590,6 @@ namespace risk_project
                             dst = curr;
                             LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
                         }
-                        if (curr == src)
-                        {
-                            if (dst.Dec(currState))
-                            {
-                                src.Inc(state: currState);
-                                temp--;
-                            }
-                        }
-                        else if (curr == dst)
-                        {
-                            if (src.Dec(currState))
-                            {
-                                dst.Inc(state: currState);
-                                temp++;
-                            }
-                        }
                     }
                     break;
             }
@@ -607,6 +671,7 @@ namespace risk_project
                     message = Comms.START_BATTLE;
                     message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
                     message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
+                    Comms.SendData(message);
                     break;
             }
         }
@@ -658,56 +723,74 @@ namespace risk_project
 
         private void T_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            Territory t = (Territory)sender;
-            t.Background.Opacity = 0.8;
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
+            {
+                Territory t = (Territory)sender;
+                t.Background.Opacity = 0.8;
+            }
         }
 
         private void T_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            Territory t = (Territory)sender;
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
+            {
+                Territory t = (Territory)sender;
 
-            if (t != src && t != dst)
-                t.Background.Opacity = 0;
+                if (t != src && t != dst)
+                    t.Background.Opacity = 0;
+            }
         }
 
         private void ElpYes_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes2.png"));
-            ElpYes.Fill = new ImageBrush
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
             {
-                ImageSource = bmp,
-                Stretch = Stretch.Fill,
-            };
+                BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes2.png"));
+                ElpYes.Fill = new ImageBrush
+                {
+                    ImageSource = bmp,
+                    Stretch = Stretch.Fill,
+                };
+            }
         }
 
         private void ElpYes_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes1.png"));
-            ElpYes.Fill = new ImageBrush
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
             {
-                ImageSource = bmp,
-                Stretch = Stretch.Fill,
-            };
+                BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/Yes1.png"));
+                ElpYes.Fill = new ImageBrush
+                {
+                    ImageSource = bmp,
+                    Stretch = Stretch.Fill,
+                };
+            }
         }
 
         private void ElpNo_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No2.png"));
-            ElpNo.Fill = new ImageBrush
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
             {
-                ImageSource = bmp,
-                Stretch = Stretch.Fill,
-            };
+                BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No2.png"));
+                ElpNo.Fill = new ImageBrush
+                {
+                    ImageSource = bmp,
+                    Stretch = Stretch.Fill,
+                };
+            }
         }
 
         private void ElpNo_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No1.png"));
-            ElpNo.Fill = new ImageBrush
+            if (currState != GameState.BattleAttacker && currState != GameState.BattleDefender)
             {
-                ImageSource = bmp,
-                Stretch = Stretch.Fill,
-            };
+                BitmapImage bmp = new BitmapImage(new Uri("ms-appx:///Assets/Icons/No1.png"));
+                ElpNo.Fill = new ImageBrush
+                {
+                    ImageSource = bmp,
+                    Stretch = Stretch.Fill,
+                };
+            }
         }
 
         private void ResetPair()
@@ -725,9 +808,6 @@ namespace risk_project
             l = null;
         }
 
-        private void Fit_Size_Battle(object sender, SizeChangedEventArgs e)
-        {
-
-        }
+        
     }
 }

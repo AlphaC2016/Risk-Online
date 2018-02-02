@@ -167,6 +167,10 @@ namespace risk_project
                     ans.Add(Comms.RecvData(1, flags));
                     break;
 
+                case Comms.START_BATTLE_RES:
+                    ans.Add(Comms.RecvData(1, flags));
+                    break;
+
                 case Comms.RECEIVE_MESSAGE:
                     size = int.Parse(Comms.RecvData(2, flags));
                     ans.Add(Comms.RecvData(size, flags));

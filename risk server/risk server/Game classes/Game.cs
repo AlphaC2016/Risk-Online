@@ -244,6 +244,34 @@ namespace risk_server.Game_classes
             msg.GetUser().Send(message);
         }
 
+        public void HandleAttack(RecievedMessage msg)
+        {
+            Territory t1 = _territories.ElementAt(int.Parse(msg[0])).Value;
+            Territory t2 = _territories.ElementAt(int.Parse(msg[1])).Value;
+
+            if (t1.Amount < 2)
+            {
+                msg.GetUser().Send(Helper.START_BATTLE_RES + "1");
+            }
+            else if (t1.GetUser() != msg.GetUser())
+            {
+                msg.GetUser().Send(Helper.START_BATTLE_RES + "2");
+            }
+            else if (t2.GetUser() == msg.GetUser())
+            {
+                msg.GetUser().Send(Helper.START_BATTLE_RES + "3");
+            }
+            else if (!t1.IsAdj(t2))
+            {
+                msg.GetUser().Send(Helper.START_BATTLE_RES + "4");
+            }
+            else
+            {
+                msg.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
+                t2.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
+            }
+        }
+
         public void HandleEndTurn(RecievedMessage msg)
         {
             currAttackerIndex = (currAttackerIndex + 1) % _players.Count;

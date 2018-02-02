@@ -162,6 +162,11 @@ namespace risk_server
                     // No Values!
                     break;
 
+                case Helper.START_BATTLE:
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -408,6 +413,11 @@ namespace risk_server
             msg.GetUser().GetGame().HandleEndTurn(msg);
         }
 
+        private void HandleStartBattle(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleAttack(msg);
+        }
+
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
         private void HandleGetLeaderboards(RecievedMessage msg)
@@ -617,6 +627,11 @@ namespace risk_server
                 case Helper.END_TURN:
                     Console.WriteLine("Router :: entering HandleEndTurn");
                     HandleEndTurn(msg);
+                    break;
+
+                case Helper.START_BATTLE:
+                    Console.WriteLine("Router :: entering HandleStartBattle");
+                    HandleStartBattle(msg);
                     break;
 
                 case Helper.LEADERBOARDS:
