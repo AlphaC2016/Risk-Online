@@ -33,7 +33,8 @@ namespace risk_project
         StopOrAttack,
         Attacker,
         Spectator,
-        Defender,
+        BattleAttacker,
+        BattleDefender,
         MoveForces
     }
 
@@ -60,6 +61,7 @@ namespace risk_project
 
         Territory src;
         Territory dst;
+        Line l;
 
         //---------------------------------------PAGE HANDLING CODE---------------------------------------------------
 
@@ -365,7 +367,6 @@ namespace risk_project
             FitSize(null, null);
         }
 
-
         private void HandleStartTurn(ReceivedMessage msg)
         {
             if (Helper.Username == msg[0])
@@ -401,7 +402,7 @@ namespace risk_project
             LblInstructions.Text = "SET YOUR FORCES IN PLACE";
 
             temp = 50 - (5*colorRects.Count());
-            LblSecondary.Text = "amount Left: " + temp + " units";
+            LblSecondary.Text = "Units remaining: " + temp + " units";
             
         }
 
@@ -429,62 +430,105 @@ namespace risk_project
         private void T_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Territory curr = sender as Territory;
-            if (currState == GameState.InitialReinforcments || currState == GameState.Reinforcements)
-            {
-                if (curr.GetOwner() == Helper.Username)
-                {
-                    var clickType = e.GetCurrentPoint(null).Properties;
 
-                    if (clickType.IsLeftButtonPressed)
-                    {
-                        if (curr.Inc(temp))
-                        {
-                            temp--;
-                            LblSecondary.Text = "amount Left: " + temp + " units";
-                        }
-                    }
-                    else if (clickType.IsRightButtonPressed)
-                    {
-                        if (curr.Dec())
-                        {
-                            temp++;
-                            LblSecondary.Text = "amount Left: " + temp + " units";
-                        }
-                    }
-                }
-            }
-
-            else if (currState == GameState.MoveForces)
+            switch (currState)
             {
-                if (curr.GetOwner() == Helper.Username)
-                {
-                    if (src == null)
+                case GameState.InitialReinforcments | GameState.Reinforcements:
+                    if (curr.GetOwner() == Helper.Username)
                     {
-                        src = curr;
-                    }
-                    else if (dst == null)
-                    {
-                        dst = curr;
-                    }
-                    else if (curr == src)
-                    {
-                        if (dst.Dec(currState))
+                        var clickType = e.GetCurrentPoint(null).Properties;
+
+                        if (clickType.IsLeftButtonPressed)
                         {
-                            src.Inc(state: currState);
-                            temp--;
+                            if (curr.Inc(temp))
+                            {
+                                temp--;
+                                LblSecondary.Text = "Units remaining: " + temp + " units";
+                            }
+                        }
+                        else if (clickType.IsRightButtonPressed)
+                        {
+                            if (curr.Dec())
+                            {
+                                temp++;
+                                LblSecondary.Text = "Units remaining: " + temp + " units";
+                            }
                         }
                     }
-                    else if (curr == dst)
+                    break;
+
+
+                case GameState.MoveForces:
+                    if (curr.GetOwner() == Helper.Username)
                     {
-                        if (src.Dec(currState))
+                        if (src == null)
                         {
-                            dst.Inc(state: currState);
-                            temp++;
+                            src = curr;
+
+                        }
+                        else if (dst == null)
+                        {
+                            dst = curr;
+
+                            l = new Line();
+                            l.X1 = Canvas.GetLeft(src);
+                            l.X2 = Canvas.GetLeft(dst);
+                            l.Y1 = Canvas.GetTop(src);
+                            l.Y2 = Canvas.GetTop(dst);
+                            l.Fill = new SolidColorBrush(Colors.White);
+                            Arena.Children.Add(l);
+                        }
+                        if (curr == src)
+                        {
+                            if (dst.Dec(currState))
+                            {
+                                src.Inc(state: currState);
+                                temp--;
+                            }
+                        }
+                        else if (curr == dst)
+                        {
+                            if (src.Dec(currState))
+                            {
+                                dst.Inc(state: currState);
+                                temp++;
+                            }
                         }
                     }
-                }
+                    break;
+
+                case GameState.Attacker:
+                    if (curr.GetOwner() == Helper.Username)
+                    {
+                        if (src == null)
+                        {
+                            src = curr;
+                            LblSecondary.Text = "Pick the attack's destination!";
+                        }
+                        else if (dst == null)
+                        {
+                            dst = curr;
+                            LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
+                        }
+                        if (curr == src)
+                        {
+                            if (dst.Dec(currState))
+                            {
+                                src.Inc(state: currState);
+                                temp--;
+                            }
+                        }
+                        else if (curr == dst)
+                        {
+                            if (src.Dec(currState))
+                            {
+                                dst.Inc(state: currState);
+                                temp++;
+                            }
+                        }
+                    }
+                    break;
             }
-            
         }
 
         private void ElpYes_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -542,8 +586,8 @@ namespace risk_project
 
                 case GameState.StopOrAttack:
                     currState = GameState.Attacker;
-                    LblInstructions.Text = "ATTACK MODE // DEBUG";
-                    LblSecondary.Text = "ATTACK MODE // DEBUG";
+                    LblInstructions.Text = "Plan Your Attack!";
+                    LblSecondary.Text = "Pick the attack's source.";
                     break;
 
                 case GameState.MoveForces:
@@ -557,6 +601,12 @@ namespace risk_project
 
                         temp = 0;
                     }
+                    break;
+
+                case GameState.Attacker:
+                    message = Comms.START_BATTLE;
+                    message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
+                    message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
                     break;
             }
         }
@@ -585,12 +635,7 @@ namespace risk_project
                 case GameState.MoveForces:
                     if (src != null)
                     {
-                        src.Revert();
-                        if (dst != null)
-                        {
-                            dst.Revert();
-                        }
-                        src = dst = null;
+                        ResetPair();
                     }
 
                     else
@@ -667,9 +712,22 @@ namespace risk_project
 
         private void ResetPair()
         {
+            src.Revert();
             src.Background.Opacity = 0;
-            dst.Background.Opacity = 0;
+
+            if (dst != null)
+            {
+                dst.Revert();
+                dst.Background.Opacity = 0;
+            }
             src = dst = null;
+            Arena.Children.Remove(l);
+            l = null;
+        }
+
+        private void Fit_Size_Battle(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

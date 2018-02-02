@@ -367,10 +367,6 @@ namespace risk_server
                     ans += Helper.GetPaddedNumber(pair.Key, 4);
                     ans += Helper.GetPaddedNumber(pair.Value.GetName().Length, 2);
                     ans += pair.Value.GetName();
-                    //ans += pair.Value.GetUsers().Count;
-                    //ans += pair.Value.GetMaxUsers();
-                    //ans += Helper.GetPaddedNumber(pair.Value.GetAdmin().Length,2);
-                    //ans += pair.Value.GetAdmin();
                 }
                 user.Send(ans);
             }
