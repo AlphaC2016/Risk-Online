@@ -14,6 +14,9 @@ namespace risk_server.Game_classes
 
         int currAttackerIndex;
 
+        Territory src, dst;
+        bool srcRolled, dstRolled;
+
         public Game(List<User> users)
         {
             Random r = new Random();
@@ -246,29 +249,62 @@ namespace risk_server.Game_classes
 
         public void HandleAttack(RecievedMessage msg)
         {
-            Territory t1 = _territories.ElementAt(int.Parse(msg[0])).Value;
-            Territory t2 = _territories.ElementAt(int.Parse(msg[1])).Value;
+            src = _territories.ElementAt(int.Parse(msg[0])).Value;
+            dst = _territories.ElementAt(int.Parse(msg[1])).Value;
 
-            if (t1.Amount < 2)
+            if (src.Amount < 2)
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "1");
             }
-            else if (t1.GetUser() != msg.GetUser())
+            else if (src.GetUser() != msg.GetUser())
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "2");
             }
-            else if (t2.GetUser() == msg.GetUser())
+            else if (dst.GetUser() == msg.GetUser())
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "3");
             }
-            else if (!t1.IsAdj(t2))
+            else if (!src.IsAdj(dst))
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "4");
             }
             else
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
-                t2.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
+                dst.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
+            }
+        }
+
+        public void HandleRollDice(RecievedMessage msg)
+        {
+            if (msg.GetUser() == src.GetUser())
+            {
+                srcRolled = true;
+            }
+            else if (msg.GetUser() == dst.GetUser())
+            {
+                dstRolled = true;
+            }
+
+            if (srcRolled && dstRolled)
+            {
+                Random r = new Random();
+                string message = Helper.ROLL_DICE_RES;
+
+                int countAtk = Math.Min(3, src.Amount-1);
+                int countDef = Math.Min(2, dst.Amount);
+                int i;
+
+                message += countAtk;
+                for (i=0; i<countAtk; i++)
+                    message += r.Next(1, 7);
+
+                message += countDef;
+                for (i = 0; i < countDef; i++)
+                    message += r.Next(1, 7);
+
+                src.GetUser().Send(message);
+                dst.GetUser().Send(message);
             }
         }
 

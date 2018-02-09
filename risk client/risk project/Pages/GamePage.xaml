@@ -82,7 +82,7 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Grid Name="GrdBattle" Canvas.Left="350" Canvas.Top="150" Height="780" Width="1220" SizeChanged="Fit_Size_Battle" Visibility="Collapsed">
+            <Grid Name="GrdBattle" Canvas.Left="350" Canvas.Top="150" Height="780" Width="1220" SizeChanged="Fit_Size_Battle" >
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/Backgrounds/battle_background.jpg"/>
                 </Grid.Background>
@@ -100,25 +100,30 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Name="LblState" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72" FontFamily="Papyrus" Foreground="DarkRed" Text="CURRENT STATE"/>
+                <TextBlock Name="LblState" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="9" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72" FontFamily="Papyrus" Foreground="DarkRed" Text="CURRENT STATE"/>
                 <TextBlock Name="LblAttacker" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" FontFamily="Papyrus" Foreground="White" Text="ATTACKER"/>
-                <TextBlock Name="LblDefender" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" FontFamily="Papyrus" Foreground="White" Text="DEFENDER"/>
+                <TextBlock Name="LblDefender" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" FontFamily="Papyrus" Foreground="White" Text="DEFENDER"/>
 
                 <Image Name="ImgAtk1" Source="/Assets/Dice/Red/0.png" Grid.Row="2" Grid.Column="0" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Name="ImgAtk2" Source="/Assets/Dice/Red/0.png" Grid.Row="2" Grid.Column="1" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Name="ImgAtk3" Source="/Assets/Dice/Red/0.png" Grid.Row="2" Grid.Column="2" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                <Image Name="ImgDef1" Source="/Assets/Dice/White/0.png" Grid.Row="2" Grid.Column="4" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Image Name="ImgDef2" Source="/Assets/Dice/White/0.png" Grid.Row="2" Grid.Column="5" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Name="ImgDef1" Source="/Assets/Dice/White/0.png" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Name="ImgDef2" Source="/Assets/Dice/White/0.png" Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2" Height="110" Width="110" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                <TextBlock Name="LblUser1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="USER 1"/>
+                <TextBlock Name="LblUser1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="USER 1"/>
                 <TextBlock Name="LblUser2" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="USER 2"/>
 
-                <Button Name="BtnRoll" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" FontSize="36" FontFamily="Papyrus" Background="DarkRed" Foreground="White" Content="ROLL!"/>
+                <TextBlock Name="LblCount1" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="??"/>
+                <TextBlock Name="LblCount2" Grid.Row="3" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="??"/>
+
+                <Button Name="BtnRoll" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" FontSize="36" FontFamily="Papyrus" Background="DarkRed" Foreground="White" Content="ROLL!" Click="BtnRoll_Click"/>
+            
             </Grid>
             
         </Canvas>

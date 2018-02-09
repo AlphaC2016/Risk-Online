@@ -46,7 +46,7 @@ namespace risk_project
         List<string[]> labelData;
         Dictionary<string, Territory> territories;
 
-        Dictionary<string, Color> colors;
+        Dictionary<string, Color> colors; //color of each user
         List<Rectangle> colorRects;
         List<TextBlock> messageLabels;
         List<TextBlock> nameLabels;
@@ -440,17 +440,17 @@ namespace risk_project
                     if (currState == GameState.Spectator)
                     {
                         currState = GameState.BattleDefender;
-                        GrdBattle.Visibility = Visibility.Visible;
-                        InitBattleGrid();
-                        //NEED TO COMPLETE
                     }
                     else if (currState == GameState.Attacker)
                     {
                         currState = GameState.BattleDefender;
-                        GrdBattle.Visibility = Visibility.Visible;
-                        InitBattleGrid();
-                        //NEED TO COMPLETE
                     }
+
+                    GrdBattle.Visibility = Visibility.Visible;
+                    InitBattleGrid();
+                    Fit_Size_Battle(null, null);
+
+                    //NEED TO COMPLETE
                     break;
 
                 case "1":
@@ -488,6 +488,8 @@ namespace risk_project
                 img.Height = img.Width = (ActualHeight + ActualWidth)/27.273;
             }
 
+            BtnRoll.Width = ActualWidth / 9.6;
+            BtnRoll.FontSize = (ActualHeight + ActualWidth) / 83.333;
         }
 
         private void InitBattleGrid()
@@ -502,6 +504,20 @@ namespace risk_project
             battleLabels.Add(LblUser2);
             battleLabels.Add(LblAttacker);
             battleLabels.Add(LblDefender);
+
+            LblAttacker.Text = src.Name;
+            LblAttacker.Foreground = new SolidColorBrush(colors[src.GetOwner()]);
+            LblUser1.Text = src.GetOwner();
+            LblUser1.Foreground = new SolidColorBrush(colors[src.GetOwner()]);
+            LblCount1.Text = src.GetAmount().ToString();
+            LblCount1.Foreground = new SolidColorBrush(colors[src.GetOwner()]);
+
+            LblDefender.Text = dst.Name;
+            LblDefender.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
+            LblUser2.Text = dst.GetOwner();
+            LblUser2.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
+            LblCount2.Text = dst.GetAmount().ToString();
+            LblCount2.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
 
         }
 
@@ -808,6 +824,12 @@ namespace risk_project
             l = null;
         }
 
-        
+        private void BtnRoll_Click(object sender, RoutedEventArgs e)
+        {
+            //START ROLLING YOUR DICE
+            string message = Comms.ROLL_DICE;
+            Comms.SendData(message);
+            LblState.Text = "Waiting for your opponent..";
+        }
     }
 }
