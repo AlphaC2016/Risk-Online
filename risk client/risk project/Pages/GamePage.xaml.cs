@@ -248,6 +248,10 @@ namespace risk_project
                     case Comms.MOVE_FORCES_RES:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleMoveForcesRes(msg));
                         break;
+
+                    case Comms.ROLL_DICE_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRollDiceRes(msg));
+                        break;
                 }
             }
         }
@@ -469,6 +473,20 @@ namespace risk_project
                     PresentError("Source and destination must be connected.");
                     break;
             }
+        }
+
+        private void HandleRollDiceRes(ReceivedMessage msg)
+        {
+            string baseUri = "ms-appx:///Assets/Dice/";
+
+            ImgAtk1.Source = new BitmapImage(new Uri(baseUri + "Red/" + msg[0] + ".png"));
+            ImgAtk2.Source = new BitmapImage(new Uri(baseUri + "Red/" + msg[1] + ".png"));
+            ImgAtk3.Source = new BitmapImage(new Uri(baseUri + "Red/" + msg[2] + ".png"));
+            ImgDef1.Source = new BitmapImage(new Uri(baseUri + "White/" + msg[3] + ".png"));
+            ImgDef2.Source = new BitmapImage(new Uri(baseUri + "White/" + msg[4] + ".png"));
+
+            LblCount1.Text = msg[5];
+            LblCount2.Text = msg[6];
         }
 
 
@@ -830,6 +848,11 @@ namespace risk_project
             string message = Comms.ROLL_DICE;
             Comms.SendData(message);
             LblState.Text = "Waiting for your opponent..";
+        }
+
+        private void BtnRetreat_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Comms.SendData(Comms.BATTLE_RETREAT);
         }
     }
 }

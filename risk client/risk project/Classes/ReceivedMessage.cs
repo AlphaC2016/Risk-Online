@@ -171,6 +171,21 @@ namespace risk_project
                     ans.Add(Comms.RecvData(1, flags));
                     break;
 
+                case Comms.ROLL_DICE_RES:
+                    size = int.Parse(Comms.RecvData(1, flags));
+                    ans.Add(size.ToString());
+                    for (i = 0; i < size; i++)
+                        ans.Add(Comms.RecvData(1, flags));
+
+                    size = int.Parse(Comms.RecvData(1, flags));
+                    ans.Add(size.ToString());
+                    for (i = 0; i < size; i++)
+                        ans.Add(Comms.RecvData(1, flags));
+
+                    ans.Add(Comms.RecvData(1, flags));
+                    ans.Add(Comms.RecvData(1, flags));
+                    break;
+
                 case Comms.RECEIVE_MESSAGE:
                     size = int.Parse(Comms.RecvData(2, flags));
                     ans.Add(Comms.RecvData(size, flags));

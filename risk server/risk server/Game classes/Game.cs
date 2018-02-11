@@ -291,17 +291,53 @@ namespace risk_server.Game_classes
                 Random r = new Random();
                 string message = Helper.ROLL_DICE_RES;
 
-                int countAtk = Math.Min(3, src.Amount-1);
-                int countDef = Math.Min(2, dst.Amount);
+                int atkCount = Math.Min(3, src.Amount - 1);
+                int defCount = Math.Min(2, src.Amount);
+
+                int[] atk = new int[3];
+                int[] def = new int[2];
                 int i;
 
-                message += countAtk;
-                for (i=0; i<countAtk; i++)
-                    message += r.Next(1, 7);
+                for (i=0; i<3; i++)
+                {
+                    if (i < atkCount)
+                        atk[i] = r.Next(1, 7);
+                    else
+                        atk[i] = 0;
+                }
 
-                message += countDef;
-                for (i = 0; i < countDef; i++)
-                    message += r.Next(1, 7);
+                for (i = 0; i < 2; i++)
+                {
+                    if (i < atkCount)
+                        def[i] = r.Next(1, 7);
+                    else
+                        def[i] = 0;
+                }
+
+                Array.Sort(atk);
+                Array.Reverse(atk);
+                Array.Sort(def);
+                Array.Reverse(def);
+
+                for (i=0; i< 2; i++)
+                {
+                    if (atk[i] > 0 && def[i] > 0)
+                    {
+                        if (atk[i] > def[i])
+                            dst.Amount--;
+                        else
+                            src.Amount--;
+                    }
+                }
+
+                foreach (int x in atk)
+                    message += x;
+
+                foreach (int x in def)
+                    message += x;
+
+                message += Helper.GetPaddedNumber(src.Amount, 2);
+                message += Helper.GetPaddedNumber(dst.Amount, 2);
 
                 src.GetUser().Send(message);
                 dst.GetUser().Send(message);

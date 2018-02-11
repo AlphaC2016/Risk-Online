@@ -167,6 +167,10 @@ namespace risk_server
                     values.Add(Helper.GetStringPartFromSocket(client, 2));
                     break;
 
+                case Helper.ROLL_DICE:
+                    // No Values!
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -418,6 +422,11 @@ namespace risk_server
             msg.GetUser().GetGame().HandleAttack(msg);
         }
 
+        private void HandleRollDice(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleRollDice(msg);
+        }
+
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
         private void HandleGetLeaderboards(RecievedMessage msg)
@@ -599,16 +608,6 @@ namespace risk_server
                     HandleStartGame(msg);
                     break;
 
-                case Helper.SEND_MESSAGE:
-                    Console.WriteLine("router :: entering HandleUserMessage");
-                    HandleUserMessage(msg);
-                    break;
-
-                case Helper.QUIT_GAME:
-                    Console.WriteLine("router :: entering HandleQuitGame");
-                    HandleQuitGame(msg);
-                    break;
-
                 case Helper.FORCES_INIT:
                     Console.WriteLine("Router :: entering HandleForcesInit");
                     HandleForcesInit(msg);
@@ -632,6 +631,21 @@ namespace risk_server
                 case Helper.START_BATTLE:
                     Console.WriteLine("Router :: entering HandleStartBattle");
                     HandleStartBattle(msg);
+                    break;
+
+                case Helper.ROLL_DICE:
+                    Console.WriteLine("Router :: entering HandleRollDice");
+                    HandleRollDice(msg);
+                    break;
+
+                case Helper.SEND_MESSAGE:
+                    Console.WriteLine("router :: entering HandleUserMessage");
+                    HandleUserMessage(msg);
+                    break;
+
+                case Helper.QUIT_GAME:
+                    Console.WriteLine("router :: entering HandleQuitGame");
+                    HandleQuitGame(msg);
                     break;
 
                 case Helper.LEADERBOARDS:
