@@ -171,6 +171,10 @@ namespace risk_server
                     // No Values!
                     break;
 
+                case Helper.BATTLE_RETREAT:
+                    // No Values!
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -427,6 +431,11 @@ namespace risk_server
             msg.GetUser().GetGame().HandleRollDice(msg);
         }
 
+        private void HandleBattleRetreat(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().EndBattle(false);
+        }
+
         //------------------LEADERBOARDS HANDLER(S)--------------------------------
 
         private void HandleGetLeaderboards(RecievedMessage msg)
@@ -614,28 +623,33 @@ namespace risk_server
                     break;
 
                 case Helper.SEND_REINFORCEMENTS:
-                    Console.WriteLine("Router :: entering HandleTurnReinforcements");
+                    Console.WriteLine("router :: entering HandleTurnReinforcements");
                     HandleTurnReinforcements(msg);
                     break;
 
                 case Helper.MOVE_FORCES:
-                    Console.WriteLine("Router :: entering HandleMoveForces");
+                    Console.WriteLine("router :: entering HandleMoveForces");
                     HandleMoveForces(msg);
                     break;
 
                 case Helper.END_TURN:
-                    Console.WriteLine("Router :: entering HandleEndTurn");
+                    Console.WriteLine("router :: entering HandleEndTurn");
                     HandleEndTurn(msg);
                     break;
 
                 case Helper.START_BATTLE:
-                    Console.WriteLine("Router :: entering HandleStartBattle");
+                    Console.WriteLine("router :: entering HandleStartBattle");
                     HandleStartBattle(msg);
                     break;
 
                 case Helper.ROLL_DICE:
-                    Console.WriteLine("Router :: entering HandleRollDice");
+                    Console.WriteLine("router :: entering HandleRollDice");
                     HandleRollDice(msg);
+                    break;
+
+                case Helper.BATTLE_RETREAT:
+                    Console.WriteLine("routerr :: entering HandleBattleRetreat");
+                    HandleBattleRetreat(msg);
                     break;
 
                 case Helper.SEND_MESSAGE:

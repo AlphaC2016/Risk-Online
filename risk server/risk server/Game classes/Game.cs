@@ -270,9 +270,14 @@ namespace risk_server.Game_classes
             }
             else
             {
-                msg.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
-                dst.GetUser().Send(Helper.START_BATTLE_RES + "0" + msg[0] + msg[1]);
+                string message = Helper.START_BATTLE_RES + "0" + msg[0] + msg[1];
+                SendMessage(message);
             }
+
+            if (src.Amount == 0)
+                EndBattle(false);
+            else if (dst.Amount == 0)
+                EndBattle(true);
         }
 
         public void HandleRollDice(RecievedMessage msg)
@@ -342,6 +347,13 @@ namespace risk_server.Game_classes
                 src.GetUser().Send(message);
                 dst.GetUser().Send(message);
             }
+        }
+
+        public void EndBattle(bool success)
+        {
+            string message = Helper.END_BATTLE;
+            message += Convert.ToInt32(!success);
+            SendMessage(message);
         }
 
         public void HandleEndTurn(RecievedMessage msg)

@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
 
-        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="I'M JUST TESTING."></TextBlock>
+        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="HELLO THERE~"></TextBlock>
 
         <Canvas Name="Arena" >
             <Grid Name="GrdUsers" Canvas.Top="780" Canvas.Left="40" Height="250" Width="300" BorderThickness="3" BorderBrush="White" CornerRadius="2">

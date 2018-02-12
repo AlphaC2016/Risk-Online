@@ -35,6 +35,7 @@ namespace risk_project
         Spectator,
         BattleAttacker,
         BattleDefender,
+        BattleWinner,
         MoveForces
     }
 
@@ -252,6 +253,10 @@ namespace risk_project
                     case Comms.ROLL_DICE_RES:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRollDiceRes(msg));
                         break;
+
+                    case Comms.END_BATTLE:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { HandleEndBattle(msg); Task.Delay(4000); });
+                        break;
                 }
             }
         }
@@ -441,20 +446,26 @@ namespace risk_project
                     src = territories.ElementAt(int.Parse(msg[1])).Value;
                     dst = territories.ElementAt(int.Parse(msg[2])).Value;
 
-                    if (currState == GameState.Spectator)
+                    if (src.GetOwner() == Helper.Username)
+                    {
+                        currState = GameState.BattleAttacker;
+                        GrdBattle.Visibility = Visibility.Visible;
+                        InitBattleGrid();
+                        Fit_Size_Battle(null, null);
+                    }
+                    else if (dst.GetOwner() == Helper.Username)
                     {
                         currState = GameState.BattleDefender;
+                        GrdBattle.Visibility = Visibility.Visible;
+                        InitBattleGrid();
+                        Fit_Size_Battle(null, null);
                     }
-                    else if (currState == GameState.Attacker)
+                    else
                     {
-                        currState = GameState.BattleDefender;
+                        LblInstructions.Text = src.GetOwner() + "IS ATTACKING" + dst.GetOwner();
+                        LblSecondary.Text = "";
                     }
-
-                    GrdBattle.Visibility = Visibility.Visible;
-                    InitBattleGrid();
-                    Fit_Size_Battle(null, null);
-
-                    //NEED TO COMPLETE
+                    
                     break;
 
                 case "1":
@@ -489,11 +500,57 @@ namespace risk_project
             LblCount2.Text = msg[6];
         }
 
+        private void HandleEndBattle(ReceivedMessage msg)
+        {
+            switch (currState)
+            {
+                case GameState.Spectator:
+                    if (msg[0] == "0")
+                    {
+                        LblInstructions.Text = src.GetOwner() + "DEFEATED&#x0a;" + dst.GetOwner();
+                    }
+                    else
+                    {
+                        LblInstructions.Text = dst.GetOwner() + "DEFEATED&#x0a;" + src.GetOwner();
+                    }
+                    break;
+
+                case GameState.BattleDefender:
+                    if (msg[0] == "0")
+                    {
+                        LblState.Text = "YOU LOST.";
+                    }
+                    else
+                    {
+                        LblState.Text = "YOU WON!";
+                    }
+                    break;
+
+                case GameState.BattleAttacker:
+                    if (msg[0] == "0")
+                    {
+                        LblState.Text = "YOU WON!";
+                        currState = GameState.BattleWinner;
+                    }
+                    else
+                    {
+                        LblState.Text = "YOU LOST.";
+                    }
+                    break;
+            }
+        }
+
 
         //---------------------------------------- BATTLE FUNCTIONS -----------------------------------------------
 
         private void Fit_Size_Battle(object sender, SizeChangedEventArgs e)
         {
+            GrdBattle.Height = ActualHeight / 1.3846;
+            GrdBattle.Width = ActualWidth / 1.574;
+
+            Canvas.SetTop(GrdBattle, ActualHeight / 7.2);
+            Canvas.SetLeft(GrdBattle, ActualWidth / 5.486);
+
             LblState.FontSize = (ActualHeight + ActualWidth) / 41.66;
             
             foreach (TextBlock t in battleLabels)
