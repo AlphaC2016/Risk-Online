@@ -45,12 +45,14 @@ namespace risk_server
         public const string BATTLE_RETREAT = "229";
         public const string ROLL_DICE = "230";
         public const string ROLL_DICE_RES = "131";
-        public const string UPDATE_MAP = "132";
-        public const string END_GAME = "133";
-        public const string SEND_MESSAGE = "234";
-        public const string RECEIVE_MESSAGE = "135";
-        public const string LEADERBOARDS = "236";
-        public const string LEADERBOARDS_RES = "137";
+        public const string END_BATTLE = "132";
+        public const string VICTORY_MOVE_FORCES = "233";
+        public const string UPDATE_MAP = "134";
+        public const string END_GAME = "135";
+        public const string SEND_MESSAGE = "236";
+        public const string RECEIVE_MESSAGE = "137";
+        public const string LEADERBOARDS = "238";
+        public const string LEADERBOARDS_RES = "139";
         public const string EXIT_APP = "299";
 
         public const int MSG_TYPE_CODE_LENGTH = 3;
