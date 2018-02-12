@@ -604,7 +604,8 @@ namespace risk_project
 
             switch (currState)
             {
-                case GameState.InitialReinforcments | GameState.Reinforcements:
+                case GameState.InitialReinforcments:
+                case GameState.Reinforcements:
                     if (curr.GetOwner() == Helper.Username)
                     {
                         var clickType = e.GetCurrentPoint(null).Properties;

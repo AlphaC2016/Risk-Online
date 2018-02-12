@@ -82,7 +82,7 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Grid Name="GrdBattle" Canvas.Left="350" Canvas.Top="150" Height="780" Width="1220" SizeChanged="Fit_Size_Battle" >
+            <Grid Name="GrdBattle" Canvas.Left="350" Canvas.Top="150" Height="780" Width="1220" SizeChanged="Fit_Size_Battle" Visibility="Collapsed">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/Backgrounds/battle_background.jpg"/>
                 </Grid.Background>
