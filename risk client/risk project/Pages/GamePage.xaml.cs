@@ -670,20 +670,17 @@ namespace risk_project
                     break;
 
                 case GameState.Attacker:
-                    if (curr.GetOwner() == Helper.Username)
+                    if (curr.GetOwner() == Helper.Username && src == null)
                     {
-                        if (src == null)
-                        {
-                            src = curr;
-                            LblSecondary.Text = "Pick the attack's destination!";
-                        }
-                        else if (dst == null)
-                        {
-                            dst = curr;
-                            LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
-                        }
+                        src = curr;
+                        LblSecondary.Text = "Pick the attack's destination!";
                     }
-                    break;
+                    else if (curr.GetOwner() != Helper.Username && dst == null)
+                    {
+                        dst = curr;
+                        LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
+                    }
+                        break;
             }
         }
 

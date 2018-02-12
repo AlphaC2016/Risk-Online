@@ -10,6 +10,8 @@ using Windows.Networking;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.IO;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Popups;
 
 namespace risk_project
 {
@@ -97,22 +99,52 @@ namespace risk_project
         public const string FORGOT_PASS_OTHER = "3";
 
 
+        private static HostName serverHost;
+        private static string port;
+
         /// <summary>
         /// This function handles the initial connection to the server.
         /// </summary>
-        public static async void InitSocket()
+        public static void InitSocket()
         {
-                sc = new StreamSocket();
+            sc = new StreamSocket();
 
-                string[] data = File.ReadAllLines(CONFIG_PATH);
-                string rawIp = data[0];
-                string port = data[1];
+            string[] data = File.ReadAllLines(CONFIG_PATH);
+            string rawIp = data[0];
+            port = data[1];
 
-                HostName serverHost = new HostName(rawIp);
-                await sc.ConnectAsync(serverHost, port);
+            
+            serverHost = new HostName(rawIp);
+
+            Connect();
         }
 
+        private async static void Connect()
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
+            try
+            {
+                cts.CancelAfter(2000);
+                await sc.ConnectAsync(serverHost, port).AsTask(cts.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                MessageDialog dialog = new MessageDialog("Error: Cannot connect to server.");
+                dialog.Commands.Add(new UICommand("Try again", new UICommandInvokedHandler(CommandInvokedHandler)));
+                dialog.Commands.Add(new UICommand("Exit App", new UICommandInvokedHandler(CommandInvokedHandler)));
+                await dialog.ShowAsync();
+            }
+        }
 
+        private static void CommandInvokedHandler(IUICommand command)
+        {
+            if (command.Label == "Exit App")
+                CoreApplication.Exit();
+            else
+            {
+                Connect();
+            }
+        }
         /// <summary>
         /// This function sends data to the server.
         /// </summary>
