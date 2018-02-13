@@ -88,7 +88,6 @@ namespace risk_project
             {
                 Comms.SendData(Comms.LEAVE_ROOM);
             }
-            Frame.Navigate(typeof(MainMenu));
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)
@@ -137,12 +136,12 @@ namespace risk_project
                 }
                 else if (code == Comms.CLOSE_ROOM_RES)
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
-                        MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
-                        dialog.ShowAsync();
-                        Frame.Navigate(typeof(MainMenu));
                         done = true;
+                        MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
+                        await dialog.ShowAsync();
+                        Frame.Navigate(typeof(MainMenu));
                     });
                 }
                 else if (code == Comms.START_GAME_RES)
@@ -161,6 +160,7 @@ namespace risk_project
                     throw new Exception();
                 }
             }
+            
         }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)

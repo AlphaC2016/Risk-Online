@@ -268,9 +268,8 @@ namespace risk_server
             if (msg.GetUser() != null)
             {
                 HandleQuitGame(msg);
-                HandleLeaveRoom(msg);
                 HandleCloseRoom(msg);
-
+                HandleLeaveRoom(msg);
                 _connectedUsers.Remove(msg.GetUser().GetSocket());
             }
         }
@@ -397,8 +396,11 @@ namespace risk_server
 
         private void HandleQuitGame(RecievedMessage msg)
         {
-            //if (msg.GetUser() != null)
-            //    msg.GetUser().GetGame().RemovePlayer(msg.GetUser());
+            if (msg.GetUser() != null)
+            {
+                Game gm = msg.GetUser().GetGame();
+                gm.RemovePlayer(msg.GetUser());
+            }
         }
 
         private void HandleForcesInit(RecievedMessage msg)

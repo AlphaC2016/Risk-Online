@@ -121,7 +121,6 @@ namespace risk_server.Game_classes
             }
             SendMessage(message);
         }
-
         /// <summary>
         /// This function removes a player from the game.
         /// </summary>
@@ -129,8 +128,16 @@ namespace risk_server.Game_classes
         public void RemovePlayer(User u)
         {
             _players.Remove(u);
-            SetUsersOnMap();
-            SendInitMessage();
+
+            if (_players.Count > 0)
+            {
+                SetUsersOnMap();
+                SendInitMessage();
+            }
+            else
+            {
+                //shut the game down.
+            }
         }
 
         /// <summary>

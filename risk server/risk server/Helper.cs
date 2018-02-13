@@ -98,12 +98,18 @@ namespace risk_server
 
         public static void SendData(string message, TcpClient client)
         {
-            NetworkStream stream = client.GetStream();
+            try
+            {
+                NetworkStream stream = client.GetStream();
 
-            byte[] data = new ASCIIEncoding().GetBytes(message);
-            stream.Write(data, 0, data.Length);
-            stream.Flush();
-            Console.WriteLine("MESSAGE " + message + " HAS BEEN SENT TO CLIENT ON " + GetIp(client));
+                byte[] data = new ASCIIEncoding().GetBytes(message);
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
+                Console.WriteLine("MESSAGE " + message + " HAS BEEN SENT TO CLIENT ON " + GetIp(client));
+            }
+            catch (Exception)
+            {
+            }
         }
 
 

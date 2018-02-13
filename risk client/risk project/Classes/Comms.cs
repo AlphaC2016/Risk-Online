@@ -127,7 +127,7 @@ namespace risk_project
                 cts.CancelAfter(2000);
                 await sc.ConnectAsync(serverHost, port).AsTask(cts.Token);
             }
-            catch (TaskCanceledException)
+            catch (Exception)
             {
                 MessageDialog dialog = new MessageDialog("Error: Cannot connect to server.");
                 dialog.Commands.Add(new UICommand("Try again", new UICommandInvokedHandler(CommandInvokedHandler)));
