@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,8 +29,10 @@ namespace risk_project
         Dictionary<string, int> roomIDs;
         List<TextBlock> rooms;
         List<TextBlock> currRoomData;
+        List<TextBlock> titles;
         List<Button> buttons;
         string currName;
+        CoreDispatcher dispatcher = Window.Current.Dispatcher;
 
         public JoinRoomPage()
         {
@@ -37,31 +40,19 @@ namespace risk_project
             roomIDs = new Dictionary<string, int>();
             rooms = new List<TextBlock>();
             currRoomData = new List<TextBlock>();
-            buttons = new List<Button>();     
+            buttons = new List<Button>();
+            titles = new List<TextBlock>();
+        }      
 
-            Comms.SendData(Comms.GET_ROOMS);
-
-            Task fillDict = new Task(() =>
-            {
-                ReceivedMessage msg = new ReceivedMessage();
-
-                if (msg.GetCode() == Comms.GET_ROOMS_RES)
-                {
-                    List<string> args = msg.GetArgs();
-
-                    for (int i=0; i<args.Count; i+=2)
-                    {
-                        roomIDs.Add(args[i + 1], int.Parse(args[i]));
-                    }
-                }
-            });
-
-            fillDict.Start();
-        }
-
-        private void BtnReturn_Click(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(MainMenu));
+            buttons.Add(BtnJoin);
+            buttons.Add(BtnReturn);
+            titles.Add(LblRooms);
+            titles.Add(LblUsers);
+            GetRooms();
+
+            FitSize(sender, null);
         }
 
         private void FitSize(object sender, SizeChangedEventArgs e)
@@ -80,28 +71,46 @@ namespace risk_project
             {
                 data.FontSize = (ActualHeight + ActualWidth) / 62.5;
             }
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            buttons.Add(BtnJoin);
-            buttons.Add(BtnReturn);
-
-            TextBlock t;
-            foreach (string name in roomIDs.Keys)
+            foreach (TextBlock title in titles)
             {
-                t = new TextBlock();
-                t.Text = name;
-                t.HorizontalAlignment = HorizontalAlignment.Center;
-                t.VerticalAlignment = VerticalAlignment.Center;
-                t.FontFamily = new FontFamily("Papyrus");
-                t.Foreground = new SolidColorBrush(Colors.DarkRed);
-                t.PointerPressed += RoomSelected;
-                rooms.Add(t);
-                StkRoomNames.Children.Add(t);
+                title.FontSize = (ActualHeight + ActualWidth) / 62.5;
             }
 
-            FitSize(sender, null);
+            BtnRefresh.Height = BtnRefresh.Width = (ActualHeight + ActualWidth) / 40;
+        }
+
+        private async void GetRooms()
+        {
+            Comms.SendData(Comms.GET_ROOMS);
+            ReceivedMessage msg = new ReceivedMessage();
+
+            if (msg.GetCode() == Comms.GET_ROOMS_RES)
+            {
+                List<string> args = msg.GetArgs();
+
+                for (int i = 0; i < args.Count; i += 2)
+                {
+                    roomIDs.Add(args[i + 1], int.Parse(args[i]));
+                }
+            }
+
+
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                TextBlock t;
+                foreach (string name in roomIDs.Keys)
+                {
+                    t = new TextBlock();
+                    t.Text = name;
+                    t.HorizontalAlignment = HorizontalAlignment.Center;
+                    t.VerticalAlignment = VerticalAlignment.Center;
+                    t.FontFamily = new FontFamily("Papyrus");
+                    t.Foreground = new SolidColorBrush(Colors.DarkRed);
+                    t.PointerPressed += RoomSelected;
+                    rooms.Add(t);
+                    StkRoomNames.Children.Add(t);
+                }
+            });
         }
 
         private void RoomSelected(object sender, RoutedEventArgs e)
@@ -139,9 +148,14 @@ namespace risk_project
             FitSize(null, null);
         }
 
+        private void BtnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainMenu));
+        }
+
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
         {
-            string id = Comms.GetPaddedNumber(roomIDs[currName],4);
+            string id = Comms.GetPaddedNumber(roomIDs[currName], 4);
             Comms.SendData(Comms.JOIN_ROOM + id);
             var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             Task response = new Task(async () =>
@@ -166,6 +180,11 @@ namespace risk_project
                 }
             });
             response.Start();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            GetRooms();
         }
     }
 }

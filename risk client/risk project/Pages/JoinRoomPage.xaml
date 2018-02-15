@@ -26,6 +26,9 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Name="LblTitle" Text="Join Room" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" FontSize="72" Foreground="DarkRed" FontWeight="Bold"/>
+        <TextBlock Name="LblRooms" Text="Rooms" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Papyrus" FontSize="48" Foreground="DarkRed" FontWeight="Bold"/>
+        <TextBlock Name="LblUsers" Text="Users" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Papyrus" FontSize="48" Foreground="DarkRed" FontWeight="Bold"/>
+
 
         <ScrollViewer Grid.Row="1" Grid.Column="1">
             <StackPanel Name="StkRoomNames" Orientation="Vertical" Background="WhiteSmoke" Opacity="0.85"/>
@@ -36,5 +39,10 @@
 
         <Button Name="BtnReturn" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Go Back" FontFamily="Papyrus" FontSize="48" Background="DarkBlue" Foreground="White" Click="BtnReturn_Click"/>
         <Button Name="BtnJoin" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Content="Join!" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White" Click="BtnJoin_Click"/>
+        <Button Name="BtnRefresh" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="75" Click="BtnRefresh_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Icons/refresh.png"></ImageBrush>
+            </Button.Background>
+        </Button>
     </Grid>
 </Page>

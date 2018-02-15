@@ -250,6 +250,10 @@ namespace risk_project
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleMoveForcesRes(msg));
                         break;
 
+                    case Comms.START_BATTLE_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleStartBattleRes(msg));
+                        break;
+
                     case Comms.ROLL_DICE_RES:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRollDiceRes(msg));
                         break;
@@ -376,8 +380,13 @@ namespace risk_project
             txb.VerticalAlignment = VerticalAlignment.Center;
             txb.FontFamily = new FontFamily("Papyrus");
             txb.Foreground = new SolidColorBrush(colors[user]);
+            txb.TextWrapping = TextWrapping.WrapWholeWords;
+
             messageLabels.Add(txb);
             StkMessages.Children.Add(txb);
+            Scroller.UpdateLayout();
+            Scroller.ChangeView(Scroller.ScrollableHeight, null, null);
+
             FitSize(null, null);
         }
 

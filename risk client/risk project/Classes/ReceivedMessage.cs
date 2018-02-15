@@ -169,6 +169,8 @@ namespace risk_project
 
                 case Comms.START_BATTLE_RES:
                     ans.Add(Comms.RecvData(1, flags));
+                    ans.Add(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(2, flags));
                     break;
 
                 case Comms.ROLL_DICE_RES:
