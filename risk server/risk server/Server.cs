@@ -399,7 +399,8 @@ namespace risk_server
             if (msg.GetUser() != null)
             {
                 Game gm = msg.GetUser().GetGame();
-                gm.RemovePlayer(msg.GetUser());
+                if (gm != null)
+                    gm.RemovePlayer(msg.GetUser());
             }
         }
 

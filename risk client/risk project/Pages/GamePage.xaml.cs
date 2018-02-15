@@ -376,8 +376,13 @@ namespace risk_project
             txb.VerticalAlignment = VerticalAlignment.Center;
             txb.FontFamily = new FontFamily("Papyrus");
             txb.Foreground = new SolidColorBrush(colors[user]);
+            txb.TextWrapping = TextWrapping.WrapWholeWords;
+
             messageLabels.Add(txb);
             StkMessages.Children.Add(txb);
+            Scroller.UpdateLayout();
+            Scroller.ChangeView(Scroller.ScrollableHeight, null, null);
+
             FitSize(null, null);
         }
 

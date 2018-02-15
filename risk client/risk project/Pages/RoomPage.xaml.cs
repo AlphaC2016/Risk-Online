@@ -34,7 +34,7 @@ namespace risk_project
         string id;
         bool done;
 
-        Task getUpdates;
+        Task handler;
         CoreDispatcher dispatcher;
         public RoomPage()
         {
@@ -44,14 +44,7 @@ namespace risk_project
             buttons = new List<Button>();
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            getUpdates = new Task(() =>
-            {
-                try
-                {
-                    HandleUpdate();
-                }
-                catch (Exception) { }
-            });
+            handler = new Task(() => ServerHandler());
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -75,7 +68,7 @@ namespace risk_project
                 BtnPlay.Visibility = Visibility.Collapsed;
             }
             FitSize(sender, null);
-            getUpdates.Start();
+            handler.Start();
         }
 
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
@@ -106,61 +99,69 @@ namespace risk_project
             }
         }
 
-        private async void HandleUpdate()
+        private async void ServerHandler()
         {
+            ReceivedMessage msg;
+            string code;
             while (!done)
             {
-                ReceivedMessage msg = new ReceivedMessage(1);
-                string code = msg.GetCode();
-                if (code == Comms.GET_USERS_RES)
+                msg = new ReceivedMessage(1);
+                code = msg.GetCode();
+
+                switch (code)
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        UsersGrid.Children.Clear();
-                        users.Clear();
-                        TextBlock name;
-                        for (int i = 0; i < msg.GetArgs().Count; i++)
-                        {
-                            name = new TextBlock();
-                            name.Text = msg[i];
-                            name.FontFamily = new FontFamily("Papyrus");
-                            name.FontSize = 48;
-                            name.Foreground = new SolidColorBrush(Colors.DarkRed);
-                            name.HorizontalAlignment = HorizontalAlignment.Center;
-                            name.VerticalAlignment = VerticalAlignment.Center;
-                            Grid.SetRow(name, i);
-                            UsersGrid.Children.Add(name);
-                            users.Add(name);
-                        }
-                    });
-                }
-                else if (code == Comms.CLOSE_ROOM_RES)
-                {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                    {
-                        done = true;
-                        MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
-                        await dialog.ShowAsync();
-                        Frame.Navigate(typeof(MainMenu));
-                    });
-                }
-                else if (code == Comms.START_GAME_RES)
-                {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        //MessageDialog dialog = new MessageDialog("The game will begin shortly!");
-                        //dialog.ShowAsync();
-                        //Task.Delay(3000);
-                        Frame.Navigate(typeof(GamePage));
-                        done = true;
-                    });
-                }
-                else
-                {
-                    throw new Exception();
+                    case Comms.GET_USERS_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleUsersUpdate(msg));
+                        break;
+
+                    case Comms.CLOSE_ROOM_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRoomClosed(msg));
+                        break;
+
+                    case Comms.START_GAME_RES:
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleGameStart(msg));
+                        break;
+
+                    default:
+                        throw new Exception();
                 }
             }
-            
+        }
+
+        private void HandleUsersUpdate(ReceivedMessage msg)
+        {
+            UsersGrid.Children.Clear();
+            users.Clear();
+            TextBlock name;
+            for (int i = 0; i < msg.GetArgs().Count; i++)
+            {
+                name = new TextBlock();
+                name.Text = msg[i];
+                name.FontFamily = new FontFamily("Papyrus");
+                name.FontSize = 48;
+                name.Foreground = new SolidColorBrush(Colors.DarkRed);
+                name.HorizontalAlignment = HorizontalAlignment.Center;
+                name.VerticalAlignment = VerticalAlignment.Center;
+                Grid.SetRow(name, i);
+                UsersGrid.Children.Add(name);
+                users.Add(name);
+            }
+        }
+
+        private async void HandleRoomClosed(ReceivedMessage msg)
+        {
+            done = true;
+            MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
+            await dialog.ShowAsync();
+            Frame.Navigate(typeof(MainMenu));
+        }
+
+        private async void HandleGameStart(ReceivedMessage msg)
+        {
+            done = true;
+            MessageDialog dialog = new MessageDialog("The game will begin now!");
+            await dialog.ShowAsync();
+            Frame.Navigate(typeof(GamePage));
         }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
