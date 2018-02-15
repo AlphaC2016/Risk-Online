@@ -82,6 +82,8 @@ namespace risk_project
             colorRects = new List<Rectangle>();
             messageLabels = new List<TextBlock>();
             nameLabels = new List<TextBlock>();
+            dice = new List<Image>();
+            battleLabels = new List<TextBlock>();
 
             dispatcher = Window.Current.Dispatcher;
             done = false;
