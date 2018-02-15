@@ -36,10 +36,10 @@
 
         <!-- Text boxes and input -->
         <TextBox Name="TxbLoginUsername" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="0"></TextBox>
-        <TextBox Name="TxbLoginPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="1"></TextBox>
+        <PasswordBox Name="PwbLoginPass" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="1"></PasswordBox>
         <TextBox Name="TxbSignUpUsername" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="3"></TextBox>
-        <TextBox Name="TxbSignUpPass" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="4"></TextBox>
-        <TextBox Name="TxbSignUpRepass" Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="5"></TextBox>
+        <PasswordBox Name="PwbSignUpPass" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="4"></PasswordBox>
+        <PasswordBox Name="PwbSignUpRepass" Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Foreground="DarkRed" TabIndex="5"></PasswordBox>
 
         <!-- Buttons -->
         <Button Name="BtnLogin" Content="Log in!" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Papyrus" FontSize="48" Width="300" Background="DarkRed" Foreground="White" Click="BtnLogin_Click" TabIndex="2"/>

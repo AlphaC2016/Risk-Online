@@ -509,6 +509,8 @@ namespace risk_project
 
             LblCount1.Text = msg[5];
             LblCount2.Text = msg[6];
+
+            LblState.Text = "Roll your dice!";
         }
 
         private void HandleEndBattle(ReceivedMessage msg)
@@ -591,6 +593,8 @@ namespace risk_project
             battleLabels.Add(LblAttacker);
             battleLabels.Add(LblDefender);
 
+            LblState.Text = "Roll your dice!";
+
             LblAttacker.Text = src.Name;
             LblAttacker.Foreground = new SolidColorBrush(colors[src.GetOwner()]);
             LblUser1.Text = src.GetOwner();
@@ -605,6 +609,14 @@ namespace risk_project
             LblCount2.Text = dst.GetAmount().ToString();
             LblCount2.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
 
+        }
+
+        private void BtnRoll_Click(object sender, RoutedEventArgs e)
+        {
+            //START ROLLING YOUR DICE
+            string message = Comms.ROLL_DICE;
+            Comms.SendData(message);
+            LblState.Text = "Waiting for your opponent..";
         }
 
         //---------------------------------------- PRACTICAL BUTTON FUNCTIONS -------------------------------------
@@ -686,7 +698,7 @@ namespace risk_project
                         src = curr;
                         LblSecondary.Text = "Pick the attack's destination!";
                     }
-                    else if (curr.GetOwner() != Helper.Username && dst == null)
+                    else if (curr.GetOwner() != Helper.Username && dst == null && src != null)
                     {
                         dst = curr;
                         LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
@@ -818,6 +830,11 @@ namespace risk_project
             Frame.Navigate(typeof(MainMenu));
         }
 
+        private void BtnRetreat_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Comms.SendData(Comms.BATTLE_RETREAT);
+        }
+
 
         //------------------------------------------- COSMETIC FUNCTIONS ------------------------------------------
 
@@ -908,17 +925,8 @@ namespace risk_project
             l = null;
         }
 
-        private void BtnRoll_Click(object sender, RoutedEventArgs e)
-        {
-            //START ROLLING YOUR DICE
-            string message = Comms.ROLL_DICE;
-            Comms.SendData(message);
-            LblState.Text = "Waiting for your opponent..";
-        }
+        
 
-        private void BtnRetreat_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            Comms.SendData(Comms.BATTLE_RETREAT);
-        }
+        
     }
 }

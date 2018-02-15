@@ -304,7 +304,7 @@ namespace risk_server.Game_classes
                 string message = Helper.ROLL_DICE_RES;
 
                 int atkCount = Math.Min(3, src.Amount - 1);
-                int defCount = Math.Min(2, src.Amount);
+                int defCount = Math.Min(2, dst.Amount);
 
                 int[] atk = new int[3];
                 int[] def = new int[2];
@@ -353,6 +353,8 @@ namespace risk_server.Game_classes
 
                 src.GetUser().Send(message);
                 dst.GetUser().Send(message);
+
+                dstRolled = srcRolled = false;
             }
         }
 

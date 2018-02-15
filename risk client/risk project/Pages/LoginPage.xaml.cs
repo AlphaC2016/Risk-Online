@@ -27,7 +27,10 @@ namespace risk_project
         List<TextBlock> titles = new List<TextBlock>();
         List<TextBlock> labels = new List<TextBlock>();
         List<TextBox> boxes = new List<TextBox>();
+        List<PasswordBox> pws = new List<PasswordBox>();
         List<Button> buttons = new List<Button>();
+
+        
         public LoginPage()
         {
             this.InitializeComponent();
@@ -41,11 +44,12 @@ namespace risk_project
             labels.Add(LblSignUpUsername);
             labels.Add(LblSignUpRepass);
 
-            boxes.Add(TxbLoginPass);
             boxes.Add(TxbLoginUsername);
-            boxes.Add(TxbSignUpPass);
-            boxes.Add(TxbSignUpRepass);
             boxes.Add(TxbSignUpUsername);
+
+            pws.Add(PwbLoginPass);
+            pws.Add(PwbSignUpPass);
+            pws.Add(PwbSignUpRepass);
 
             buttons.Add(BtnLogin);
             buttons.Add(BtnSignUp);
@@ -90,7 +94,7 @@ namespace risk_project
             string message = Comms.SIGN_IN.ToString();
             string username = TxbLoginUsername.Text;
             Helper.Username = username;
-            string password = TxbLoginPass.Text;
+            string password = PwbLoginPass.Password;
 
             message += Comms.GetPaddedNumber(username.Length, 2) + username;
             message += Comms.GetPaddedNumber(password.Length, 2) + password;
@@ -106,7 +110,7 @@ namespace risk_project
 
                 if (msg.GetCode() == Comms.SIGN_IN_RES)
                 {
-                   await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                   await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                    {
                        MessageDialog dialog;
                        switch (msg[0])
@@ -117,18 +121,18 @@ namespace risk_project
 
                            case Comms.SIGN_IN_WRONG_DETAILS:
                                dialog = new MessageDialog("Incorrect username or password.");
-                               dialog.ShowAsync();
+                               await dialog.ShowAsync();
 
                                TxbLoginUsername.Text = "";
-                               TxbLoginPass.Text = "";
+                               PwbLoginPass.Password = "";
                                break;
 
                            default:
                                dialog = new MessageDialog("The specified user is already connected - please try again.");
-                               dialog.ShowAsync();
+                               await dialog.ShowAsync();
 
                                TxbLoginUsername.Text = "";
-                               TxbLoginPass.Text = "";
+                               PwbLoginPass.Password = "";
                                break;
                        }
                    });
@@ -138,21 +142,21 @@ namespace risk_project
             getAnswer.Start();
         }
 
-        private void BtnSignUp_Click(object sender, RoutedEventArgs e)
+        private async void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
             MessageDialog dialog;
-            if (TxbSignUpPass.Text != TxbSignUpRepass.Text)
+            if (PwbSignUpPass.Password != PwbSignUpRepass.Password)
             {
                 dialog = new MessageDialog("Passwords do not match. try again.");
-                dialog.ShowAsync();
-                TxbSignUpPass.Text = "";
-                TxbSignUpRepass.Text = "";
+                await dialog.ShowAsync();
+                PwbSignUpPass.Password = "";
+                PwbSignUpRepass.Password = "";
             }
             else
             {
                 string message = Comms.SIGN_UP.ToString();
                 string username = TxbSignUpUsername.Text;
-                string password = TxbSignUpPass.Text;
+                string password = PwbSignUpPass.Password;
 
                 message += Comms.GetPaddedNumber(username.Length, 2) + username;
                 message += Comms.GetPaddedNumber(password.Length, 2) + password;
@@ -166,7 +170,7 @@ namespace risk_project
 
                     if (msg.GetCode() == Comms.SIGN_UP_RES)
                     {
-                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                         {
                             switch (msg[0])
                             {
@@ -176,18 +180,18 @@ namespace risk_project
 
                                 case Comms.SIGN_UP_USERNAME_ALREADY_EXISTS:
                                     dialog = new MessageDialog("This username already exists - please choose something else!");
-                                    dialog.ShowAsync();
+                                    await dialog.ShowAsync();
                                     TxbSignUpUsername.Text = "";
-                                    TxbSignUpPass.Text = "";
-                                    TxbSignUpRepass.Text = "";
+                                    PwbSignUpPass.Password = "";
+                                    PwbSignUpRepass.Password = "";
                                     break;
 
                                 case Comms.SIGN_UP_OTHER:
                                     dialog = new MessageDialog("An error occured. please try again.");
-                                    dialog.ShowAsync();
+                                    await dialog.ShowAsync();
                                     TxbSignUpUsername.Text = "";
-                                    TxbSignUpPass.Text = "";
-                                    TxbSignUpRepass.Text = "";
+                                    PwbSignUpPass.Password = "";
+                                    PwbSignUpRepass.Password = "";
                                     break;
                             }
                         });

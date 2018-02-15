@@ -119,7 +119,7 @@
                 <TextBlock Name="LblUser1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="USER 1" Canvas.ZIndex="2"/>
                 <TextBlock Name="LblUser2" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="USER 2" Canvas.ZIndex="2"/>
 
-                <TextBlock Name="LblCount1" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="??"/>
+                <TextBlock Name="LblCount1" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="??" Canvas.ZIndex="2"/>
                 <TextBlock Name="LblCount2" Grid.Row="3" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Papyrus" Foreground="White" Text="??"/>
 
                 <Button Name="BtnRoll" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" FontSize="36" FontFamily="Papyrus" Background="DarkRed" Foreground="White" Content="ROLL!" Click="BtnRoll_Click" Canvas.ZIndex="2"/>

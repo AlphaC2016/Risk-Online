@@ -84,6 +84,9 @@ namespace risk_project
             Comms.SendData(Comms.GET_ROOMS);
             ReceivedMessage msg = new ReceivedMessage();
 
+            roomIDs = new Dictionary<string, int>();
+            StkRoomNames.Children.Clear();
+
             if (msg.GetCode() == Comms.GET_ROOMS_RES)
             {
                 List<string> args = msg.GetArgs();

@@ -99,9 +99,14 @@ namespace risk_project
                 player.Pause();
         }
 
-        public static void UpdateConfig()
+        public static async void UpdateConfig()
         {
-            //string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
+            string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
+
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile dataFile = await storageFolder.GetFileAsync(@"Assets/Data/config.txt");
+            var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
+
             //File.Delete(@"Assets/Data/config.txt");
             //rawData[2] = musicPlaying.ToString();
             //rawData[3] = soundPlaying.ToString();
