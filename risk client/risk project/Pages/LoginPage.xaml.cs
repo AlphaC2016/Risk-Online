@@ -82,6 +82,12 @@ namespace risk_project
                 box.Width = ActualWidth / 6.4;
             }
 
+            foreach (PasswordBox box in pws)
+            {
+                box.FontSize = (ActualHeight + ActualWidth) / 62.5;
+                box.Width = ActualWidth / 6.4;
+            }
+
             foreach (Button button in buttons)
             {
                 button.FontSize = (ActualHeight + ActualWidth) / 62.5;

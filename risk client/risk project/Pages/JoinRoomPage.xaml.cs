@@ -113,6 +113,7 @@ namespace risk_project
                     rooms.Add(t);
                     StkRoomNames.Children.Add(t);
                 }
+                FitSize(null, null);
             });
         }
 

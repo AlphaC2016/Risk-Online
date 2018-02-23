@@ -261,7 +261,17 @@ namespace risk_project
                         break;
 
                     case Comms.END_BATTLE:
-                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { HandleEndBattle(msg); Task.Delay(4000); });
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => 
+                        {
+                            HandleEndBattle(msg);
+                            Task.Delay(4000);
+                            GrdBattle.Opacity = 0;
+                            if (currState == GameState.BattleWinner)
+                            {
+                                LblInstructions.Text = "Claim your victory!";
+                                LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
+                            }
+                        });
                         break;
                 }
             }
@@ -441,6 +451,7 @@ namespace risk_project
 
             switch (currState)
             {
+                case GameState.BattleWinner:
                 case GameState.Reinforcements:
                     LblInstructions.Text = "Would you like to attack?";
                     LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
@@ -520,11 +531,11 @@ namespace risk_project
                 case GameState.Spectator:
                     if (msg[0] == "0")
                     {
-                        LblInstructions.Text = src.GetOwner() + "DEFEATED&#x0a;" + dst.GetOwner();
+                        LblInstructions.Text = src.GetOwner() + "DEFEATED\n" + dst.GetOwner();
                     }
                     else
                     {
-                        LblInstructions.Text = dst.GetOwner() + "DEFEATED&#x0a;" + src.GetOwner();
+                        LblInstructions.Text = dst.GetOwner() + "DEFEATED\n" + src.GetOwner();
                     }
                     break;
 
@@ -537,6 +548,7 @@ namespace risk_project
                     {
                         LblState.Text = "YOU WON!";
                     }
+                    currState = GameState.Spectator;
                     break;
 
                 case GameState.BattleAttacker:
@@ -548,6 +560,7 @@ namespace risk_project
                     else
                     {
                         LblState.Text = "YOU LOST.";
+                        currState = GameState.Attacker;
                     }
                     break;
             }
@@ -704,6 +717,25 @@ namespace risk_project
                         LblSecondary.Text = "Press ✓ to confirm, X to cancel.";
                     }
                         break;
+
+                case GameState.BattleWinner:
+                    if (curr == src)
+                    {
+                        if (dst.Dec(currState))
+                        {
+                            src.Inc(state: currState);
+                            temp--;
+                        }
+                    }
+                    else if (curr == dst)
+                    {
+                        if (src.Dec(currState))
+                        {
+                            dst.Inc(state: currState);
+                            temp++;
+                        }
+                    }
+                    break;
             }
         }
 
@@ -783,6 +815,13 @@ namespace risk_project
                     message = Comms.START_BATTLE;
                     message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
                     message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
+                    Comms.SendData(message);
+                    break;
+
+                case GameState.BattleWinner:
+                    message = Comms.VICTORY_MOVE_FORCES;
+                    message += Comms.GetPaddedNumber(src.GetAmount(), 2);
+                    message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
                     Comms.SendData(message);
                     break;
             }

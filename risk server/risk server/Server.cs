@@ -175,6 +175,11 @@ namespace risk_server
                     // No Values!
                     break;
 
+                case Helper.VICTORY_MOVE_FORCES:
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    break;
+
                 case Helper.QUIT_GAME:
                     // No Values!
                     break;
@@ -437,6 +442,11 @@ namespace risk_server
         private void HandleBattleRetreat(RecievedMessage msg)
         {
             msg.GetUser().GetGame().EndBattle(false);
+        }
+
+        private void HandleVictoryMoveForces(RecievedMessage msg)
+        {
+            msg.GetUser().GetGame().HandleVictoryMoveForces(msg);
         }
 
         //------------------LEADERBOARDS HANDLER(S)--------------------------------

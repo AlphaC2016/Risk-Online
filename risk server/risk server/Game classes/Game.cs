@@ -320,7 +320,7 @@ namespace risk_server.Game_classes
 
                 for (i = 0; i < 2; i++)
                 {
-                    if (i < atkCount)
+                    if (i < defCount)
                         def[i] = r.Next(1, 7);
                     else
                         def[i] = 0;
@@ -355,14 +355,49 @@ namespace risk_server.Game_classes
                 dst.GetUser().Send(message);
 
                 dstRolled = srcRolled = false;
+
+                if (dst.Amount < 1)
+                    EndBattle(true);
+                else if (src.Amount < 2)
+                    EndBattle(false);
             }
+        }
+
+        public void HandleVictoryMoveForces(RecievedMessage msg)
+        {
+            src.Amount = int.Parse(msg[0]);
+            dst.Amount = int.Parse(msg[1]);
+
+            _territoryCount[src.GetUser()]++;
+            _territoryCount[dst.GetUser()]--;
+
+            src.SetUser(dst.GetUser());
+
+            if (_territoryCount[dst.GetUser()] == Helper.TERRITORY_AMOUNT)
+            {
+                string message = Helper.END_GAME;
+                string username = src.GetUser().GetUsername();
+                message += Helper.GetPaddedNumber(username.Length, 2);
+                message += username;
+
+                SendMessage(message);
+            }
+
+            src = dst = null;
+
+            SendUpdate();
         }
 
         public void EndBattle(bool success)
         {
+            if (!success)
+                src = dst = null;
+
+            SendUpdate();
             string message = Helper.END_BATTLE;
             message += Convert.ToInt32(!success);
             SendMessage(message);
+            
         }
 
         public void HandleEndTurn(RecievedMessage msg)
