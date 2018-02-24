@@ -390,14 +390,19 @@ namespace risk_server.Game_classes
 
         public void EndBattle(bool success)
         {
-            if (!success)
-                src = dst = null;
-
             SendUpdate();
             string message = Helper.END_BATTLE;
             message += Convert.ToInt32(!success);
             SendMessage(message);
-            
+
+            if (!success)
+                src = dst = null;
+            else
+            {
+                _territoryCount[dst.GetUser()]--;
+                _territoryCount[src.GetUser()]++;
+                dst.SetUser(src.GetUser());
+            }
         }
 
         public void HandleEndTurn(RecievedMessage msg)
