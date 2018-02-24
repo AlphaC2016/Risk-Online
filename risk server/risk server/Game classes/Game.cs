@@ -21,6 +21,7 @@ namespace risk_server.Game_classes
         {
             Random r = new Random();
             _players = new List<User>(users);
+            _territoryCount = new Dictionary<User, int>();
 
             foreach (User p in _players)
             {
@@ -79,6 +80,7 @@ namespace risk_server.Game_classes
 
             foreach (User p in _players)
             {
+                _territoryCount.Add(p, 0);
                 i = 0;
                 while (i<limit)
                 {
@@ -86,6 +88,7 @@ namespace risk_server.Game_classes
                     if (t.GetUser() == null)
                     {
                         t.SetUser(p);
+                        _territoryCount[p]++;
                         i++;
                     }
                 }
@@ -390,14 +393,19 @@ namespace risk_server.Game_classes
 
         public void EndBattle(bool success)
         {
-            if (!success)
-                src = dst = null;
-
             SendUpdate();
             string message = Helper.END_BATTLE;
             message += Convert.ToInt32(!success);
             SendMessage(message);
-            
+
+            if (!success)
+                src = dst = null;
+            else
+            {
+                _territoryCount[dst.GetUser()]--;
+                _territoryCount[src.GetUser()]++;
+                dst.SetUser(src.GetUser());
+            }
         }
 
         public void HandleEndTurn(RecievedMessage msg)

@@ -268,7 +268,7 @@ namespace risk_project
                             GrdBattle.Opacity = 0;
                             if (currState == GameState.BattleWinner)
                             {
-                                LblInstructions.Text = "Claim your victory!";
+                                LblInstructions.Text = "You Won! Claim your victory!";
                                 LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                             }
                         });
@@ -306,14 +306,62 @@ namespace risk_project
                 await Task.Delay(5000);
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
+                    LblSecondary.Foreground = new SolidColorBrush(Colors.White);
                     if (LblSecondary.Text == message)
                     {
                         LblSecondary.Text = currContent;
-                        LblSecondary.Foreground = new SolidColorBrush(Colors.White);
                     }
                 });
             });
             t.Start();
+        }
+
+        private void PresentMessage(string message, TimeSpan time)
+        {
+            string currContent = LblInstructions.Text;
+            Task t = new Task(async () =>
+            {
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    LblInstructions.Text = message;
+                    LblInstructions.Foreground = new SolidColorBrush(Colors.Goldenrod);
+                    LblInstructions.FontWeight = FontWeights.Bold;
+                });
+                await Task.Delay(time);
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    LblInstructions.Foreground = new SolidColorBrush(Colors.White);
+                    LblInstructions.FontWeight = FontWeights.Normal;
+                    if (LblInstructions.Text == message)
+                    {
+                        LblInstructions.Text = currContent;
+                    }
+                });
+            });
+            t.Start();
+        }
+
+        private void PresentMessage(string message)
+        {
+            LblInstructions.Text = message;
+        }
+
+        private void ResetPair()
+        {
+            if (currState == GameState.MoveForces)
+                src.Revert();
+            src.Background.Opacity = 0;
+
+            if (dst != null)
+            {
+                if (currState == GameState.MoveForces)
+                    dst.Revert();
+                dst.Background.Opacity = 0;
+            }
+            src = dst = null;
+
+            //Arena.Children.Remove(l);
+            //l = null;
         }
 
         //---------------------------------------- MESSAGE HANDLERS -----------------------------------------------
@@ -407,14 +455,14 @@ namespace risk_project
             if (Helper.Username == msg[0])
             {
                 currState = GameState.Reinforcements;
-                LblInstructions.Text = "IT'S YOUR TURN!\nSET YOUR FORCES";
+                LblInstructions.Text = "It's your turn!\nSet your forces.";
                 temp = territoryCount / 3;
                 LblSecondary.Text = "Units Remaining: " + temp;
             }
             else
             {
                 currState = GameState.Spectator;
-                LblInstructions.Text = "It's " + msg[0] + "'s turn";
+                LblInstructions.Text = "It's " + msg[0] + "'s turn.";
                 LblSecondary.Text = "Waiting for update...";
                 LblSecondary.Foreground = new SolidColorBrush(Colors.White);
             }
@@ -443,10 +491,13 @@ namespace risk_project
 
         private void HandleUpdate(ReceivedMessage msg)
         {
+            Territory t;
             for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
             {
-                territories.ElementAt(i).Value.SetOwner(msg[i * 2]);
-                territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i * 2 + 1]));
+                t = territories.ElementAt(i).Value;
+                t.SetOwner(msg[i * 2]);
+                t.SetAmount(int.Parse(msg[i * 2 + 1]));
+                t.SetColor(colors[msg[i * 2]]);
             }
 
             switch (currState)
@@ -531,37 +582,43 @@ namespace risk_project
                 case GameState.Spectator:
                     if (msg[0] == "0")
                     {
-                        LblInstructions.Text = src.GetOwner() + "DEFEATED\n" + dst.GetOwner();
+                        PresentMessage(src.GetOwner() + "DEFEATED\n" + dst.GetOwner(), new TimeSpan(0,0,5));
                     }
                     else
                     {
-                        LblInstructions.Text = dst.GetOwner() + "DEFEATED\n" + src.GetOwner();
+                        PresentMessage(dst.GetOwner() + "DEFEATED\n" + src.GetOwner(), new TimeSpan(0, 0, 5));
                     }
                     break;
 
                 case GameState.BattleDefender:
                     if (msg[0] == "0")
                     {
-                        LblState.Text = "YOU LOST.";
+                        PresentMessage("YOU LOST.", new TimeSpan(0, 0, 5));
                     }
                     else
                     {
-                        LblState.Text = "YOU WON!";
+                        PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
+                    GrdBattle.Visibility = Visibility.Collapsed;
                     break;
 
                 case GameState.BattleAttacker:
                     if (msg[0] == "0")
                     {
-                        LblState.Text = "YOU WON!";
+                        PresentMessage("Complete your victory!");
+                        LblInstructions.Text = "Move some uniots to the territory you defeated.";
+                        PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                         currState = GameState.BattleWinner;
                     }
                     else
                     {
-                        LblState.Text = "YOU LOST.";
-                        currState = GameState.Attacker;
+                        PresentMessage("Would you like to attack?");
+                        PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
+                        LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                        currState = GameState.StopOrAttack;
                     }
+                    GrdBattle.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -678,13 +735,13 @@ namespace risk_project
                         {
                             dst = curr;
 
-                            l = new Line();
-                            l.X1 = Canvas.GetLeft(src);
-                            l.X2 = Canvas.GetLeft(dst);
-                            l.Y1 = Canvas.GetTop(src);
-                            l.Y2 = Canvas.GetTop(dst);
-                            l.Fill = new SolidColorBrush(Colors.White);
-                            Arena.Children.Add(l);
+                            //l = new Line();
+                            //l.X1 = Canvas.GetLeft(src);
+                            //l.X2 = Canvas.GetLeft(dst);
+                            //l.Y1 = Canvas.GetTop(src);
+                            //l.Y2 = Canvas.GetTop(dst);
+                            //l.Fill = new SolidColorBrush(Colors.White);
+                            //Arena.Children.Add(l);
                         }
                         if (curr == src)
                         {
@@ -806,9 +863,12 @@ namespace risk_project
                         message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
                         message += Comms.GetPaddedNumber(temp, 2);
                         Comms.SendData(message);
-
+                        src.Confirm();
+                        dst.Confirm();
                         temp = 0;
+                        ResetPair();
                     }
+                    
                     break;
 
                 case GameState.Attacker:
@@ -823,6 +883,7 @@ namespace risk_project
                     message += Comms.GetPaddedNumber(src.GetAmount(), 2);
                     message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
                     Comms.SendData(message);
+
                     break;
             }
         }
@@ -949,23 +1010,6 @@ namespace risk_project
             }
         }
 
-        private void ResetPair()
-        {
-            src.Revert();
-            src.Background.Opacity = 0;
-
-            if (dst != null)
-            {
-                dst.Revert();
-                dst.Background.Opacity = 0;
-            }
-            src = dst = null;
-            Arena.Children.Remove(l);
-            l = null;
-        }
-
-        
-
-        
+              
     }
 }

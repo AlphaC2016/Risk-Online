@@ -665,6 +665,11 @@ namespace risk_server
                     HandleBattleRetreat(msg);
                     break;
 
+                case Helper.VICTORY_MOVE_FORCES:
+                    Console.WriteLine("router :: entering HandleVictoryMoveForces");
+                    HandleVictoryMoveForces(msg);
+                    break;
+
                 case Helper.SEND_MESSAGE:
                     Console.WriteLine("router :: entering HandleUserMessage");
                     HandleUserMessage(msg);
