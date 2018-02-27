@@ -268,7 +268,7 @@ namespace risk_project
                             GrdBattle.Opacity = 0;
                             if (currState == GameState.BattleWinner)
                             {
-                                LblInstructions.Text = "Claim your victory!";
+                                LblInstructions.Text = "You Won! Claim your victory!";
                                 LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                             }
                         });
@@ -306,14 +306,44 @@ namespace risk_project
                 await Task.Delay(5000);
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
+                    LblSecondary.Foreground = new SolidColorBrush(Colors.White);
                     if (LblSecondary.Text == message)
                     {
                         LblSecondary.Text = currContent;
-                        LblSecondary.Foreground = new SolidColorBrush(Colors.White);
                     }
                 });
             });
             t.Start();
+        }
+
+        private void PresentMessage(string message, TimeSpan time)
+        {
+            string currContent = LblInstructions.Text;
+            Task t = new Task(async () =>
+            {
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    LblInstructions.Text = message;
+                    LblInstructions.Foreground = new SolidColorBrush(Colors.Goldenrod);
+                    LblInstructions.FontWeight = FontWeights.Bold;
+                });
+                await Task.Delay(time);
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    LblInstructions.Foreground = new SolidColorBrush(Colors.White);
+                    LblInstructions.FontWeight = FontWeights.Normal;
+                    if (LblInstructions.Text == message)
+                    {
+                        LblInstructions.Text = currContent;
+                    }
+                });
+            });
+            t.Start();
+        }
+
+        private void PresentMessage(string message)
+        {
+            LblInstructions.Text = message;
         }
 
         //---------------------------------------- MESSAGE HANDLERS -----------------------------------------------
@@ -407,14 +437,14 @@ namespace risk_project
             if (Helper.Username == msg[0])
             {
                 currState = GameState.Reinforcements;
-                LblInstructions.Text = "IT'S YOUR TURN!\nSET YOUR FORCES";
+                LblInstructions.Text = "It's your turn!\nSet your forces.";
                 temp = territoryCount / 3;
                 LblSecondary.Text = "Units Remaining: " + temp;
             }
             else
             {
                 currState = GameState.Spectator;
-                LblInstructions.Text = "It's " + msg[0] + "'s turn";
+                LblInstructions.Text = "It's " + msg[0] + "'s turn.";
                 LblSecondary.Text = "Waiting for update...";
                 LblSecondary.Foreground = new SolidColorBrush(Colors.White);
             }
@@ -531,22 +561,22 @@ namespace risk_project
                 case GameState.Spectator:
                     if (msg[0] == "0")
                     {
-                        LblInstructions.Text = src.GetOwner() + "DEFEATED\n" + dst.GetOwner();
+                        PresentMessage(src.GetOwner() + "DEFEATED\n" + dst.GetOwner(), new TimeSpan(0,0,5));
                     }
                     else
                     {
-                        LblInstructions.Text = dst.GetOwner() + "DEFEATED\n" + src.GetOwner();
+                        PresentMessage(dst.GetOwner() + "DEFEATED\n" + src.GetOwner(), new TimeSpan(0, 0, 5));
                     }
                     break;
 
                 case GameState.BattleDefender:
                     if (msg[0] == "0")
                     {
-                        LblState.Text = "YOU LOST.";
+                        PresentMessage("YOU LOST.", new TimeSpan(0, 0, 5));
                     }
                     else
                     {
-                        LblState.Text = "YOU WON!";
+                        PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
                     break;
@@ -554,13 +584,17 @@ namespace risk_project
                 case GameState.BattleAttacker:
                     if (msg[0] == "0")
                     {
-                        LblState.Text = "YOU WON!";
+                        PresentMessage("Complete your victory!");
+                        LblInstructions.Text = "Move some uniots to the territory you defeated.";
+                        PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                         currState = GameState.BattleWinner;
                     }
                     else
                     {
-                        LblState.Text = "YOU LOST.";
-                        currState = GameState.Attacker;
+                        PresentMessage("Would you like to attack?");
+                        PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
+                        LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                        currState = GameState.StopOrAttack;
                     }
                     break;
             }
@@ -962,10 +996,6 @@ namespace risk_project
             src = dst = null;
             Arena.Children.Remove(l);
             l = null;
-        }
-
-        
-
-        
+        }      
     }
 }
