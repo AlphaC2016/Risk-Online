@@ -21,6 +21,7 @@ namespace risk_server.Game_classes
         {
             Random r = new Random();
             _players = new List<User>(users);
+            _territoryCount = new Dictionary<User, int>();
 
             foreach (User p in _players)
             {
@@ -79,6 +80,7 @@ namespace risk_server.Game_classes
 
             foreach (User p in _players)
             {
+                _territoryCount.Add(p, 0);
                 i = 0;
                 while (i<limit)
                 {
@@ -86,6 +88,7 @@ namespace risk_server.Game_classes
                     if (t.GetUser() == null)
                     {
                         t.SetUser(p);
+                        _territoryCount[p]++;
                         i++;
                     }
                 }

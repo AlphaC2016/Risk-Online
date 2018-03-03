@@ -104,8 +104,8 @@ namespace risk_project
             string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
 
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            StorageFile dataFile = await storageFolder.GetFileAsync(@"Assets/Data/config.txt");
-            var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
+            //StorageFile dataFile = await storageFolder.GetFileAsync(@"Assets/Data/config.txt");
+            //var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
 
             //File.Delete(@"Assets/Data/config.txt");
             //rawData[2] = musicPlaying.ToString();

@@ -346,6 +346,24 @@ namespace risk_project
             LblInstructions.Text = message;
         }
 
+        private void ResetPair()
+        {
+            if (currState == GameState.MoveForces)
+                src.Revert();
+            src.Background.Opacity = 0;
+
+            if (dst != null)
+            {
+                if (currState == GameState.MoveForces)
+                    dst.Revert();
+                dst.Background.Opacity = 0;
+            }
+            src = dst = null;
+
+            //Arena.Children.Remove(l);
+            //l = null;
+        }
+
         //---------------------------------------- MESSAGE HANDLERS -----------------------------------------------
 
 
@@ -473,10 +491,13 @@ namespace risk_project
 
         private void HandleUpdate(ReceivedMessage msg)
         {
+            Territory t;
             for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
             {
-                territories.ElementAt(i).Value.SetOwner(msg[i * 2]);
-                territories.ElementAt(i).Value.SetAmount(int.Parse(msg[i * 2 + 1]));
+                t = territories.ElementAt(i).Value;
+                t.SetOwner(msg[i * 2]);
+                t.SetAmount(int.Parse(msg[i * 2 + 1]));
+                t.SetColor(colors[msg[i * 2]]);
             }
 
             switch (currState)
@@ -579,6 +600,7 @@ namespace risk_project
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
+                    GrdBattle.Visibility = Visibility.Collapsed;
                     break;
 
                 case GameState.BattleAttacker:
@@ -596,6 +618,7 @@ namespace risk_project
                         LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
                         currState = GameState.StopOrAttack;
                     }
+                    GrdBattle.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -712,13 +735,13 @@ namespace risk_project
                         {
                             dst = curr;
 
-                            l = new Line();
-                            l.X1 = Canvas.GetLeft(src);
-                            l.X2 = Canvas.GetLeft(dst);
-                            l.Y1 = Canvas.GetTop(src);
-                            l.Y2 = Canvas.GetTop(dst);
-                            l.Fill = new SolidColorBrush(Colors.White);
-                            Arena.Children.Add(l);
+                            //l = new Line();
+                            //l.X1 = Canvas.GetLeft(src);
+                            //l.X2 = Canvas.GetLeft(dst);
+                            //l.Y1 = Canvas.GetTop(src);
+                            //l.Y2 = Canvas.GetTop(dst);
+                            //l.Fill = new SolidColorBrush(Colors.White);
+                            //Arena.Children.Add(l);
                         }
                         if (curr == src)
                         {
@@ -840,9 +863,12 @@ namespace risk_project
                         message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
                         message += Comms.GetPaddedNumber(temp, 2);
                         Comms.SendData(message);
-
+                        src.Confirm();
+                        dst.Confirm();
                         temp = 0;
+                        ResetPair();
                     }
+                    
                     break;
 
                 case GameState.Attacker:
@@ -857,6 +883,7 @@ namespace risk_project
                     message += Comms.GetPaddedNumber(src.GetAmount(), 2);
                     message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
                     Comms.SendData(message);
+
                     break;
             }
         }
@@ -983,19 +1010,6 @@ namespace risk_project
             }
         }
 
-        private void ResetPair()
-        {
-            src.Revert();
-            src.Background.Opacity = 0;
-
-            if (dst != null)
-            {
-                dst.Revert();
-                dst.Background.Opacity = 0;
-            }
-            src = dst = null;
-            Arena.Children.Remove(l);
-            l = null;
-        }      
+              
     }
 }
