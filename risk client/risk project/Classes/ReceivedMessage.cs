@@ -110,6 +110,10 @@ namespace risk_project
                     // No Values!
                     break;
 
+                case Comms.LEAVE_ROOM_RES:
+                    ans.Add(Comms.RecvData(1, flags));
+                    break;
+
                 case Comms.INIT_MAP:
                     string temp;
                     amount = int.Parse(Comms.RecvData(1, flags));

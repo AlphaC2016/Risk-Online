@@ -94,7 +94,7 @@ namespace risk_server
 
         public const int TERRITORY_AMOUNT = 42;
 
-        public const string DB_PATH = "MyDatabase.db";
+        public const string DB_PATH = "../../MyDatabase.db";
 
         public static void SendData(string message, TcpClient client)
         {

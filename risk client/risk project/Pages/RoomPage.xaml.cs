@@ -118,6 +118,9 @@ namespace risk_project
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRoomClosed(msg));
                         break;
 
+                    case Comms.LEAVE_ROOM_RES:
+
+
                     case Comms.START_GAME_RES:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleGameStart(msg));
                         break;
@@ -152,6 +155,14 @@ namespace risk_project
         {
             done = true;
             MessageDialog dialog = new MessageDialog("This room has been closed by the admin.");
+            await dialog.ShowAsync();
+            Frame.Navigate(typeof(MainMenu));
+        }
+
+        private async void HandleLeaveRoom(ReceivedMessage msg)
+        {
+            done = true;
+            MessageDialog dialog = new MessageDialog("You have left the room.");
             await dialog.ShowAsync();
             Frame.Navigate(typeof(MainMenu));
         }
