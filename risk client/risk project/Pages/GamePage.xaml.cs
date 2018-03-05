@@ -503,6 +503,12 @@ namespace risk_project
             switch (currState)
             {
                 case GameState.BattleWinner:
+                    LblInstructions.Text = "Would you like to attack?";
+                    LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                    currState = GameState.StopOrAttack;
+                    ResetPair();
+                    break;
+
                 case GameState.Reinforcements:
                     LblInstructions.Text = "Would you like to attack?";
                     LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
@@ -601,6 +607,7 @@ namespace risk_project
                     }
                     currState = GameState.Spectator;
                     GrdBattle.Visibility = Visibility.Collapsed;
+                    ResetPair();
                     break;
 
                 case GameState.BattleAttacker:
@@ -617,6 +624,7 @@ namespace risk_project
                         PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
                         LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
                         currState = GameState.StopOrAttack;
+                        ResetPair();
                     }
                     GrdBattle.Visibility = Visibility.Collapsed;
                     break;
