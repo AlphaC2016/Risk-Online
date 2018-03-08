@@ -246,8 +246,8 @@ namespace risk_server.Game_classes
             if (AreConnected(t1, t2))
             {
                 int temp = int.Parse(msg[2]);
-                t1.Amount += temp;
-                t2.Amount -= temp;
+                t1.Amount -= temp;
+                t2.Amount += temp;
                 message += "0";
             }
             else

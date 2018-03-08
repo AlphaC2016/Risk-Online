@@ -119,7 +119,8 @@ namespace risk_project
                         break;
 
                     case Comms.LEAVE_ROOM_RES:
-
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleLeaveRoom(msg));
+                        break;
 
                     case Comms.START_GAME_RES:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleGameStart(msg));

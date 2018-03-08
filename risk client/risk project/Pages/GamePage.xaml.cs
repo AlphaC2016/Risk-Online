@@ -264,13 +264,6 @@ namespace risk_project
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => 
                         {
                             HandleEndBattle(msg);
-                            Task.Delay(4000);
-                            GrdBattle.Opacity = 0;
-                            if (currState == GameState.BattleWinner)
-                            {
-                                LblInstructions.Text = "You Won! Claim your victory!";
-                                LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
-                            }
                         });
                         break;
                 }
@@ -472,9 +465,12 @@ namespace risk_project
         {
             if (msg[0] == "1")
             {
-                PresentError("The territories must be connected.");
-                src.Revert();
-                dst.Revert();
+                PresentError("The territories must be connected!");
+            }
+            else
+            {
+                src.Confirm();
+                dst.Confirm();
             }
             ResetPair();
         }
@@ -613,7 +609,7 @@ namespace risk_project
                 case GameState.BattleAttacker:
                     if (msg[0] == "0")
                     {
-                        PresentMessage("Complete your victory!");
+                        PresentMessage("You Won! Claim your victory!");
                         LblInstructions.Text = "Move some uniots to the territory you defeated.";
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                         currState = GameState.BattleWinner;
@@ -622,7 +618,7 @@ namespace risk_project
                     {
                         PresentMessage("Would you like to attack?");
                         PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
-                        LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                        LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                         currState = GameState.StopOrAttack;
                         ResetPair();
                     }
@@ -660,16 +656,23 @@ namespace risk_project
 
         private void InitBattleGrid()
         {
-            dice.Add(ImgAtk1);
-            dice.Add(ImgAtk2);
-            dice.Add(ImgAtk3);
-            dice.Add(ImgDef1);
-            dice.Add(ImgDef2);
-
-            battleLabels.Add(LblUser1);
-            battleLabels.Add(LblUser2);
-            battleLabels.Add(LblAttacker);
-            battleLabels.Add(LblDefender);
+            if (dice.Count == 0)
+            {
+                dice.Add(ImgAtk1);
+                dice.Add(ImgAtk2);
+                dice.Add(ImgAtk3);
+                dice.Add(ImgDef1);
+                dice.Add(ImgDef2);
+            }
+            
+            if (battleLabels.Count == 0)
+            {
+                battleLabels.Add(LblUser1);
+                battleLabels.Add(LblUser2);
+                battleLabels.Add(LblAttacker);
+                battleLabels.Add(LblDefender);
+            }
+            
 
             LblState.Text = "Roll your dice!";
 
@@ -751,7 +754,7 @@ namespace risk_project
                             //l.Fill = new SolidColorBrush(Colors.White);
                             //Arena.Children.Add(l);
                         }
-                        if (curr == src)
+                        else if (curr == src)
                         {
                             if (dst.Dec(currState))
                             {
@@ -871,10 +874,7 @@ namespace risk_project
                         message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
                         message += Comms.GetPaddedNumber(temp, 2);
                         Comms.SendData(message);
-                        src.Confirm();
-                        dst.Confirm();
                         temp = 0;
-                        ResetPair();
                     }
                     
                     break;
