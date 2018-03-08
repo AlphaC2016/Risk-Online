@@ -759,7 +759,6 @@ namespace risk_project
                             if (dst.Dec(currState))
                             {
                                 src.Inc(state: currState);
-                                temp--;
                             }
                         }
                         else if (curr == dst)
@@ -767,7 +766,6 @@ namespace risk_project
                             if (src.Dec(currState))
                             {
                                 dst.Inc(state: currState);
-                                temp++;
                             }
                         }
                     }
@@ -872,7 +870,8 @@ namespace risk_project
                         message = Comms.MOVE_FORCES;
                         message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
                         message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
-                        message += Comms.GetPaddedNumber(temp, 2);
+                        message += Comms.GetPaddedNumber(src.GetAmount(), 2);
+                        message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
                         Comms.SendData(message);
                         temp = 0;
                     }

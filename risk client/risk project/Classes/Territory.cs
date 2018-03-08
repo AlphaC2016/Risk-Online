@@ -146,7 +146,7 @@ namespace risk_project
             {
                 return false;
             }
-            else if (_amount > 0)
+            else if (_amount > 1)
             {
                 ((TextBlock)Children[1]).Text = (--_amount).ToString();
                 return true;

@@ -238,6 +238,8 @@ namespace risk_server.Game_classes
         {
             int index1 = int.Parse(msg[0]);
             int index2 = int.Parse(msg[1]);
+            int amount1 = int.Parse(msg[2]);
+            int amount2 = int.Parse(msg[3]);
             Territory t1 = _territories.ElementAt(index1).Value;
             Territory t2 = _territories.ElementAt(index2).Value;
 
@@ -245,9 +247,8 @@ namespace risk_server.Game_classes
 
             if (AreConnected(t1, t2))
             {
-                int temp = int.Parse(msg[2]);
-                t1.Amount -= temp;
-                t2.Amount += temp;
+                t1.Amount = amount1;
+                t2.Amount += amount2;
                 message += "0";
             }
             else

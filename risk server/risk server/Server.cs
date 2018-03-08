@@ -156,6 +156,7 @@ namespace risk_server
                     values.Add(Helper.GetStringPartFromSocket(client, 2));
                     values.Add(Helper.GetStringPartFromSocket(client, 2));
                     values.Add(Helper.GetStringPartFromSocket(client, 2));
+                    values.Add(Helper.GetStringPartFromSocket(client, 2));
                     break;
 
                 case Helper.END_TURN:
