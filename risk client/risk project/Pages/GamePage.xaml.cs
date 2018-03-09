@@ -318,7 +318,7 @@ namespace risk_project
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     LblInstructions.Text = message;
-                    LblInstructions.Foreground = new SolidColorBrush(Colors.Goldenrod);
+                    LblInstructions.Foreground = new SolidColorBrush(Colors.DarkRed);
                     LblInstructions.FontWeight = FontWeights.Bold;
                 });
                 await Task.Delay(time);
@@ -508,7 +508,7 @@ namespace risk_project
 
                 case GameState.Reinforcements:
                     LblInstructions.Text = "Would you like to attack?";
-                    LblSecondary.Text = "click ✓ to attack, X to start moving forces.";
+                    LblSecondary.Text = "Click ✓ to attack, X to start moving forces.";
                     currState = GameState.StopOrAttack;
                     break;
             }
@@ -590,8 +590,9 @@ namespace risk_project
             LblState.Text = "Roll your dice!";
         }
 
-        private void HandleEndBattle(ReceivedMessage msg)
+        private async void HandleEndBattle(ReceivedMessage msg)
         {
+            await Task.Delay(3000);
             switch (currState)
             {
                 case GameState.Spectator:
@@ -623,15 +624,15 @@ namespace risk_project
                     if (msg[0] == "0")
                     {
                         PresentMessage("You Won! Claim your victory!");
-                        LblInstructions.Text = "Move some uniots to the territory you defeated.";
+                        LblInstructions.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                         currState = GameState.BattleWinner;
                     }
                     else
                     {
-                        PresentMessage("Would you like to attack?");
+                        PresentMessage("Would you like to attack?");                        
+                        LblSecondary.Text = "Click ✓ to attack, X to start moving forces.";
                         PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
-                        LblSecondary.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                         currState = GameState.StopOrAttack;
                         ResetPair();
                     }
