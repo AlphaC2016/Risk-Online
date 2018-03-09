@@ -21,6 +21,7 @@ using Windows.Storage;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -544,19 +545,31 @@ namespace risk_project
                     break;
 
                 case "1":
+                    PresentMessage("Plan Your Attack!");
+                    LblSecondary.Text = "Pick the attack's source.";
                     PresentError("The attacking territory needs more than 1 soldier to attack.");
+                    ResetPair();
                     break;
 
                 case "2":
-                    PresentError("Invalid source.");
+                    PresentMessage("Plan Your Attack!");
+                    LblSecondary.Text = "Pick the attack's source.";
+                    PresentError("The attacking territory needs more than 1 soldier to attack.");
+                    ResetPair();
                     break;
 
                 case "3":
+                    PresentMessage("Plan Your Attack!");
+                    LblSecondary.Text = "Pick the attack's source.";
                     PresentError("Invalid destination.");
+                    ResetPair();
                     break;
 
                 case "4":
-                    PresentError("Source and destination must be connected.");
+                    PresentMessage("Plan Your Attack!");
+                    LblSecondary.Text = "Pick the attack's source.";
+                    PresentError("The attacking territory needs more than 1 soldier to attack.");
+                    ResetPair();
                     break;
             }
         }
@@ -627,6 +640,13 @@ namespace risk_project
             }
         }
 
+        private async void HandleEndGame(ReceivedMessage msg)
+        {
+            MessageDialog dialog = new MessageDialog("The Game is Over!\n" + msg[0] + " won.");
+            await dialog.ShowAsync();
+            Frame.Navigate(typeof(MainMenu));
+        }
+
 
         //---------------------------------------- BATTLE FUNCTIONS -----------------------------------------------
 
@@ -656,6 +676,7 @@ namespace risk_project
 
         private void InitBattleGrid()
         {
+            string baseUri = "ms-appx:///Assets/Dice/";
             if (dice.Count == 0)
             {
                 dice.Add(ImgAtk1);
@@ -665,6 +686,12 @@ namespace risk_project
                 dice.Add(ImgDef2);
             }
             
+            ImgAtk1.Source = new BitmapImage(new Uri(baseUri + "Red/0.png"));
+            ImgAtk2.Source = new BitmapImage(new Uri(baseUri + "Red/0.png"));
+            ImgAtk3.Source = new BitmapImage(new Uri(baseUri + "Red/0.png"));
+            ImgDef1.Source = new BitmapImage(new Uri(baseUri + "White/0.png"));
+            ImgDef2.Source = new BitmapImage(new Uri(baseUri + "White/0.png"));
+
             if (battleLabels.Count == 0)
             {
                 battleLabels.Add(LblUser1);
@@ -860,7 +887,7 @@ namespace risk_project
 
                 case GameState.StopOrAttack:
                     currState = GameState.Attacker;
-                    LblInstructions.Text = "Plan Your Attack!";
+                    PresentMessage("Plan Your Attack!");
                     LblSecondary.Text = "Pick the attack's source.";
                     break;
 
@@ -900,7 +927,8 @@ namespace risk_project
             string message;
             switch (currState)
             {
-                case GameState.InitialReinforcments | GameState.Reinforcements:
+                case GameState.Reinforcements:
+                case GameState.InitialReinforcments:
                     foreach (Territory t in territories.Values)
                     {
                         if (t.GetOwner() == Helper.Username)
@@ -927,6 +955,12 @@ namespace risk_project
                         message = Comms.END_TURN;
                         Comms.SendData(message);
                     }
+                    break;
+
+                case GameState.Attacker:
+                    PresentMessage("Plan Your Attack!");
+                    LblSecondary.Text = "Pick the attack's source.";
+                    ResetPair();
                     break;
             }
         }

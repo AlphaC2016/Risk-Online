@@ -41,6 +41,8 @@ namespace risk_project
             lbl.Foreground = new SolidColorBrush(Colors.Black);
             lbl.Text = name;
             Children.Add(lbl);
+            Name = name;
+
 
             lbl = new TextBlock();
             lbl.FontFamily = new FontFamily("Papyrus");

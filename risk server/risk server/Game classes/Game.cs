@@ -134,6 +134,10 @@ namespace risk_server.Game_classes
 
             if (_players.Count > 0)
             {
+                _territoryCount.Clear();
+                foreach (Territory t in _territories.Values)
+                    t.SetUser(null);
+
                 SetUsersOnMap();
                 SendInitMessage();
             }
@@ -248,7 +252,7 @@ namespace risk_server.Game_classes
             if (AreConnected(t1, t2))
             {
                 t1.Amount = amount1;
-                t2.Amount += amount2;
+                t2.Amount = amount2;
                 message += "0";
             }
             else
@@ -291,7 +295,7 @@ namespace risk_server.Game_classes
                 EndBattle(true);
         }
 
-        public void HandleRollDice(RecievedMessage msg)
+        public User HandleRollDice(RecievedMessage msg)
         {
             if (msg.GetUser() == src.GetUser())
             {
@@ -361,10 +365,11 @@ namespace risk_server.Game_classes
                 dstRolled = srcRolled = false;
 
                 if (dst.Amount < 1)
-                    EndBattle(true);
+                    return EndBattle(true);
                 else if (src.Amount < 2)
-                    EndBattle(false);
+                    return EndBattle(false);
             }
+            return null;
         }
 
         public void HandleVictoryMoveForces(RecievedMessage msg)
@@ -392,7 +397,7 @@ namespace risk_server.Game_classes
             SendUpdate();
         }
 
-        public void EndBattle(bool success)
+        public User EndBattle(bool success)
         {
             SendUpdate();
             string message = Helper.END_BATTLE;
@@ -406,12 +411,26 @@ namespace risk_server.Game_classes
                 _territoryCount[dst.GetUser()]--;
                 _territoryCount[src.GetUser()]++;
                 dst.SetUser(src.GetUser());
+
+                if (_territoryCount[src.GetUser()] == Helper.TERRITORY_AMOUNT)
+                {
+                    string name = src.GetUser().GetUsername();
+                    message = Helper.END_GAME;
+                    message += Helper.GetPaddedNumber(name.Length, 2);
+                    message += name;
+                    SendMessage(message);
+                    return src.GetUser();
+                }
             }
+            return null;
         }
 
         public void HandleEndTurn(RecievedMessage msg)
         {
-            currAttackerIndex = (currAttackerIndex + 1) % _players.Count;
+            do
+            {
+                currAttackerIndex = (currAttackerIndex + 1) % _players.Count;
+            } while (_territoryCount[_players[currAttackerIndex]] == 0);
             StartTurn();
         }
 

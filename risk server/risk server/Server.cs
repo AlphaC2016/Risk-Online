@@ -437,7 +437,15 @@ namespace risk_server
 
         private void HandleRollDice(RecievedMessage msg)
         {
-            msg.GetUser().GetGame().HandleRollDice(msg);
+            Game gm = msg.GetUser().GetGame();
+            User u = gm.HandleRollDice(msg);
+
+            if (u != null)
+            {
+                _db.AddVictory(u.GetUsername());
+                
+            }
+
         }
 
         private void HandleBattleRetreat(RecievedMessage msg)
