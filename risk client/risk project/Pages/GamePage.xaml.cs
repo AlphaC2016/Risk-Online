@@ -373,6 +373,7 @@ namespace risk_project
             TextBlock txb;
             Rectangle rect;
             Color color;
+            int j = 0;
             for (i = 1; i <= count; i++)
             {
                 txb = new TextBlock();
@@ -391,11 +392,13 @@ namespace risk_project
                 rect = new Rectangle();
                 if (msg[i] == Helper.Username)
                 {
-                    color = Helper.GetPlayerColor();
+                    color = Helper.UserColor;
                 }
                 else
                 {
-                    color = Helper.GetRandomColor();
+                    if (Helper.ColorChoices[j] == Helper.UserColor)
+                        j++;
+                    color = Helper.ColorChoices[j];
                 }
                 rect.Fill = new SolidColorBrush(color);
                 Grid.SetColumn(rect, 0);
@@ -403,6 +406,7 @@ namespace risk_project
                 GrdUsers.Children.Add(rect);
                 colorRects.Add(rect);
                 colors.Add(msg[i], color);
+                j++;
             }
 
             foreach (Territory t in territories.Values)
@@ -610,6 +614,7 @@ namespace risk_project
                     if (msg[0] == "0")
                     {
                         PresentMessage("YOU LOST.", new TimeSpan(0, 0, 5));
+                        territoryCount--;
                     }
                     else
                     {
@@ -627,6 +632,7 @@ namespace risk_project
                         LblInstructions.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                         currState = GameState.BattleWinner;
+                        territoryCount++;
                     }
                     else
                     {

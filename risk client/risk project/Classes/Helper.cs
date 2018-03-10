@@ -12,6 +12,7 @@ using Windows.UI;
 using Windows.Media.Playback;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
 
 namespace risk_project
 {
@@ -22,16 +23,26 @@ namespace risk_project
         public static bool soundPlaying;
         public static bool fullScreen;
 
-        public static double red;
-        public static double green;
-        public static double blue;
+        public static Color UserColor { get; set; }
 
         public static string Username { get; set; }
 
         static ApplicationView view = ApplicationView.GetForCurrentView();
 
         public static int TERRITORY_AMOUNT = 42;
-        
+
+        public static Color[] ColorChoices { get; } = 
+           { Colors.Navy,
+            Colors.Blue,
+            Colors.Cyan,
+            Colors.LightBlue,
+            Colors.Black,
+            Colors.Maroon,
+            Colors.DarkMagenta,
+            Colors.MediumVioletRed
+        };
+
+
 
         //public static object RecordPlayer { get; private set; }
 
@@ -64,28 +75,31 @@ namespace risk_project
         public static async void InitMusic()
         {
             player = new MediaElement();
+            player.Loaded += Player_Loaded;
             StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             Folder = await Folder.GetFolderAsync(@"Assets\\Data");
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
             player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
-            player.AutoPlay = false;
         }
 
-        
+        private static void Player_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (musicPlaying)
+                player.Pause();
+        }
+
         /// <summary>
         /// This function Initializes the static class - settings and music included.
         /// </summary>
-        public async static void Init()
+        public static void Init()
         {
+
             string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
             musicPlaying = bool.Parse(rawData[2]);
             soundPlaying = bool.Parse(rawData[3]);
             fullScreen = bool.Parse(rawData[4]);
 
-            string[] colors = rawData[5].Split(',');
-            red = double.Parse(colors[0]);
-            green = double.Parse(colors[1]);
-            blue = double.Parse(colors[2]);
+            UserColor = ColorChoices[int.Parse(rawData[5])];
 
             if (fullScreen)
             {
@@ -93,37 +107,19 @@ namespace risk_project
             }
 
             InitMusic();
-
-            await Task.Delay(250);
-            if (!musicPlaying)
-                player.Pause();
         }
 
         public static async void UpdateConfig()
         {
-            string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
+            //string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
+            //StorageFile dataFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appdata:///Data/config.txt"));
+            ////var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
 
-            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            //StorageFile dataFile = await storageFolder.GetFileAsync(@"Assets/Data/config.txt");
-            //var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
-
-            //File.Delete(@"Assets/Data/config.txt");
             //rawData[2] = musicPlaying.ToString();
             //rawData[3] = soundPlaying.ToString();
             //rawData[4] = fullScreen.ToString();
-            //rawData[5] = red.ToString() + ',' + green + ',' + blue;
-            //File.WriteAllLines(@"Assets/Data/config.txt", rawData);
-        }
-
-        public static Color GetRandomColor()
-        {
-            Random r = new Random();
-            return Color.FromArgb((byte)255, (byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256));
-        }
-
-        public static Color GetPlayerColor()
-        {
-            return Color.FromArgb((byte)255, (byte)red, (byte)green, (byte)blue);
+            //rawData[5] = Array.IndexOf(ColorChoices, UserColor).ToString();
+            //await FileIO.WriteLinesAsync(dataFile, rawData);
         }
 
         /// <summary>

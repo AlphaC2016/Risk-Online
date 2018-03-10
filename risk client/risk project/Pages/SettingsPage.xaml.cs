@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,25 +27,26 @@ namespace risk_project
     {
         bool init;
         List<Button> buttons;
-        List<Slider> sliders;
+        //List<Slider> sliders;
         List<TextBlock> labels;
-
+        List<Rectangle> colors;
 
         public SettingsPage()
         {
             this.InitializeComponent();
 
             buttons = new List<Button>();
-            sliders = new List<Slider>();
+            //sliders = new List<Slider>();
             labels = new List<TextBlock>();
+            colors = new List<Rectangle>();
 
             buttons.Add(BtnMusic);
             buttons.Add(BtnSound);
             buttons.Add(BtnReturn);
 
-            sliders.Add(SldRed);
-            sliders.Add(SldGreen);
-            sliders.Add(SldBlue);
+            //sliders.Add(SldRed);
+            //sliders.Add(SldGreen);
+            //sliders.Add(SldBlue);
 
             labels.Add(LblColor);
             labels.Add(LblMode);
@@ -52,12 +54,28 @@ namespace risk_project
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            init = false;
-            SldRed.Value = Helper.red;
-            SldGreen.Value = Helper.green;
-            SldBlue.Value = Helper.blue;
             init = true;
-            ChangeColor(sender, null);
+
+            Rectangle rect;
+
+            for (int i=0; i<Helper.ColorChoices.Length; i++)
+            {
+                rect = new Rectangle();
+                rect.HorizontalAlignment = HorizontalAlignment.Center;
+                rect.VerticalAlignment = VerticalAlignment.Center;
+                rect.Fill = new SolidColorBrush(Helper.ColorChoices[i]);
+                rect.Stroke = new SolidColorBrush(Colors.White);
+                rect.StrokeThickness = 0;
+                rect.PointerPressed += ChangeColor;
+
+                Grid.SetRow(rect, i / 4);
+                Grid.SetColumn(rect, i % 4);
+                ColorsGrid.Children.Add(rect);
+                colors.Add(rect);
+
+                if (Helper.ColorChoices[i] == Helper.UserColor)
+                    ChangeColor(rect, null);
+            }
 
             if (!Helper.musicPlaying)
             {
@@ -78,7 +96,7 @@ namespace risk_project
             {
                 CbxModes.SelectedIndex = 0;
             }
-            
+            FitSize(null, null);
         }
 
         private void Return(object sender, RoutedEventArgs e)
@@ -120,14 +138,16 @@ namespace risk_project
             }
         }
 
-        private void ChangeColor(object sender, RangeBaseValueChangedEventArgs e)
+        private void ChangeColor(object sender, RoutedEventArgs e)
         {
             if (init)
             {
-                Helper.red = SldRed.Value;
-                Helper.green = SldGreen.Value;
-                Helper.blue = SldBlue.Value;
-                RecColorSample.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)SldRed.Value, (byte)SldGreen.Value, (byte)SldBlue.Value));
+                foreach (Rectangle curr in colors)
+                    curr.StrokeThickness = 0;
+
+                Rectangle rect = sender as Rectangle;
+                Helper.UserColor = (rect.Fill as SolidColorBrush).Color;
+                rect.StrokeThickness = 3;
             }
         }
 
@@ -150,11 +170,6 @@ namespace risk_project
 
         private void FitSize(object sender, SizeChangedEventArgs e)
         {
-            foreach (Slider sld in sliders)
-            {
-                sld.Width = ActualWidth / 3.168;
-                sld.Height = ActualHeight / 11.02;
-            }
 
             foreach (TextBlock lbl in labels)
             {
@@ -168,13 +183,16 @@ namespace risk_project
                 btn.Height = ActualHeight / 12;
             }
 
+            foreach (Rectangle rect in colors)
+            {
+                rect.Height = rect.Width = (ActualHeight + ActualWidth) / 30;
+            }
+
             LblTitle.FontSize = (ActualHeight + ActualWidth) / 41.67;
 
             CbxModes.Width = ActualWidth / 4.8;
             CbxModes.Height = ActualHeight / 14;
             CbxModes.FontSize = (ActualHeight + ActualWidth) / 62.5;
-
-            RecColorSample.Width = RecColorSample.Height = (ActualWidth + ActualHeight) / 30;
         }
     }
 }

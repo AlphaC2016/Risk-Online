@@ -42,18 +42,18 @@
         <Button Name="BtnSound" Content="Sound: ON" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkGreen" Click="ToggleSound" Height="90" ></Button>
         <Button Name="BtnReturn" Content="Go Back" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontFamily="Papyrus" FontSize="48" Foreground="White" Background="DarkRed" Click="Return" Height="90"></Button>
 
-        <Grid Name="SliderGrid" Grid.Row="3" Grid.Column="2">
+        <Grid Name="ColorsGrid" Grid.Row="3" Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-
-            <Slider Name="SldRed" Grid.Row="0" Minimum="0" Maximum="255" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Foreground="Red" Background="White" ValueChanged="ChangeColor" SmallChange="8" StepFrequency="8"></Slider>
-            <Slider Name="SldGreen" Grid.Row="1" Minimum="0" Maximum="255" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Foreground="Green" Background="White" ValueChanged="ChangeColor" SmallChange="8" StepFrequency="8"></Slider>
-            <Slider Name="SldBlue" Grid.Row="2" Minimum="0" Maximum="255" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal" Foreground="Blue" Background="White" ValueChanged="ChangeColor" SmallChange="8" StepFrequency="8"></Slider>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
         </Grid>
 
-        <Rectangle Name="RecColorSample" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100" Fill="White"></Rectangle>
     </Grid>
 </Page>
