@@ -18,9 +18,14 @@
         </Grid.RowDefinitions>
 
 
-        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="White" Text="HELLO THERE~"></TextBlock>
+        <TextBlock Name="LblInstructions" FontSize="36"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Papyrus" Foreground="DarkRed" Text="HOW MUCH WOOD COULD A WOODCHUCK CHUCK"></TextBlock>
 
         <Canvas Name="Arena" >
+            <!--<StackPanel Canvas.Left="1560" Canvas.Top="341">
+                <TextBlock Text="Japan" FontSize="20" FontFamily="Papyrus" Foreground="Navy" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="0" FontSize="20" FontFamily="Papyrus" Foreground="Navy" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>-->
+
             <Grid Name="GrdUsers" Canvas.Top="780" Canvas.Left="40" Height="250" Width="300" BorderThickness="3" BorderBrush="White" CornerRadius="2">
                 <Grid.Background>
                     <SolidColorBrush Color="White" Opacity="0.7"></SolidColorBrush>
@@ -61,7 +66,7 @@
                 <Button Name="BtnSend" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" Content="SEND" FontSize="16" Click="SendUserMessage"></Button>
             </Grid>
 
-            <TextBlock Name="LblSecondary" Text="TESTING AGAIN." Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
+            <TextBlock Name="LblSecondary" Text="if a woodchuck could chuck wood?" Canvas.Left="500" Canvas.Top="990" FontFamily="Papyrus" FontSize="30" Foreground="White"/>
 
 
             <Ellipse Name="ElpNo" Width="75" Height="75" Canvas.Left="1800" Canvas.Top="780" PointerPressed="ElpNo_PointerPressed" PointerEntered="ElpNo_PointerEntered" PointerExited="ElpNo_PointerExited">
@@ -126,7 +131,8 @@
                 <Image Name="BtnRetreat" Grid.Row="4" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center" Source="/Assets/Icons/flag.png" Width="100" Height="100" PointerPressed="BtnRetreat_PointerPressed" Canvas.ZIndex="2"/>
 
             </Grid>
-            
+
         </Canvas>
+
     </Grid>
 </Page>

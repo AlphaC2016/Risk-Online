@@ -33,13 +33,13 @@ namespace risk_project
 
         public static Color[] ColorChoices { get; } = 
            { Colors.Navy,
-            Colors.Blue,
-            Colors.Cyan,
-            Colors.LightBlue,
-            Colors.Black,
             Colors.Maroon,
+            Colors.Blue,
             Colors.DarkMagenta,
-            Colors.MediumVioletRed
+            Colors.Cyan,
+            Colors.MediumVioletRed,
+            Colors.LightBlue,
+            Colors.Black
         };
 
 

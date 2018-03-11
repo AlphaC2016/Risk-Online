@@ -94,7 +94,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Assets\Data\mapdata.csv" />
+    <Content Include="Assets\Data\mapdata.csv" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
