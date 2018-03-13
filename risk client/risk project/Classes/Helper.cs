@@ -14,14 +14,17 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 
+
 namespace risk_project
 {
     static class Helper
     {
-        private static MediaElement player;
+        private static MediaPlayer player;
         public static bool musicPlaying;
         public static bool soundPlaying;
         public static bool fullScreen;
+
+        
 
         public static Color UserColor { get; set; }
 
@@ -74,32 +77,47 @@ namespace risk_project
         /// </summary>
         public static async void InitMusic()
         {
-            player = new MediaElement();
-            player.Loaded += Player_Loaded;
+            //player = new MediaElement();
+            //player.MediaOpened += Player_MediaOpened;
+
+            
+
             StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             Folder = await Folder.GetFolderAsync(@"Assets\\Data");
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
-            player.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
-        }
 
-        private static void Player_Loaded(object sender, RoutedEventArgs e)
-        {
+            player = BackgroundMediaPlayer.Current;
+            player.Source = MediaSource.CreateFromStorageFile(sf);
+
             if (musicPlaying)
+                player.Play();
+            else
                 player.Pause();
         }
+
 
         /// <summary>
         /// This function Initializes the static class - settings and music included.
         /// </summary>
         public static void Init()
         {
+            var localSettings = ApplicationData.Current.LocalSettings.Values;
 
-            string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
-            musicPlaying = bool.Parse(rawData[2]);
-            soundPlaying = bool.Parse(rawData[3]);
-            fullScreen = bool.Parse(rawData[4]);
-
-            UserColor = ColorChoices[int.Parse(rawData[5])];
+            if (localSettings["musicPlaying"] == null)
+            {
+                localSettings["musicPlaying"] = musicPlaying = false;
+                localSettings["soundPlaying"] = soundPlaying = false;
+                localSettings["fullscreen"] = fullScreen = false;
+                localSettings["color"] = 0;
+                UserColor = ColorChoices[0];
+            }
+            else
+            {
+                musicPlaying = (bool)localSettings["musicPlaying"];
+                soundPlaying = (bool)localSettings["soundPlaying"];
+                fullScreen = (bool)localSettings["fullscreen"];
+                UserColor = ColorChoices[(int)localSettings["color"]];
+            }
 
             if (fullScreen)
             {
@@ -109,17 +127,14 @@ namespace risk_project
             InitMusic();
         }
 
-        public static async void UpdateConfig()
+        public static void UpdateConfig()
         {
-            //string[] rawData = File.ReadAllLines(@"Assets/Data/config.txt");
-            //StorageFile dataFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appdata:///Data/config.txt"));
-            ////var stream = await dataFile.OpenAsync(FileAccessMode.ReadWrite);
+            var localSettings = ApplicationData.Current.LocalSettings.Values;
 
-            //rawData[2] = musicPlaying.ToString();
-            //rawData[3] = soundPlaying.ToString();
-            //rawData[4] = fullScreen.ToString();
-            //rawData[5] = Array.IndexOf(ColorChoices, UserColor).ToString();
-            //await FileIO.WriteLinesAsync(dataFile, rawData);
+            localSettings["musicPlaying"] = musicPlaying;
+            localSettings["soundPlaying"] = soundPlaying;
+            localSettings["fullscreen"] = fullScreen;
+            localSettings["color"] = Array.IndexOf(ColorChoices, UserColor);
         }
 
         /// <summary>

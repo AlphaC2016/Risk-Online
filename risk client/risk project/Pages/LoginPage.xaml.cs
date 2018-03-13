@@ -55,7 +55,7 @@ namespace risk_project
             buttons.Add(BtnSignUp);
 
             Comms.InitSocket();
-            
+
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

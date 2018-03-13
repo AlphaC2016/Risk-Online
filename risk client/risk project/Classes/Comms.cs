@@ -26,6 +26,9 @@ namespace risk_project
         private static StreamSocket sc;
         private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
+        private static string ip = "192.168.1.34";
+        private static string port = "3000";
+
         //these are the protocol code values. a matching list is found on the server.
         public const string SIGN_IN = "200";
         public const string SIGN_OUT = "201";
@@ -100,7 +103,6 @@ namespace risk_project
 
 
         private static HostName serverHost;
-        private static string port;
 
         /// <summary>
         /// This function handles the initial connection to the server.
@@ -108,13 +110,8 @@ namespace risk_project
         public static void InitSocket()
         {
             sc = new StreamSocket();
-
-            string[] data = File.ReadAllLines(CONFIG_PATH);
-            string rawIp = data[0];
-            port = data[1];
-
             
-            serverHost = new HostName(rawIp);
+            serverHost = new HostName(ip);
 
             Connect();
         }
