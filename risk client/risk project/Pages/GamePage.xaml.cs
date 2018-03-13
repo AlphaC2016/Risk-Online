@@ -40,6 +40,12 @@ namespace risk_project
         MoveForces
     }
 
+    enum Control
+    {
+        Map,
+        Battle
+    }
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -61,6 +67,7 @@ namespace risk_project
         CoreDispatcher dispatcher;
 
         GameState currState;
+        Control ActiveWindow;
         int temp;
         int territoryCount;
 
@@ -101,6 +108,7 @@ namespace risk_project
         {
             BuildBoard();
             LblInstructions.Text = "SET YOUR FORCES IN PLACE";
+            ActiveWindow = Control.Map;
             handler = new Task(() =>
             {
                 ServerHandler();
@@ -287,6 +295,8 @@ namespace risk_project
         }
 
         
+        //----------------------------------------MISC COSMETIC FUNCTIONS------------------------------------------
+
         private void PresentError(string message)
         {
             string currContent = LblSecondary.Text;
@@ -545,7 +555,7 @@ namespace risk_project
                         LblInstructions.Text = src.GetOwner() + "IS ATTACKING" + dst.GetOwner();
                         LblSecondary.Text = "";
                     }
-                    
+                    ActiveWindow = Control.Battle;
                     break;
 
                 case "1":
@@ -596,7 +606,7 @@ namespace risk_project
 
         private async void HandleEndBattle(ReceivedMessage msg)
         {
-            await Task.Delay(3000);
+            
             switch (currState)
             {
                 case GameState.Spectator:
@@ -621,6 +631,7 @@ namespace risk_project
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
+                    await Task.Delay(3000);
                     GrdBattle.Visibility = Visibility.Collapsed;
                     ResetPair();
                     break;
@@ -642,9 +653,11 @@ namespace risk_project
                         currState = GameState.StopOrAttack;
                         ResetPair();
                     }
+                    await Task.Delay(3000);
                     GrdBattle.Visibility = Visibility.Collapsed;
                     break;
             }
+            ActiveWindow = Control.Map;
         }
 
         private async void HandleEndGame(ReceivedMessage msg)
@@ -729,9 +742,12 @@ namespace risk_project
         private void BtnRoll_Click(object sender, RoutedEventArgs e)
         {
             //START ROLLING YOUR DICE
-            string message = Comms.ROLL_DICE;
-            Comms.SendData(message);
-            LblState.Text = "Waiting for your opponent..";
+            if (ActiveWindow == Control.Battle)
+            {
+                string message = Comms.ROLL_DICE;
+                Comms.SendData(message);
+                LblState.Text = "Waiting for your opponent..";
+            }
         }
 
         //---------------------------------------- PRACTICAL BUTTON FUNCTIONS -------------------------------------
@@ -740,6 +756,7 @@ namespace risk_project
         {
             Territory curr = sender as Territory;
 
+            if (ActiveWindow == Control.Map)
             switch (currState)
             {
                 case GameState.InitialReinforcments:
@@ -841,6 +858,7 @@ namespace risk_project
 
         private void ElpYes_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            if (ActiveWindow == Control.Map)
             switch (currState)
             {
                 case GameState.InitialReinforcments:
@@ -932,6 +950,7 @@ namespace risk_project
         private void ElpNo_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             string message;
+            if (ActiveWindow == Control.Map)
             switch (currState)
             {
                 case GameState.Reinforcements:
@@ -1058,6 +1077,5 @@ namespace risk_project
             }
         }
 
-              
     }
 }
