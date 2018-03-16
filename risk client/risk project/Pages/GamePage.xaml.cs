@@ -52,7 +52,7 @@ namespace risk_project
     public sealed partial class GamePage : Page
     {
         List<string[]> labelData;
-        Dictionary<string, Territory> territories;
+        Dictionary<string, Territory> territories; //key is territory name, value is territory object
 
         Dictionary<string, Color> colors; //color of each user
         List<Rectangle> colorRects;
@@ -175,6 +175,7 @@ namespace risk_project
                 foreach (TextBlock lbl in content)
                 {
                     lbl.FontSize = (ActualHeight + ActualWidth) / 150;
+                    lbl.FontWeight = FontWeights.Bold;
                 }    
             }
 
@@ -270,11 +271,14 @@ namespace risk_project
                         break;
 
                     case Comms.END_BATTLE:
-                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => 
-                        {
-                            HandleEndBattle(msg);
-                        });
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleEndBattle(msg));
                         break;
+
+                    case Comms.END_GAME:
+                        done = true;
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleEndGame(msg));
+                        break;
+
                 }
             }
         }
@@ -384,6 +388,11 @@ namespace risk_project
             Rectangle rect;
             Color color;
             int j = 0;
+
+            colors = new Dictionary<string, Color>();
+            colorRects = new List<Rectangle>();
+            nameLabels = new List<TextBlock>();
+
             for (i = 1; i <= count; i++)
             {
                 txb = new TextBlock();
@@ -864,50 +873,64 @@ namespace risk_project
                 case GameState.InitialReinforcments:
                     string message = Comms.FORCES_INIT;
                     bool ok = true;
-
-                    foreach (Territory curr in territories.Values)
+                    if (temp == 0)
                     {
-                        if (curr.GetAmount() != 0 || curr.GetOwner() != Helper.Username)
-                        {
-                            
-                            message += Comms.GetPaddedNumber(curr.GetAmount(), 2);
-                        }
-                        else
-                        {
-                            PresentError("all your territories must contain at least one unit.");
-                            ok = false;
-                            break;
-                        }
-                    }
-                    if (ok)
-                    {
-                        Comms.SendData(message);
                         foreach (Territory curr in territories.Values)
                         {
-                            curr.Confirm();
+                            if (curr.GetAmount() != 0 || curr.GetOwner() != Helper.Username)
+                            {
+
+                                message += Comms.GetPaddedNumber(curr.GetAmount(), 2);
+                            }
+                            else
+                            {
+                                PresentError("all your territories must contain at least one unit.");
+                                ok = false;
+                                break;
+                            }
                         }
-                        LblInstructions.Text = "Waiting for other players...";
+                        if (ok)
+                        {
+                            Comms.SendData(message);
+                            foreach (Territory curr in territories.Values)
+                            {
+                                curr.Confirm();
+                            }
+                            LblInstructions.Text = "Waiting for other players...";
+                        }
                     }
+                    else
+                    {
+                        PresentError("you must put all your units on the board!");
+                    }
+                    
                     break;
 
                 case GameState.Reinforcements:
-
-                    int count = 0;
-                    message = Comms.SEND_REINFORCEMENTS;
-                    Territory t;
-                    for (int i=0; i<Helper.TERRITORY_AMOUNT; i++)
+                    if (temp == 0)
                     {
-                        t = territories.ElementAt(i).Value;
-                        if (!t.Compare())
+                        int count = 0;
+                        message = Comms.SEND_REINFORCEMENTS;
+                        Territory t;
+                        for (int i = 0; i < Helper.TERRITORY_AMOUNT; i++)
                         {
-                            message += Comms.GetPaddedNumber(i, 2);
-                            message += Comms.GetPaddedNumber(t.GetAmount(), 2);
-                            t.Confirm();
-                            count++;
+                            t = territories.ElementAt(i).Value;
+                            if (!t.Compare())
+                            {
+                                message += Comms.GetPaddedNumber(i, 2);
+                                message += Comms.GetPaddedNumber(t.GetAmount(), 2);
+                                t.Confirm();
+                                count++;
+                            }
                         }
+                        message = message.Insert(3, Comms.GetPaddedNumber(count, 2));
+                        Comms.SendData(message);
                     }
-                    message = message.Insert(3, Comms.GetPaddedNumber(count, 2));
-                    Comms.SendData(message);
+                    else
+                    {
+                        PresentError("you must put all your units on the board!");
+                    }
+                    
                     break;
 
                 case GameState.StopOrAttack:
@@ -931,18 +954,27 @@ namespace risk_project
                     break;
 
                 case GameState.Attacker:
-                    message = Comms.START_BATTLE;
-                    message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
-                    message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
-                    Comms.SendData(message);
+                    if (src != null && dst != null)
+                    {
+                        message = Comms.START_BATTLE;
+                        message += Comms.GetPaddedNumber(Helper.GetIndex(territories, src), 2);
+                        message += Comms.GetPaddedNumber(Helper.GetIndex(territories, dst), 2);
+                        Comms.SendData(message);
+                    }
                     break;
 
                 case GameState.BattleWinner:
-                    message = Comms.VICTORY_MOVE_FORCES;
-                    message += Comms.GetPaddedNumber(src.GetAmount(), 2);
-                    message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
-                    Comms.SendData(message);
-
+                    if (dst.GetAmount() != 0)
+                    {
+                        message = Comms.VICTORY_MOVE_FORCES;
+                        message += Comms.GetPaddedNumber(src.GetAmount(), 2);
+                        message += Comms.GetPaddedNumber(dst.GetAmount(), 2);
+                        Comms.SendData(message);
+                    }
+                    else
+                    {
+                        PresentError("The destination must contain at least one unit.");
+                    }
                     break;
             }
         }

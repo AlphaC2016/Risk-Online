@@ -91,7 +91,7 @@ namespace risk_server
         /// <param name="username">the name of the winner.</param>
         public void AddVictory(string username)
         {
-            Execute("UPDATE User SET victories = victories + 1 WHERE username=" + username + "\";");
+            Execute("UPDATE User SET victories = victories + 1 WHERE username=\"" + username + "\";");
         }
     }
 }

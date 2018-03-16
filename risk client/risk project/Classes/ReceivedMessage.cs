@@ -149,10 +149,13 @@ namespace risk_project
                     for (i = 0; i < amount; i++)
                     {
                         size = int.Parse(Comms.RecvData(2, flags));
+
                         if (size == 0)
                         {
                             ans.Add("-----------");
                             ans.Add("-----------");
+                            Comms.RecvData(2, flags);
+                            
                         }
                         else
                         {
@@ -188,6 +191,11 @@ namespace risk_project
 
                 case Comms.END_BATTLE:
                     ans.Add(Comms.RecvData(1, flags));
+                    break;
+
+                case Comms.END_GAME:
+                    size = int.Parse(Comms.RecvData(2, flags));
+                    ans.Add(Comms.RecvData(size, flags));
                     break;
 
                 case Comms.RECEIVE_MESSAGE:

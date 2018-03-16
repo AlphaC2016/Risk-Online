@@ -171,6 +171,7 @@ namespace risk_project
         public void Revert()
         {
             _amount = _prevAmount;
+            ((TextBlock)Children[1]).Text = _amount.ToString();
         }
 
 

@@ -403,9 +403,12 @@ namespace risk_server
         {
             if (msg.GetUser() != null)
             {
+                User u = null;
                 Game gm = msg.GetUser().GetGame();
                 if (gm != null)
-                    gm.RemovePlayer(msg.GetUser());
+                    u = gm.RemovePlayer(msg.GetUser());
+                if (u != null)
+                    _db.AddVictory(u.GetUsername());
             }
         }
 
@@ -710,7 +713,7 @@ namespace risk_server
             {
                 return _connectedUsers[client];
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

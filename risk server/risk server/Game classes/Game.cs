@@ -128,23 +128,24 @@ namespace risk_server.Game_classes
         /// This function removes a player from the game.
         /// </summary>
         /// <param name="u">The player to be removed.</param>
-        public void RemovePlayer(User u)
+        public User RemovePlayer(User u)
         {
             _players.Remove(u);
 
-            if (_players.Count > 0)
-            {
-                _territoryCount.Clear();
-                foreach (Territory t in _territories.Values)
-                    t.SetUser(null);
+            _territoryCount.Clear();
+            foreach (Territory t in _territories.Values)
+                t.SetUser(null);
 
+            if (_players.Count != 0)
+            {
                 SetUsersOnMap();
                 SendInitMessage();
             }
-            else
-            {
-                //shut the game down.
-            }
+
+            if (_players.Count == 1)
+                return CheckEndGame(_players[0]);
+
+            return null;
         }
 
         /// <summary>
@@ -264,6 +265,7 @@ namespace risk_server.Game_classes
 
         public void HandleAttack(RecievedMessage msg)
         {
+            
             src = _territories.ElementAt(int.Parse(msg[0])).Value;
             dst = _territories.ElementAt(int.Parse(msg[1])).Value;
 
@@ -411,16 +413,26 @@ namespace risk_server.Game_classes
                 _territoryCount[dst.GetUser()]--;
                 _territoryCount[src.GetUser()]++;
                 dst.SetUser(src.GetUser());
+                return CheckEndGame(src.GetUser());
+            }
+            return null;
+        }
 
-                if (_territoryCount[src.GetUser()] == Helper.TERRITORY_AMOUNT)
-                {
-                    string name = src.GetUser().GetUsername();
-                    message = Helper.END_GAME;
-                    message += Helper.GetPaddedNumber(name.Length, 2);
-                    message += name;
-                    SendMessage(message);
-                    return src.GetUser();
-                }
+        private User CheckEndGame(User user)
+        {
+            string message;
+            if (_territoryCount[user] == Helper.TERRITORY_AMOUNT)
+            {
+                string name = user.GetUsername();
+                message = Helper.END_GAME;
+                message += Helper.GetPaddedNumber(name.Length, 2);
+                message += name;
+                SendMessage(message);
+
+                foreach (User u in _players)
+                    u.LeaveGame();
+
+                return user;
             }
             return null;
         }
@@ -445,7 +457,7 @@ namespace risk_server.Game_classes
                 {
                     foreach (Territory t in t1.GetAdj())
                     {
-                        if (AreConnected(t, t2, count - 1))
+                        if (t.GetUser() == t1.GetUser() && AreConnected(t, t2, count - 1))
                             return true;
                     }
                     return false;
