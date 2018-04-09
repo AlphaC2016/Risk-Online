@@ -12,11 +12,6 @@ namespace risk_server
         {
             Server s = new Server();
             s.Serve();
-            //List<User> users = new List<User>();
-            //users.Add(new User("alpha", null));
-            //users.Add(new User("bravo", null));
-            //Game_classes.Game gm = new Game_classes.Game(users);
-
         }
     }
 }

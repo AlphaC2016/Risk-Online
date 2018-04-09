@@ -149,10 +149,7 @@ namespace risk_server
 
             foreach (User u in _users)
             {
-                if (u!=_admin)
-                {
-                    u.ClearRoom();
-                }
+                u.ClearRoom();
             }
             return _id;
         }

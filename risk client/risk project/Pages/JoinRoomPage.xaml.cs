@@ -50,7 +50,9 @@ namespace risk_project
             buttons.Add(BtnReturn);
             titles.Add(LblRooms);
             titles.Add(LblUsers);
-            GetRooms();
+
+            Task t = new Task(() => GetRooms());
+            t.Start();
 
             FitSize(sender, null);
         }
@@ -152,7 +154,7 @@ namespace risk_project
             FitSize(null, null);
         }
 
-        private void BtnReturn_Click(object sender, RoutedEventArgs e)
+        private void Return(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenu));
         }
@@ -188,7 +190,8 @@ namespace risk_project
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            GetRooms();
+            Task t = new Task(() => GetRooms());
+            t.Start();
         }
     }
 }

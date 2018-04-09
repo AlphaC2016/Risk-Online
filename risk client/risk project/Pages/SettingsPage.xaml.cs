@@ -25,9 +25,7 @@ namespace risk_project
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        bool init;
         List<Button> buttons;
-        //List<Slider> sliders;
         List<TextBlock> labels;
         List<Rectangle> colors;
 
@@ -36,7 +34,6 @@ namespace risk_project
             this.InitializeComponent();
 
             buttons = new List<Button>();
-            //sliders = new List<Slider>();
             labels = new List<TextBlock>();
             colors = new List<Rectangle>();
 
@@ -44,17 +41,12 @@ namespace risk_project
             buttons.Add(BtnSound);
             buttons.Add(BtnReturn);
 
-            //sliders.Add(SldRed);
-            //sliders.Add(SldGreen);
-            //sliders.Add(SldBlue);
-
             labels.Add(LblColor);
             labels.Add(LblMode);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            init = true;
 
             Rectangle rect;
 
@@ -140,15 +132,12 @@ namespace risk_project
 
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
-            if (init)
-            {
-                foreach (Rectangle curr in colors)
-                    curr.StrokeThickness = 0;
+            foreach (Rectangle curr in colors)
+                curr.StrokeThickness = 0;
 
-                Rectangle rect = sender as Rectangle;
-                Helper.UserColor = (rect.Fill as SolidColorBrush).Color;
-                rect.StrokeThickness = 3;
-            }
+            Rectangle rect = sender as Rectangle;
+            Helper.UserColor = (rect.Fill as SolidColorBrush).Color;
+            rect.StrokeThickness = 3;
         }
 
         private void CbxModes_SelectionChanged(object sender, SelectionChangedEventArgs e)
