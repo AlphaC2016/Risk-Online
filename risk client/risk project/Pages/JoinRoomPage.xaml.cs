@@ -163,7 +163,6 @@ namespace risk_project
         {
             string id = Comms.GetPaddedNumber(roomIDs[currName], 4);
             Comms.SendData(Comms.JOIN_ROOM + id);
-            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             Task response = new Task(async () =>
             {
                 ReceivedMessage msg = new ReceivedMessage();
