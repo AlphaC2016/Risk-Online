@@ -12,10 +12,10 @@ namespace risk_server.Game_classes
         Dictionary<string, Territory> _territories;
         Dictionary<User, int> _territoryCount;
 
-        int currAttackerIndex;
+        int _currAttackerIndex;
 
-        Territory src, dst;
-        bool srcRolled, dstRolled;
+        Territory _src, _dst;
+        bool _srcRolled, _dstRolled;
 
         public Game(List<User> users)
         {
@@ -28,7 +28,7 @@ namespace risk_server.Game_classes
                 p.SetGame(this);
             }
 
-            currAttackerIndex = r.Next(_players.Count);
+            _currAttackerIndex = r.Next(_players.Count);
 
             InitMap();
         }
@@ -209,7 +209,7 @@ namespace risk_server.Game_classes
         {
             SendUpdate();
             string message = Helper.START_TURN;
-            string curr = _players[currAttackerIndex].GetUsername();
+            string curr = _players[_currAttackerIndex].GetUsername();
 
             message += Helper.GetPaddedNumber(curr.Length, 2) + curr;
             SendMessage(message);
@@ -266,22 +266,22 @@ namespace risk_server.Game_classes
         public void HandleAttack(RecievedMessage msg)
         {
             
-            src = _territories.ElementAt(int.Parse(msg[0])).Value;
-            dst = _territories.ElementAt(int.Parse(msg[1])).Value;
+            _src = _territories.ElementAt(int.Parse(msg[0])).Value;
+            _dst = _territories.ElementAt(int.Parse(msg[1])).Value;
 
-            if (src.Amount < 2)
+            if (_src.Amount < 2)
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "1");
             }
-            else if (src.GetUser() != msg.GetUser())
+            else if (_src.GetUser() != msg.GetUser())
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "2");
             }
-            else if (dst.GetUser() == msg.GetUser())
+            else if (_dst.GetUser() == msg.GetUser())
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "3");
             }
-            else if (!src.IsAdj(dst))
+            else if (!_src.IsAdj(_dst))
             {
                 msg.GetUser().Send(Helper.START_BATTLE_RES + "4");
             }
@@ -291,30 +291,30 @@ namespace risk_server.Game_classes
                 SendMessage(message);
             }
 
-            if (src.Amount == 0)
+            if (_src.Amount == 0)
                 EndBattle(false);
-            else if (dst.Amount == 0)
+            else if (_dst.Amount == 0)
                 EndBattle(true);
         }
 
         public User HandleRollDice(RecievedMessage msg)
         {
-            if (msg.GetUser() == src.GetUser())
+            if (msg.GetUser() == _src.GetUser())
             {
-                srcRolled = true;
+                _srcRolled = true;
             }
-            else if (msg.GetUser() == dst.GetUser())
+            else if (msg.GetUser() == _dst.GetUser())
             {
-                dstRolled = true;
+                _dstRolled = true;
             }
 
-            if (srcRolled && dstRolled)
+            if (_srcRolled && _dstRolled)
             {
                 Random r = new Random();
                 string message = Helper.ROLL_DICE_RES;
 
-                int atkCount = Math.Min(3, src.Amount - 1);
-                int defCount = Math.Min(2, dst.Amount);
+                int atkCount = Math.Min(3, _src.Amount - 1);
+                int defCount = Math.Min(2, _dst.Amount);
 
                 int[] atk = new int[3];
                 int[] def = new int[2];
@@ -346,9 +346,9 @@ namespace risk_server.Game_classes
                     if (atk[i] > 0 && def[i] > 0)
                     {
                         if (atk[i] > def[i])
-                            dst.Amount--;
+                            _dst.Amount--;
                         else
-                            src.Amount--;
+                            _src.Amount--;
                     }
                 }
 
@@ -358,17 +358,17 @@ namespace risk_server.Game_classes
                 foreach (int x in def)
                     message += x;
 
-                message += Helper.GetPaddedNumber(src.Amount, 2);
-                message += Helper.GetPaddedNumber(dst.Amount, 2);
+                message += Helper.GetPaddedNumber(_src.Amount, 2);
+                message += Helper.GetPaddedNumber(_dst.Amount, 2);
 
-                src.GetUser().Send(message);
-                dst.GetUser().Send(message);
+                _src.GetUser().Send(message);
+                _dst.GetUser().Send(message);
 
-                dstRolled = srcRolled = false;
+                _dstRolled = _srcRolled = false;
 
-                if (dst.Amount < 1)
+                if (_dst.Amount < 1)
                     return EndBattle(true);
-                else if (src.Amount < 2)
+                else if (_src.Amount < 2)
                     return EndBattle(false);
             }
             return null;
@@ -376,25 +376,25 @@ namespace risk_server.Game_classes
 
         public void HandleVictoryMoveForces(RecievedMessage msg)
         {
-            src.Amount = int.Parse(msg[0]);
-            dst.Amount = int.Parse(msg[1]);
+            _src.Amount = int.Parse(msg[0]);
+            _dst.Amount = int.Parse(msg[1]);
 
-            _territoryCount[src.GetUser()]++;
-            _territoryCount[dst.GetUser()]--;
+            _territoryCount[_src.GetUser()]++;
+            _territoryCount[_dst.GetUser()]--;
 
-            src.SetUser(dst.GetUser());
+            _src.SetUser(_dst.GetUser());
 
-            if (_territoryCount[dst.GetUser()] == Helper.TERRITORY_AMOUNT)
+            if (_territoryCount[_dst.GetUser()] == Helper.TERRITORY_AMOUNT)
             {
                 string message = Helper.END_GAME;
-                string username = src.GetUser().GetUsername();
+                string username = _src.GetUser().GetUsername();
                 message += Helper.GetPaddedNumber(username.Length, 2);
                 message += username;
 
                 SendMessage(message);
             }
 
-            src = dst = null;
+            _src = _dst = null;
 
             SendUpdate();
         }
@@ -407,13 +407,13 @@ namespace risk_server.Game_classes
             SendMessage(message);
 
             if (!success)
-                src = dst = null;
+                _src = _dst = null;
             else
             {
-                _territoryCount[dst.GetUser()]--;
-                _territoryCount[src.GetUser()]++;
-                dst.SetUser(src.GetUser());
-                return CheckEndGame(src.GetUser());
+                _territoryCount[_dst.GetUser()]--;
+                _territoryCount[_src.GetUser()]++;
+                _dst.SetUser(_src.GetUser());
+                return CheckEndGame(_src.GetUser());
             }
             return null;
         }
@@ -441,8 +441,8 @@ namespace risk_server.Game_classes
         {
             do
             {
-                currAttackerIndex = (currAttackerIndex + 1) % _players.Count;
-            } while (_territoryCount[_players[currAttackerIndex]] == 0);
+                _currAttackerIndex = (_currAttackerIndex + 1) % _players.Count;
+            } while (_territoryCount[_players[_currAttackerIndex]] == 0);
             StartTurn();
         }
 

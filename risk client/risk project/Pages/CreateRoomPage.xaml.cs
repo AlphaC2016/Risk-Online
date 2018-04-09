@@ -41,7 +41,7 @@ namespace risk_project
             labels.Add(LblRoomName);
         }
 
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        private void Return(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenu));
         }

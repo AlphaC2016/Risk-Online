@@ -24,7 +24,6 @@ namespace risk_project
         //private static StreamSocket sc;
         private static StreamReader reader = null;
         private static StreamSocket sc;
-        private const string CONFIG_PATH = @"Assets/Data/config.txt";
 
         private static string ip = "192.168.1.34";
         private static string port = "3000";
@@ -225,11 +224,6 @@ namespace risk_project
         public static string PrepString(string str)
         {
             return GetPaddedNumber(str.Length, 2) + str;
-        }
-
-        public static void Reset()
-        {
-            reader = null;
         }
     }
 }
