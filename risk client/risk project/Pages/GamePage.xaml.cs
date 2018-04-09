@@ -640,6 +640,7 @@ namespace risk_project
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
+                    BtnRoll.Visibility = Visibility.Collapsed;
                     await Task.Delay(3000);
                     GrdBattle.Visibility = Visibility.Collapsed;
                     ResetPair();
@@ -662,6 +663,7 @@ namespace risk_project
                         currState = GameState.StopOrAttack;
                         ResetPair();
                     }
+                    BtnRoll.Visibility = Visibility.Collapsed;
                     await Task.Delay(3000);
                     GrdBattle.Visibility = Visibility.Collapsed;
                     break;
@@ -745,7 +747,7 @@ namespace risk_project
             LblUser2.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
             LblCount2.Text = dst.GetAmount().ToString();
             LblCount2.Foreground = new SolidColorBrush(colors[dst.GetOwner()]);
-
+            BtnRoll.Visibility = Visibility.Visible;
         }
 
         private void BtnRoll_Click(object sender, RoutedEventArgs e)
