@@ -26,8 +26,8 @@ namespace risk_project
     {
         string owner;
 
-        int _amount;
-        int _prevAmount;
+        int amount;
+        int prevAmount;
 
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace risk_project
             //Color to be changed accordingly to player holding the point.
             lbl.Foreground = new SolidColorBrush(Colors.Black);
             lbl.Text = "?";
-            _amount = _prevAmount = 0;
+            amount = prevAmount = 0;
             lbl.FontWeight = FontWeights.Bold;
             Children.Add(lbl);
             Orientation = Orientation.Vertical;
@@ -89,7 +89,7 @@ namespace risk_project
         /// <returns></returns>
         public int GetAmount()
         {
-            return this._amount;
+            return this.amount;
         }
 
         /// <summary>
@@ -97,10 +97,10 @@ namespace risk_project
         /// WARNING: UNSAFE FUNCTION: SETS BOTH PREV AND CURR VALUES TO THE PARAMETER.
         /// </summary>
         /// <param name="amount">The new amount of units.</param>
-        public void SetAmount(int amount)
+        public void SetAmount(int newAmount)
         {
-            _prevAmount = _amount = amount;
-            ((TextBlock)Children[1]).Text = amount.ToString();
+            prevAmount = amount = newAmount;
+            ((TextBlock)Children[1]).Text = newAmount.ToString();
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace risk_project
             }
             else
             {
-                ((TextBlock)Children[1]).Text = (++_amount).ToString();
+                ((TextBlock)Children[1]).Text = (++amount).ToString();
                 return true;
             }
         }
@@ -144,13 +144,13 @@ namespace risk_project
         public bool Dec(GameState state = GameState.InitialReinforcments)
         {
 
-            if ((state == GameState.InitialReinforcments && _amount == _prevAmount) || _amount == 0)
+            if ((state == GameState.InitialReinforcments && amount == prevAmount) || amount == 0)
             {
                 return false;
             }
-            else if (_amount > 1)
+            else if (amount > 1)
             {
-                ((TextBlock)Children[1]).Text = (--_amount).ToString();
+                ((TextBlock)Children[1]).Text = (--amount).ToString();
                 return true;
             }
             return false;
@@ -162,7 +162,7 @@ namespace risk_project
         /// </summary>
         public void Confirm()
         {
-            _prevAmount = _amount;
+            prevAmount = amount;
         }
 
         /// <summary>
@@ -170,8 +170,8 @@ namespace risk_project
         /// </summary>
         public void Revert()
         {
-            _amount = _prevAmount;
-            ((TextBlock)Children[1]).Text = _amount.ToString();
+            amount = prevAmount;
+            ((TextBlock)Children[1]).Text = amount.ToString();
         }
 
 
@@ -181,7 +181,7 @@ namespace risk_project
         /// <returns>Returns true if the two are equal, false otherwise.</returns>
         public bool Compare()
         {
-            return _amount == _prevAmount;
+            return amount == prevAmount;
         }
     }
 }

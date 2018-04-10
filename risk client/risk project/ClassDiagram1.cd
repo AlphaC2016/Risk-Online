@@ -11,7 +11,7 @@
   <Class Name="risk_project.Comms" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>1VAEwACMJKJgAAAgIGhIBIRABWoFICngVCglASsYBQQ=</HashCode>
+      <HashCode>1VAEwACMJIJgAABgIGhIBIRABWoFICngVCglASsYBQQ=</HashCode>
       <FileName>Classes\Comms.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -29,10 +29,10 @@
       <FileName>Classes\ReceivedMessage.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="risk_project.Territory" Collapsed="true">
-    <Position X="2.25" Y="3.5" Width="1.5" />
+  <Class Name="risk_project.Territory">
+    <Position X="10.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAYAIAQgACAAAAACACAAAAAAAAAAAhAAAAQACA=</HashCode>
+      <HashCode>AAAAAgAIAIAQgACAAAAACACAAAAAgAAAAAhAAAAQACA=</HashCode>
       <FileName>Classes\Territory.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -44,8 +44,8 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="risk_project.GamePage" BaseTypeListCollapsed="true">
-    <Position X="8.25" Y="0.5" Width="1.5" />
+  <Class Name="risk_project.GamePage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QUiAAgkAUABYQAEBFCAABYCEB4ApAgCGAqACBAAJhCA=</HashCode>
       <FileName>Pages\GamePage.xaml.cs</FileName>
