@@ -44,10 +44,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="risk_project.GamePage" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="5.75" Y="0.5" Width="1.5" />
+  <Class Name="risk_project.GamePage" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QUiAAgkAUABYQAEBFCAABYCEB4ApAgCGBqACBAAJhCA=</HashCode>
+      <HashCode>QUiAAgkAUABYQAEBFCAABYCEB4ApAgCGAqACBAAJhCA=</HashCode>
       <FileName>Pages\GamePage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -60,8 +60,8 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="risk_project.JoinRoomPage" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="1.5" Width="1.5" />
+  <Class Name="risk_project.JoinRoomPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAgAAAQQAAAAAAAIAKAAIAAAQCDAAAAAAAAkQAAAAA=</HashCode>
       <FileName>Pages\JoinRoomPage.xaml.cs</FileName>
@@ -95,7 +95,7 @@
   <Class Name="risk_project.RoomPage" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>cEAAAAhAQAACAAAAIACAAIQAAQABAAgAAAAQAAAAAwA=</HashCode>
+      <HashCode>cEAAAAhAQAACAAAAIACAAIQAAQABAAgAAAAAEAAAAwA=</HashCode>
       <FileName>Pages\RoomPage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />

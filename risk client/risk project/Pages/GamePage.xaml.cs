@@ -73,7 +73,6 @@ namespace risk_project
 
         Territory src;
         Territory dst;
-        Line l;
 
         //---------------------------------------PAGE HANDLING CODE---------------------------------------------------
 
@@ -279,6 +278,10 @@ namespace risk_project
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleEndGame(msg));
                         break;
 
+                    case Comms.ACK:
+                        done = true;
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Frame.Navigate(typeof(MainMenu)));
+                        break;
                 }
             }
         }
@@ -367,9 +370,6 @@ namespace risk_project
                 dst.Background.Opacity = 0;
             }
             src = dst = null;
-
-            //Arena.Children.Remove(l);
-            //l = null;
         }
 
         //---------------------------------------- MESSAGE HANDLERS -----------------------------------------------
@@ -807,14 +807,6 @@ namespace risk_project
                         else if (dst == null)
                         {
                             dst = curr;
-
-                            //l = new Line();
-                            //l.X1 = Canvas.GetLeft(src);
-                            //l.X2 = Canvas.GetLeft(dst);
-                            //l.Y1 = Canvas.GetTop(src);
-                            //l.Y2 = Canvas.GetTop(dst);
-                            //l.Fill = new SolidColorBrush(Colors.White);
-                            //Arena.Children.Add(l);
                         }
                         else if (curr == src)
                         {
@@ -1028,6 +1020,7 @@ namespace risk_project
         private void RectQuit_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Comms.SendData(Comms.QUIT_GAME);
+            done = true;
             Frame.Navigate(typeof(MainMenu));
         }
 

@@ -405,6 +405,7 @@ namespace risk_server
             {
                 User u = null;
                 Game gm = msg.GetUser().GetGame();
+                msg.GetUser().Send(Helper.ACK);
                 if (gm != null)
                     u = gm.RemovePlayer(msg.GetUser());
                 if (u != null)

@@ -41,7 +41,7 @@ namespace risk_project
         public const string JOIN_ROOM = "209";
         public const string JOIN_ROOM_RES = "110";
         public const string LEAVE_ROOM = "211";
-        public const string LEAVE_ROOM_RES = "112";
+        public const string ACK = "112";
         public const string CREATE_ROOM = "213";
         public const string CREATE_ROOM_RES = "114";
         public const string CLOSE_ROOM = "215";

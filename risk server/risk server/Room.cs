@@ -129,7 +129,7 @@ namespace risk_server
             if (_users.Contains<User>(user))
             {
                 _users.Remove(user);
-                user.Send(Helper.LEAVE_ROOM_RES.ToString());
+                user.Send(Helper.ACK.ToString());
                 SendMessage(user, GetUserListMessage());
             }
         }

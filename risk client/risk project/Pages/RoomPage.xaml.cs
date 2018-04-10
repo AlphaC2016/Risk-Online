@@ -71,7 +71,7 @@ namespace risk_project
             handler.Start();
         }
 
-        private void BtnReturn_Click(object sender, RoutedEventArgs e)
+        private void Return(object sender, RoutedEventArgs e)
         {
             if (isAdmin)
             {
@@ -118,7 +118,7 @@ namespace risk_project
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleRoomClosed(msg));
                         break;
 
-                    case Comms.LEAVE_ROOM_RES:
+                    case Comms.ACK:
                         await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => HandleLeaveRoom(msg));
                         break;
 
@@ -162,7 +162,6 @@ namespace risk_project
 
         private async void HandleLeaveRoom(ReceivedMessage msg)
         {
-            done = true;
             MessageDialog dialog = new MessageDialog("You have left the room.");
             await dialog.ShowAsync();
             Frame.Navigate(typeof(MainMenu));

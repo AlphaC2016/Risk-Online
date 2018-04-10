@@ -36,7 +36,7 @@
             </Grid.RowDefinitions>
         </Grid>
 
-        <Button Name="BtnReturn" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Leave Room" Width="300" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White" Click="BtnReturn_Click"></Button>
+        <Button Name="BtnReturn" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Leave Room" Width="300" FontFamily="Papyrus" FontSize="48" Background="DarkRed" Foreground="White" Click="Return"></Button>
         <Button Name="BtnPlay" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Start Game!" Width="300" FontFamily="Papyrus" FontSize="48" Background="DarkGoldenRod" Foreground="White" Click="BtnPlay_Click"/>
     </Grid>
 </Page>

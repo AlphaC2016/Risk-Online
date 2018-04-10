@@ -110,7 +110,7 @@ namespace risk_project
                     // No Values!
                     break;
 
-                case Comms.LEAVE_ROOM_RES:
+                case Comms.ACK:
                     ans.Add(Comms.RecvData(1, flags));
                     break;
 
