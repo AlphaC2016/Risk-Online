@@ -93,6 +93,7 @@ namespace risk_project
 
         private void Return(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Helper.UpdateConfig();
             Frame.Navigate(typeof(MainMenu));
         }

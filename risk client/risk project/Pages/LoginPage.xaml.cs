@@ -97,6 +97,7 @@ namespace risk_project
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             string message = Comms.SIGN_IN.ToString();
             string username = TxbLoginUsername.Text;
             Helper.Username = username;
@@ -150,6 +151,7 @@ namespace risk_project
 
         private async void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             MessageDialog dialog;
             if (PwbSignUpPass.Password != PwbSignUpRepass.Password)
             {

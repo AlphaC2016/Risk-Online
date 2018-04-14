@@ -73,6 +73,7 @@ namespace risk_project
 
         private void Return(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             if (isAdmin)
             {
                 Comms.SendData(Comms.CLOSE_ROOM);
@@ -172,11 +173,13 @@ namespace risk_project
             done = true;
             MessageDialog dialog = new MessageDialog("The game will begin now!");
             await dialog.ShowAsync();
+            Helper.PlayGameStart();
             Frame.Navigate(typeof(GamePage));
         }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Comms.SendData(Comms.START_GAME);
         }
     }

@@ -94,6 +94,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Assets\Data\battle_loss.mp3" />
+    <Content Include="Assets\Data\battle_win.mp3" />
+    <Content Include="Assets\Data\confirm.mp3" />
+    <Content Include="Assets\Data\game_loss.wav" />
+    <Content Include="Assets\Data\game_start.mp3" />
+    <Content Include="Assets\Data\game_won.wav" />
     <Content Include="Assets\Data\mapdata.csv" />
     <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />

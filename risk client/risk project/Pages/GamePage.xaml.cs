@@ -632,11 +632,13 @@ namespace risk_project
                 case GameState.BattleDefender:
                     if (msg[0] == "0")
                     {
+                        Helper.PlayBattleLoss();
                         PresentMessage("YOU LOST.", new TimeSpan(0, 0, 5));
                         territoryCount--;
                     }
                     else
                     {
+                        Helper.PlayBattleWin();
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
                     }
                     currState = GameState.Spectator;
@@ -649,6 +651,7 @@ namespace risk_project
                 case GameState.BattleAttacker:
                     if (msg[0] == "0")
                     {
+                        Helper.PlayBattleWin();
                         PresentMessage("You Won! Claim your victory!");
                         LblInstructions.Text = "Move some units to the country you defeated! press ✓ to confirm.";
                         PresentMessage("YOU WON!", new TimeSpan(0, 0, 5));
@@ -657,6 +660,7 @@ namespace risk_project
                     }
                     else
                     {
+                        Helper.PlayGameLoss();
                         PresentMessage("Would you like to attack?");                        
                         LblSecondary.Text = "Click ✓ to attack, X to start moving forces.";
                         PresentMessage("YOU LOST!", new TimeSpan(0, 0, 5));
@@ -673,7 +677,17 @@ namespace risk_project
 
         private async void HandleEndGame(ReceivedMessage msg)
         {
-            MessageDialog dialog = new MessageDialog("The Game is Over!\n" + msg[0] + " won.");
+            MessageDialog dialog;
+            if (msg[0] == Helper.Username)
+            {
+                Helper.PlayGameWin();
+                dialog = new MessageDialog("The Game is Over!\n You won!!!");
+            }
+            else
+            {
+                Helper.PlayGameLoss();
+                dialog = new MessageDialog("The Game is Over!\n" + msg[0] + " won.");
+            }
             await dialog.ShowAsync();
             Frame.Navigate(typeof(MainMenu));
         }

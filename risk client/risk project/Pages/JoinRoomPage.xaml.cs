@@ -86,8 +86,8 @@ namespace risk_project
             Comms.SendData(Comms.GET_ROOMS);
             ReceivedMessage msg = new ReceivedMessage();
 
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => StkRoomNames.Children.Clear());
             roomIDs = new Dictionary<string, int>();
-            StkRoomNames.Children.Clear();
 
             if (msg.GetCode() == Comms.GET_ROOMS_RES)
             {
@@ -161,6 +161,7 @@ namespace risk_project
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             string id = Comms.GetPaddedNumber(roomIDs[currName], 4);
             Comms.SendData(Comms.JOIN_ROOM + id);
             Task response = new Task(async () =>

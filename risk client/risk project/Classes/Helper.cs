@@ -19,7 +19,8 @@ namespace risk_project
 {
     static class Helper
     {
-        private static MediaPlayer player;
+        private static MediaPlayer musicPlayer;
+        private static MediaElement soundPlayer;
         public static bool musicPlaying;
         public static bool soundPlaying;
         public static bool fullScreen;
@@ -51,11 +52,11 @@ namespace risk_project
 
         public static void PlayMusic()
         {
-            player.Play();
+            musicPlayer.Play();
         }
         public static void PauseMusic()
         {
-            player.Pause();
+            musicPlayer.Pause();
         }
 
         public static void GoFullscreen()
@@ -80,19 +81,19 @@ namespace risk_project
             //player = new MediaElement();
             //player.MediaOpened += Player_MediaOpened;
 
-            
+            soundPlayer = new MediaElement();
 
             StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             Folder = await Folder.GetFolderAsync(@"Assets\\Data");
             StorageFile sf = await Folder.GetFileAsync("music.mp3");
 
-            player = BackgroundMediaPlayer.Current;
-            player.Source = MediaSource.CreateFromStorageFile(sf);
+            musicPlayer = BackgroundMediaPlayer.Current;
+            musicPlayer.Source = MediaSource.CreateFromStorageFile(sf);
 
             if (musicPlaying)
-                player.Play();
+                musicPlayer.Play();
             else
-                player.Pause();
+                musicPlayer.Pause();
         }
 
 
@@ -137,6 +138,36 @@ namespace risk_project
             localSettings["color"] = Array.IndexOf(ColorChoices, UserColor);
         }
 
+        public static void PlayConfirmSound()
+        {
+            PlaySound("confirm");
+        }
+
+        public static void PlayGameStart()
+        {
+            PlaySound("game_start");
+        }
+
+        public static void PlayBattleWin()
+        {
+            PlaySound("battle_win");
+        }
+
+        public static void PlayBattleLoss()
+        {
+            PlaySound("battle_loss");
+        }
+
+        public static void PlayGameWin()
+        {
+            PlaySound("game_win");
+        }
+
+        public static void PlayGameLoss()
+        {
+            PlaySound("game_loss");
+        }
+
         /// <summary>
         /// This function returns the index of a territory in a string-Territory dictionary.
         /// </summary>
@@ -153,6 +184,20 @@ namespace risk_project
                 i++;
             }
             return -1;
+        }
+
+        private static async void PlaySound(string soundName)
+        {
+            if (soundPlaying)
+            {
+                StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                Folder = await Folder.GetFolderAsync(@"Assets\\Data");
+                StorageFile sf = await Folder.GetFileAsync(soundName + ".mp3");
+                var stream = await sf.OpenAsync(FileAccessMode.Read);
+                soundPlayer.SetSource(stream, sf.ContentType);
+                soundPlayer.Volume = 50;
+                soundPlayer.Play();
+            }
         }
     }
 }
