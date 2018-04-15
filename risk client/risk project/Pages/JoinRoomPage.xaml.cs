@@ -42,6 +42,7 @@ namespace risk_project
             currRoomData = new List<TextBlock>();
             buttons = new List<Button>();
             titles = new List<TextBlock>();
+            currName = "";
         }      
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -161,31 +162,35 @@ namespace risk_project
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
         {
+            MessageDialog dialog;
             Helper.PlayConfirmSound();
-            string id = Comms.GetPaddedNumber(roomIDs[currName], 4);
-            Comms.SendData(Comms.JOIN_ROOM + id);
-            Task response = new Task(async () =>
+            if (currName != "")
             {
-                ReceivedMessage msg = new ReceivedMessage();
-
-                if (msg.GetCode() == Comms.JOIN_ROOM_RES)
+                string id = Comms.GetPaddedNumber(roomIDs[currName], 4);
+                Comms.SendData(Comms.JOIN_ROOM + id);
+                Task response = new Task(async () =>
                 {
-                    await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                    ReceivedMessage msg = new ReceivedMessage();
+
+                    if (msg.GetCode() == Comms.JOIN_ROOM_RES)
                     {
-                        if (msg[0] == "0")
+                        await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                         {
-                            object[] data = { currName, id, false };
-                            Frame.Navigate(typeof(RoomPage), data);
-                        }
-                        else
-                        {
-                            var dialog = new MessageDialog("An error occured. Please try again.");
-                            await dialog.ShowAsync();
-                        }
-                    });
-                }
-            });
-            response.Start();
+                            if (msg[0] == "0")
+                            {
+                                object[] data = { currName, id, false };
+                                Frame.Navigate(typeof(RoomPage), data);
+                            }
+                            else
+                            {
+                                dialog = new MessageDialog("An error occured. Please try again.");
+                                await dialog.ShowAsync();
+                            }
+                        });
+                    }
+                });
+                response.Start();
+            }
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)

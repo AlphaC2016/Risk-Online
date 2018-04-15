@@ -25,7 +25,7 @@ namespace risk_project
         private static StreamReader reader = null;
         private static StreamSocket sc;
 
-        private static string ip = "192.168.1.34";
+        private static string ip = "10.10.11.31";
         private static string port = "3000";
 
         //these are the protocol code values. a matching list is found on the server.
