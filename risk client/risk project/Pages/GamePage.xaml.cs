@@ -198,6 +198,8 @@ namespace risk_project
 
             LblInstructions.FontSize = (ActualHeight + ActualWidth) / 83.333;
 
+            BtnRetreat.Height = BtnRetreat.Width = (ActualHeight + ActualWidth) / 30;
+
             Canvas.SetLeft(GrdChat, ActualWidth / 1.2);
             Canvas.SetTop(GrdChat, ActualHeight / 2.634);
             GrdChat.Height = GrdChat.Width = (ActualHeight + ActualWidth) / 10;
@@ -218,8 +220,8 @@ namespace risk_project
             Canvas.SetTop(LblSecondary, ActualHeight / 1.091);
             LblSecondary.FontSize = (ActualHeight + ActualWidth) / 100;
 
-            TxbMessage.FontSize = (ActualHeight * ActualWidth) / 80000;
-            BtnSend.FontSize = (ActualHeight * ActualWidth) / 120000;
+            TxbMessage.FontSize = (ActualHeight + ActualWidth) / 210;
+            BtnSend.FontSize = (ActualHeight + ActualWidth) / 187.5;
         }
 
 
@@ -994,6 +996,16 @@ namespace risk_project
             switch (currState)
             {
                 case GameState.Reinforcements:
+                    foreach (Territory t in territories.Values)
+                    {
+                        if (t.GetOwner() == Helper.Username)
+                        {
+                            t.Revert();
+                        }
+                    }
+                    LblSecondary.Text = "Units Remaining: 0";
+                    temp = 50 - nameLabels.Count * 5;
+                    break;
                 case GameState.InitialReinforcments:
                     foreach (Territory t in territories.Values)
                     {
