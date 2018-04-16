@@ -162,6 +162,7 @@ namespace risk_project
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
         {
+            BtnJoin.IsEnabled = false;
             MessageDialog dialog;
             Helper.PlayConfirmSound();
             if (currName != "")

@@ -29,7 +29,7 @@ namespace risk_project
 {
     enum GameState
     {
-        InitialReinforcments,
+        InitialReinforcements,
         Reinforcements,
         StopOrAttack,
         Attacker,
@@ -503,7 +503,7 @@ namespace risk_project
 
         private void SetReinforcements()
         {
-            currState = GameState.InitialReinforcments;
+            currState = GameState.InitialReinforcements;
             LblInstructions.Text = "SET YOUR FORCES IN PLACE";
 
             temp = 50 - (5*colorRects.Count());
@@ -601,6 +601,7 @@ namespace risk_project
 
         private void HandleRollDiceRes(ReceivedMessage msg)
         {
+            BtnRoll.IsEnabled = true;
             string baseUri = "ms-appx:///Assets/Dice/";
 
             ImgAtk1.Source = new BitmapImage(new Uri(baseUri + "Red/" + msg[0] + ".png"));
@@ -771,6 +772,7 @@ namespace risk_project
             //START ROLLING YOUR DICE
             if (ActiveWindow == Control.Battle)
             {
+                BtnRoll.IsEnabled = false;
                 string message = Comms.ROLL_DICE;
                 Comms.SendData(message);
                 LblState.Text = "Waiting for your opponent..";
@@ -786,7 +788,7 @@ namespace risk_project
             if (ActiveWindow == Control.Map)
             switch (currState)
             {
-                case GameState.InitialReinforcments:
+                case GameState.InitialReinforcements:
                 case GameState.Reinforcements:
                     if (curr.GetOwner() == Helper.Username)
                     {
@@ -880,7 +882,7 @@ namespace risk_project
             if (ActiveWindow == Control.Map)
             switch (currState)
             {
-                case GameState.InitialReinforcments:
+                case GameState.InitialReinforcements:
                     string message = Comms.FORCES_INIT;
                     bool ok = true;
                     if (temp == 0)
@@ -995,6 +997,18 @@ namespace risk_project
             if (ActiveWindow == Control.Map)
             switch (currState)
             {
+                case GameState.InitialReinforcements:
+                    foreach (Territory t in territories.Values)
+                    {
+                        if (t.GetOwner() == Helper.Username)
+                        {
+                            t.Revert();
+                        }
+                    }
+                    temp = 50 - nameLabels.Count * 5;
+                    LblSecondary.Text = "Units Remaining: "+temp;
+                    break;
+
                 case GameState.Reinforcements:
                     foreach (Territory t in territories.Values)
                     {
@@ -1003,17 +1017,8 @@ namespace risk_project
                             t.Revert();
                         }
                     }
-                    LblSecondary.Text = "Units Remaining: 0";
-                    temp = 50 - nameLabels.Count * 5;
-                    break;
-                case GameState.InitialReinforcments:
-                    foreach (Territory t in territories.Values)
-                    {
-                        if (t.GetOwner() == Helper.Username)
-                        {
-                            t.Revert();
-                        }
-                    }
+                    temp = territoryCount / 3;
+                    LblSecondary.Text = "Units Remaining: " + temp;
                     break;
 
                 case GameState.StopOrAttack:
