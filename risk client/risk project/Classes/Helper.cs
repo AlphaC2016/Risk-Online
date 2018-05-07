@@ -150,22 +150,22 @@ namespace risk_project
 
         public static void PlayBattleWin()
         {
-            PlaySound("battle_win");
+            //PlaySound("battle_win");
         }
 
         public static void PlayBattleLoss()
         {
-            PlaySound("battle_loss");
+            //PlaySound("battle_loss");
         }
 
         public static void PlayGameWin()
         {
-            PlaySound("game_win");
+            //PlaySound("game_win");
         }
 
         public static void PlayGameLoss()
         {
-            PlaySound("game_loss");
+            //PlaySound("game_loss");
         }
 
         /// <summary>
