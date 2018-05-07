@@ -98,6 +98,8 @@ namespace risk_project
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             Helper.PlayConfirmSound();
+            BtnLogin.IsEnabled = false;
+            BtnSignUp.IsEnabled = false;
             string message = Comms.SIGN_IN.ToString();
             string username = TxbLoginUsername.Text;
             Helper.Username = username;
@@ -151,7 +153,10 @@ namespace risk_project
 
         private async void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            BtnLogin.IsEnabled = false;
+            BtnSignUp.IsEnabled = false;
             Helper.PlayConfirmSound();
+            Helper.Username = TxbSignUpUsername.Text;
             MessageDialog dialog;
             if (PwbSignUpPass.Password != PwbSignUpRepass.Password)
             {

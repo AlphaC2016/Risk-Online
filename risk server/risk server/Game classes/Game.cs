@@ -94,6 +94,14 @@ namespace risk_server.Game_classes
                 }
                 
             }
+
+            foreach (Territory curr in _territories.Values)
+            {
+                if (curr.GetUser() == null)
+                {
+                    curr.SetUser(_players[r.Next(_players.Count)]);
+                }
+            }
         }
 
         /// <summary>
