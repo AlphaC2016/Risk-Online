@@ -58,26 +58,31 @@ namespace risk_project
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(SettingsPage));
         }
 
         private void BtnLeaderBoards_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(LeaderboardsPage));
         }
 
         private void BtnHelp_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(HelpPage));
         }
 
         private void BtnJoinRoom_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(JoinRoomPage));
         }
 
         private void BtnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(CreateRoomPage));
         }
 

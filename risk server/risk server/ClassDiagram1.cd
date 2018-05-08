@@ -8,9 +8,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.Helper" Collapsed="true">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="5.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>1UCMwAAMpKJ0AAogAChIBARABeoFKCHoVCgBCSsKBQQ=</HashCode>
+      <HashCode>1UCMwAAMpIJ0AApgAChIBARABeoFKCHoVCgBCSsKBQQ=</HashCode>
       <FileName>Helper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -22,49 +22,49 @@
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.RecievedMessage" Collapsed="true">
-    <Position X="0.5" Y="1.5" Width="1.5" />
+    <Position X="0.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAAACAAAAIBAAAAAAIAAEAABYAAAACA=</HashCode>
       <FileName>RecievedMessage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.Room" Collapsed="true">
-    <Position X="4" Y="1.5" Width="1.5" />
+    <Position X="5.75" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAIBACAEAAAAAAACBAAAAAgAAAAIAAAAAAAAJBDAA=</HashCode>
       <FileName>Room.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.Server" Collapsed="true">
-    <Position X="5.75" Y="1.5" Width="1.5" />
+    <Position X="8.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EIAAgAQQABASAiUAAGBAFYIAgABAAABCCAAEZhCAEAE=</HashCode>
       <FileName>Server.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.User" Collapsed="true">
-    <Position X="2.25" Y="2.5" Width="1.5" />
+    <Position X="3.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>wQAACAATAEAAEAAAAEAAAAAAgAAAAAAAAEIAQAAAEAQ=</HashCode>
       <FileName>User.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="risk_server.Game_classes.Game">
-    <Position X="9.5" Y="0.5" Width="1.5" />
+  <Class Name="risk_server.Game_classes.Game" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAYAIAAEAIECDQAADDoEBAAABJAAAAABAABFAKIAAA=</HashCode>
       <FileName>Game classes\Game.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.Game_classes.Territory" Collapsed="true">
-    <Position X="0.5" Y="2.5" Width="1.5" />
+    <Position X="0.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAoAAAAAAAAAAABAAQAACAAAAQAAAAEAABAAACBAA=</HashCode>
       <FileName>Game classes\Territory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="risk_server.Properties.Resources" Collapsed="true">
-    <Position X="2.25" Y="1.5" Width="1.5" />
+    <Position X="3.25" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAEAAAIA=</HashCode>
     </TypeIdentifier>

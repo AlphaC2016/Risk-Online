@@ -43,6 +43,7 @@ namespace risk_project
 
         private void Return(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             Frame.Navigate(typeof(MainMenu));
         }
 
@@ -72,6 +73,7 @@ namespace risk_project
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
+            Helper.PlayConfirmSound();
             string message = Comms.CREATE_ROOM;
             string name = TxbRoomName.Text;
             message += Comms.GetPaddedNumber(name.Length, 2);

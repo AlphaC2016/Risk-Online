@@ -122,9 +122,9 @@ namespace risk_project
         /// <param name="total">The total amount of units available (relevant in reinforcement mode).</param>
         /// <param name="state">The game's current state (different rules apply in different states). defaults to Initial Reinforcements.</param>
         /// <returns>Returns whether the increase was valid and successful.</returns>
-        public bool Inc(int total = 0, GameState state = GameState.InitialReinforcments)
+        public bool Inc(int total = 0, GameState state = GameState.InitialReinforcements)
         {
-            if (state == GameState.InitialReinforcments && total == 0)
+            if (state == GameState.InitialReinforcements && total == 0)
             {
                 return false;
             }
@@ -141,10 +141,10 @@ namespace risk_project
         /// </summary>
         /// <param name="state">The game's current state (different rules apply in different states). defaults to Initial Reinforcements.</param>
         /// <returns>Returns whether the decrease was valid and successful.</returns>
-        public bool Dec(GameState state = GameState.InitialReinforcments)
+        public bool Dec(GameState state = GameState.InitialReinforcements)
         {
 
-            if ((state == GameState.InitialReinforcments && amount == prevAmount) || amount == 0)
+            if ((state == GameState.InitialReinforcements && amount == prevAmount) || amount == 0)
             {
                 return false;
             }

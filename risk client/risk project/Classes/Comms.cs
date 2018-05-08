@@ -24,8 +24,9 @@ namespace risk_project
         //private static StreamSocket sc;
         private static StreamReader reader = null;
         private static StreamSocket sc;
+        private static HostName serverHost;
 
-        private static string ip = "192.168.1.34";
+        private static string ip = "10.10.11.31";
         private static string port = "3000";
 
         //these are the protocol code values. a matching list is found on the server.
@@ -74,7 +75,6 @@ namespace risk_project
         public const string MSG_TYPE_CODE_LENGTH = "3";
 
 
-        
 
         //RESPONSE VERBOSE MEANINGS
 
@@ -100,8 +100,6 @@ namespace risk_project
         public const string FORGOT_PASS_NO_PARAMS = "2";
         public const string FORGOT_PASS_OTHER = "3";
 
-
-        private static HostName serverHost;
 
         /// <summary>
         /// This function handles the initial connection to the server.
